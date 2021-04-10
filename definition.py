@@ -6,7 +6,8 @@
 # Created : 2020.10.14
 # Author : Chalk Yu
 # ========================================
-from .screws import ConfStore
+from .screws import ConfStore, Store
+# 默认参数常量
 __cache__ = ConfStore(
     # 路径缓存定义
     root_dir=None,  # 项目根目录
@@ -19,4 +20,35 @@ __cache__ = ConfStore(
     model_folder='model',
     # 默认模块名
     model_name='pskel'
+)
+
+# DB类型反射python类型
+__type_reflect__ = Store(
+    {
+        "postgres":{
+            "varchar":str,
+            "int":int,
+            "datetime":str
+        },
+        "db2":{
+            "varchar":str,
+            "int":int,
+            "datetime":str
+        },
+        "mysql":{
+            "varchar":str,
+            "int":int,
+            "datetime":str
+        },
+        "sqlite":{
+            "varchar":str,
+            "int":int,
+            "datetime":str
+        },
+        "oracle":{
+            "varchar":str,
+            "int":int,
+            "datetime":str
+        }
+    }
 )

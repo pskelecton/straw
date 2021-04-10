@@ -15,7 +15,7 @@ from .orm_factory import orm
 
 def createDbc(*args, **kwargs):
     # 采用的数据库关系映射的库
-    ORM_LOADER = kwargs.get('ORM_LOADER') or 'psycopg'
+    ORM_LOADER = kwargs.get('ORM_LOADER') or 'sqlalchemy'
     # 读取关系映射的loader
     OrmLoader: type = ORM_LOADER if type(
         ORM_LOADER) == type else orm.loaderCreater(ORM_LOADER)

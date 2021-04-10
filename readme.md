@@ -73,6 +73,7 @@
 > 7. @sql注解和全局参数，新增allow_mutisql参数
 > 8. 文件读取逻辑移动到外层db_guide中，而接口的loader中可以直接拿到字符串
 > 9. psycopg和pymysq需要修正
+> 10. DB类型反射python语言类型，比如说datetime类型对应python的str方式解析
 
 ## 说明：
 > 1. connection注解不能嵌套使用，非connection注解函数可以调用connection注解函数，反之也可

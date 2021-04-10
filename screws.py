@@ -17,7 +17,7 @@ from dataclasses import dataclass
 # ConfStore.a = {'xxx': Store({'yyy': 123})}
 # ConfStore.b = {'xxx': {'yyy': 123}}
 
-
+# 配置对象，控制对象只读
 class ConfStore():
     def __init__(self, **kwargs):
         self.__ConfStore__ = Store(kwargs)
@@ -161,10 +161,8 @@ class Store(dict):
         for key in _dict:
             if type(_dict[key]) == dict:
                 self.__dict__[key] = Store(_dict[key])
-                # setattr(self, key, Store(_dict[key]))
             else:
                 self.__dict__[key] = _dict[key]
-                # setattr(self, key, _dict[key])
 
     # 更新时同步反射
     def __updvalue__(self, key, value):
@@ -175,10 +173,8 @@ class Store(dict):
             # 引用赋值
             if type(value) == dict:
                 self.__dict__[key] = Store(value)
-                # setattr(self, key, Store(value))
             else:
                 self.__dict__[key] = value
-                # setattr(self, key, value)
             # 赋值
             super().__setitem__(key, value)
 
@@ -196,14 +192,23 @@ class Store(dict):
 
     # 字典取值拦截
     def __getitem__(self, key):
-        return self.__dict__[key]
+        try:
+            return self.__dict__[key]
+        except Exception as exc:
+            return None
 
     # 解除属性引用
     def __delattr__(self, key):
-        del self.__dict__[key]
-        super().__delitem__(key)
+        try:
+            del self.__dict__[key]
+            super().__delitem__(key)
+        except Exception as exc:
+            pass
 
     # 解除字典属性引用
     def __delitem__(self, key):
-        del self.__dict__[key]
-        super().__delitem__(key)
+        try:
+            del self.__dict__[key]
+            super().__delitem__(key)
+        except Exception as exc:
+            pass

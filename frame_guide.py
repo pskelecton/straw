@@ -98,14 +98,6 @@ class GuideArgs(ConfArgs):
         self.__Args__['MODEL_FOLDER_NAME'] = kwargs.get(
             'MODEL_FOLDER_NAME') or self.getArg('MODEL_FOLDER_NAME') or __cache__.model_folder
 
-        ''' #|== 路径方案一:废弃 ==|
-        # 追踪model文件夹的最大深度
-        self.__Args__['MODEL_TRACK_DEPTH'] = kwargs.get(
-            'MODEL_TRACK_DEPTH') or self.getArg('MODEL_TRACK_DEPTH') or 2
-        self.__Args__['MODEL_TRACK_DEPTH'] = Str2Int(
-            self.__Args__['MODEL_TRACK_DEPTH'])
-        '''
-
         # 是否使用Bean来获取数据
         self.__Args__['USE_BEAN'] = kwargs.get(
             'USE_BEAN') or self.getArg('USE_BEAN') or False
@@ -117,7 +109,7 @@ class GuideArgs(ConfArgs):
             "AUTO_COMMIT") or self.getArg('AUTO_COMMIT') or True
         # SQL模板类型
         self.__Args__['SQL_TEMPLATE_TYPE'] = kwargs.get(
-            "SQL_TEMPLATE_TYPE") or self.getArg('SQL_TEMPLATE_TYPE') or "1"
+            "SQL_TEMPLATE_TYPE") or self.getArg('SQL_TEMPLATE_TYPE') or 1
         # 数据库驱动
         self.__Args__['DB_DRIVER'] = kwargs.get(
             "DB_DRIVER") or self.getArg('DB_DRIVER') or None
@@ -255,7 +247,7 @@ class GuideArgs(ConfArgs):
         return self.__Args__['DB_DRIVER']
 
     @DB_DRIVER.setter
-    def DB_DATABASE(self, value):
+    def DB_DRIVER(self, value):
         # self.__Args__['DB_DRIVER'] = value
         pass  # 只读属性
 
@@ -346,7 +338,7 @@ class InitGuide(GuideArgs, PathPlant):
 
     # 解析sql文件路径
     def resolveSqlPath(self, func_name, model_path):
-        if self.TRACK_SQL_FILE:
+        if self.TRACK_SQL_FILE and MODEL_FOLDER_NAME != None:
             # 模块路径截取，model_path是包含文件名的
             model_split_paths = self.splitFolder(
                 model_path, self.MODEL_FOLDER_NAME, includeModel=False)

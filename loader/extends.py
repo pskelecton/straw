@@ -224,12 +224,6 @@ class SqlParser():
             'sqls': sqlCache,
             'mutiSqls': mutiSqls,  # 字符串连接后的sql数组
         })
-        # mutiList = self.listSplit(sqlCache, maxSize)
-        # sqlStore = Store({
-        #     'sqls': sqlCache,
-        #     'mutiSqls': list(map(lambda l: ''.join(l), mutiList))
-        # })
-        # return sqlStore
 
     # sql模板参数转换
     #   @args：
@@ -264,8 +258,6 @@ class SqlParser():
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
         logging("DEBUG", f'****** SQL ****** : \n{sql}')
-        # sql = sql % tuple(map(lambda v: v if type(v) == int or type(
-        #     v) == float else f"'{v}'", tuple_args))
         sql = sql % tuple(map(lambda v: str(v), tuple_args))
         _sql_ = sql.strip()
         logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
@@ -280,26 +272,16 @@ class SqlParser():
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
         logging("DEBUG", f'****** SQL ****** : \n{sql}')
-        # sql = sql.format(*tuple(map(lambda v: v if type(v) == int or type(
-        #     v) == float else f"'{v}'", tuple_args)))
         sql = sql.format(*tuple(map(lambda v: str(v), tuple_args)))
         _sql_ = sql.strip()
         logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
         return _sql_
 
     def DictParseEngine(self, sql, dict_args, logging):
-        # format_sql = sqlparse.format(
-        #     sql, reindent=True, keyword_case='upper', strip_comments=True, reindent_aligned=False)
-        # parsed = sqlparse.parse(format_sql)
-        # stmt = parsed[0]
-        # sql = str(stmt)
         sql = self.formatSql(sql)
         logging("DEBUG", f'****** SQL ****** : \n{sql}')
         sqlFragments = self.sqlChipMaker(sql)
         for key in dict_args:
-            # sql = sql.replace(f':{key}', dict_args[key] if type(dict_args[key]) == int or type(
-            #     dict_args[key]) == float else f'\'{dict_args[key]}\'')
-            # sql = sql.replace(f':{key}', str(dict_args[key]))
             sqlFragments = self.listReplace(
                 sqlFragments, f':{key}', str(dict_args[key]))
         sql = self.formatSql(' '.join(sqlFragments))
