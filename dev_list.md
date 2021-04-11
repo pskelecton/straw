@@ -2,7 +2,7 @@
 
 ### 目录结构
 ```
-|-- _pskelecton
+|-- _straw
 |    |-- __init__.py
 |    |-- loader
 |    |    |-- __init__.py
