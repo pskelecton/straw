@@ -100,7 +100,12 @@ python setup.py sdist build
 twine upload dist/*
 ```
 
-## pip查看
+ - pip查看版本
 ```
-pip show logzero
+pip show pstraw
+```
+
+ - pip安装
+```
+pip install pstraw
 ```
