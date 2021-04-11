@@ -76,6 +76,9 @@ class GuideArgs(ConfArgs):
         # LOG文件存放目录
         self.__Args__['LOG_PATH'] = PathPlant.transAbspath(kwargs.get(
             'LOG_PATH') or self.getArg('LOG_PATH') or None)
+        # 是否不输出日志文件
+        self.__Args__['NO_LOG'] = kwargs.get(
+            'NO_LOG') or self.getArg('NO_LOG') or __cache__.no_log
         # 是否是debug模式
         self.__Args__['DEBUG'] = kwargs.get(
             'DEBUG') or self.getArg('DEBUG') or __cache__.debug
@@ -148,6 +151,16 @@ class GuideArgs(ConfArgs):
     @LOG_PATH.setter
     def LOG_PATH(self, value):
         self.__Args__['LOG_PATH'] = PathPlant.transAbspath(value)
+        # pass  # 可读写属性
+
+    # 是否不输出日志文件
+    @property
+    def NO_LOG(self):
+        return self.__Args__['NO_LOG']
+
+    @NO_LOG.setter
+    def NO_LOG(self, value):
+        self.__Args__['NO_LOG'] = value
         # pass  # 可读写属性
 
     # 是否是debug模式
@@ -355,7 +368,7 @@ class InitGuide(GuideArgs, PathPlant):
         return sql_fullpath
 
     # 控制台输出
-    def print(self, level, message, *msgs):
+    def __print(self, level, message, *msgs):
         # 获取当前帧对象 ， 代表执行到当前的logging函数
         cur_frame = inspect.currentframe()
         # 获取上一帧对象 ， 代表谁调用的
@@ -377,7 +390,7 @@ class InitGuide(GuideArgs, PathPlant):
         # self.__logger.print(level, message, cur_frame=bac_frame)
 
     # 日志输出
-    def logging(self, level, message, *msgs):
+    def __logging(self, level, message, *msgs):
         # 获取当前帧对象 ， 代表执行到当前的logging函数
         cur_frame = inspect.currentframe()
         # 获取上一帧对象 ， 代表谁调用的
@@ -391,15 +404,25 @@ class InitGuide(GuideArgs, PathPlant):
         if type(message) == str:
             # 合并
             message = message + '\n' + msgStr
-            self.__logger.print(level, message, cur_frame=bac_frame)
+            self.__logger.logging(level, message, cur_frame=bac_frame)
         else:
             # Exception message
-            self.__logger.print(level, msgStr, cur_frame=bac_frame)
-            self.__logger.print(level, message, cur_frame=bac_frame)
+            self.__logger.logging(level, msgStr, cur_frame=bac_frame)
+            self.__logger.logging(level, message, cur_frame=bac_frame)
+
+    # 打印输出函数
+    def logging(self,level, message, *msgs):
+        self.__print(level, message, *msgs)
+        if not self.NO_LOG:
+            self.__logging(level, message, *msgs)
 
     # 初始化logging
     def initLogging(self):
-        self.__logger = LoggerFactory(path=os.path.join(self.LOG_PATH, self.module_name + ".log"),
-                                      console=False, debug=self.DEBUG,
-                                      maxMb=self.LOG_MAX_SIZE, backupCount=self.LOG_BACKUP_CNT)
+        self.__logger = LoggerFactory(
+            path=os.path.join(self.LOG_PATH, self.module_name + ".log"),
+            console=False, 
+            debug=self.DEBUG,
+            maxMb=self.LOG_MAX_SIZE, 
+            backupCount=self.LOG_BACKUP_CNT, 
+            noLog=self.NO_LOG)
 
