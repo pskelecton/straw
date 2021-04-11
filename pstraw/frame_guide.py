@@ -38,7 +38,7 @@ class ConfArgs():
         self.loadConf()
 
     def loadConf(self):
-        print(self.__CONF_PATH)
+        # print(self.__CONF_PATH)
         if self.__CONF_PATH != None:
             self.__configparser__.read(self.__CONF_PATH, encoding="utf-8")
         return self.__configparser__
@@ -186,7 +186,7 @@ class GuideArgs(ConfArgs):
     # 日志最大备份数
     @property
     def LOG_BACKUP_CNT(self):
-        print(self.__Args__)
+        # print(self.__Args__)
         return self.__Args__['LOG_BACKUP_CNT']
 
     @LOG_BACKUP_CNT.setter
