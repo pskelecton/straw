@@ -109,3 +109,9 @@ pip show pstraw
 ```
 pip install pstraw
 ```
+
+ - git打标签
+```
+git tag v0.9.2
+git push origin v0.9.2
+```
