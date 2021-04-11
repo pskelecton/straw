@@ -11,6 +11,7 @@ from __future__ import absolute_import
 from .frame_guide import InitGuide
 from .bean_factory import bf
 from .orm_factory import orm
+from .resource_factory import resf
 
 
 def createDbc(*args, **kwargs):
@@ -35,11 +36,21 @@ def createDbc(*args, **kwargs):
 
         # sql装饰器
         def __sql__(self, *args, **kwargs):
+            ''' 装饰器参数 '''
+            # 应用模板类型
             _ParseType_ = self._ParseType_ if kwargs.get(
-                'format') == None else kwargs.get('format')
+                'SQL_TEMPLATE_TYPE') == None else kwargs.get('SQL_TEMPLATE_TYPE')
+            # 是否应用Bean来使用自动注入
             _UseBean_ = self._UseBean_ if kwargs.get(
-                'use_bean') == None else kwargs.get('use_bean')
+                'USE_BEAN') == None else kwargs.get('USE_BEAN')
+            # 注入的Bean类，USE_BEAN=True才生效
             __bean__ = None if len(args) == 0 else args[0]
+            # 直接指定sql文件
+            _SqlName_ = None if kwargs.get(
+                'SQL_NAME') == None else kwargs.get('SQL_NAME')
+            # 直接设置sql语句
+            _SqlStr_ = None if kwargs.get(
+                'SQL') == None else kwargs.get('SQL')
 
             def _sql_(model_fn):
                 # 解析路径
@@ -47,15 +58,37 @@ def createDbc(*args, **kwargs):
                 # 初始化log
                 self.initLogging()
                 # 获取sql路径
-                sql_path = self.resolveSqlPath(
-                    model_fn.__name__, self.getModelPath(model_fn))
+                sql_path = None
+                modelFnName = None
+                if _SqlName_ == None:
+                    sql_path = self.resolveSqlPath(
+                        model_fn.__name__, self.getModelPath(model_fn))
+                    modelFnName = None
+                else:
+                    sql_path = self.resolveSqlPathSn(_SqlName_)
+                    modelFnName = model_fn.__name__
 
                 def __model_fn(*args, **kwargs):
                     self.logging(
                         "DEBUG", "****** %s Start ******" % self.__module_name__)
-                    cur = self.execute(
-                        sql_path, model_fn(*args, **kwargs), _ParseType_)
+
+                    # 生成sql语句
+                    sqls,sqlAction = resf.sqlCompose(
+                        sqlPath=sql_path,
+                        args=model_fn(*args, **kwargs),
+                        parseType=_ParseType_,
+                        modelFnName=modelFnName,
+                        sql=_SqlStr_,
+                        logging=self.logging)
+
+                    cur = self.execute(sqls,sqlAction)
+
+                    # cur = self.execute(
+                    #     sql_path, model_fn(*args, **kwargs), _ParseType_, model_fn.__name__)
+                    
                     if(cur == None):
+                        raise Exception("The 'cursor' is None", 1)
+                    elif(type(cur) == list and len(cur) == 0):
                         raise Exception("The 'cursor' is None", 1)
                     else:
                         if _UseBean_:

@@ -27,7 +27,8 @@ class loader(OrmLoader, SqlParser):
         elif self.DB_DRIVER == "db2":
             pass
         elif self.DB_DRIVER == "mysql":
-            pass
+            conn_str = 'mysql+pymysql://%s:%s@%s:%s/%s' %(
+                self.DB_USER,self.DB_PASSWORD,self.DB_HOST,self.DB_PORT,self.DB_DATABASE)
         elif self.DB_DRIVER == "sqlite":
             pass
         elif self.DB_DRIVER == "oracle":
@@ -41,26 +42,14 @@ class loader(OrmLoader, SqlParser):
             sessionFacory = sessionmaker(bind=engine, autoflush=True)
             self.conn = scoped_session(sessionFacory)
 
-    def execute(self, sql_path, args, parseType):
+    def execute(self, sqls, sqlAction):
+        self._SqlAction_ = sqlAction
         try:
-            cur = None
-            with open(sql_path, "r", encoding='utf-8') as fs_sql:
-                sql = fs_sql.read()
-                self._SqlAction_ = self.getSqlAction(sql)
-                # cursor组
-                curs = []
-                # 插入的时候，可以一次插入多条数据
-                if type(args) == list and self._SqlAction_ == 'INSERT':
-                    transSql = self.multiSqlParse(
-                        sql, args, self.logging, parseType=parseType, comb=True)
-                    for sql in transSql.mutiSqls:
-                        cur = self.conn.execute(sql)
-                        curs.append(cur)
-                else:
-                    sql = self.sqlParse(
-                        sql, args, self.logging, parseType=parseType)
-                    cur = self.conn.execute(sql)
-                    curs.append(cur)
+            # cursor组
+            curs = []
+            for sql in sqls:
+                cur = self.conn.execute(sql)
+                curs.append(cur)
                 self.logging("DEBUG", f'****** SQL loading success ******')
             return curs
         except Exception as exc:
@@ -68,6 +57,34 @@ class loader(OrmLoader, SqlParser):
             self.logging("ERROR", "%s: %s" %
                          (exc.__class__.__name__, exc))
             raise
+
+    # def execute(self, sql_path, args, parseType, modelFnName):
+    #     try:
+    #         cur = None
+    #         with open(sql_path, "r", encoding='utf-8') as fs_sql:
+    #             sql = fs_sql.read()
+    #             self._SqlAction_ = self.getSqlAction(sql)
+    #             # cursor组
+    #             curs = []
+    #             # 插入的时候，可以一次插入多条数据
+    #             if type(args) == list and self._SqlAction_ == 'INSERT':
+    #                 transSql = self.multiSqlParse(
+    #                     sql, args, self.logging, parseType=parseType, comb=True)
+    #                 for sql in transSql.mutiSqls:
+    #                     cur = self.conn.execute(sql)
+    #                     curs.append(cur)
+    #             else:
+    #                 sql = self.sqlParse(
+    #                     sql, args, self.logging, parseType=parseType)
+    #                 cur = self.conn.execute(sql)
+    #                 curs.append(cur)
+    #             self.logging("DEBUG", f'****** SQL loading success ******')
+    #         return curs
+    #     except Exception as exc:
+    #         self.logging("ERROR", "****** SQL loading error ******")
+    #         self.logging("ERROR", "%s: %s" %
+    #                      (exc.__class__.__name__, exc))
+    #         raise
 
     def close(self):
         self.conn.close()

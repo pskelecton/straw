@@ -7,4 +7,4 @@
 # Author : Chalk Yu
 # ========================================
 from __future__ import absolute_import
-from .extends import OrmLoader
+from .extends import OrmLoader, SqlParser

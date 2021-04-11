@@ -43,19 +43,22 @@ class OrmLoader():
             @[dbc].connection([allow_rollback],[auto_commit])
     '''
 
-    def execute(self, sql_path, args, parseType):
+    # def execute(self, sql_path, args, parseType, modelFnName):
+    #     pass
+
+    def execute(self, sqls, sqlAction):
         pass
 
-    def close(self, *args, **kwargs):
+    def close(self):
         pass
 
-    def commit(self, *args, **kwargs):
+    def commit(self):
         pass
 
-    def rollback(self, *args, **kwargs):
+    def rollback(self):
         pass
 
-    def inject(self, *args, **kwargs):
+    def inject(self, curs, bean, resultCreater):
         pass
 
 
@@ -229,7 +232,7 @@ class SqlParser():
     #   @args：
     #      [sql] : str(sql)
     #      [tuple_args|dict_args] :
-    #      [parseType] : 1 | 2 | 3
+    #      [parseType] : 1 | 2 | 3 | 4 | 5 | 6
     #           parseType == 1: (default parse , no parse engine)
     #               sql : %s %s %s        ==>   model : (p1, p2, p3)
     #           parseType == 2: (StrParseEngine)
@@ -238,6 +241,7 @@ class SqlParser():
     #           parseType == 3: (DictParseEngine)
     #               sql :  col1=:c1, col2=:c2  ==>   model : {'c1':p1, 'c2':p2}
     #   @return：str(sql)
+    # 注意： parseType = 4 | 5 | 6 转换方式同 1 | 2 | 3 , 只是对于非数值类型的值自动补充双引号
 
     def sqlParse(self, *args, parseType):
         if parseType == 1:
@@ -246,6 +250,12 @@ class SqlParser():
             return self.StrParseEngine(*args)
         elif parseType == 3:
             return self.DictParseEngine(*args)
+        elif parseType == 4:
+            return self.TempParseEngineT(*args)
+        elif parseType == 5:
+            return self.StrParseEngineT(*args)
+        elif parseType == 6:
+            return self.DictParseEngineT(*args)
         else:
             return self.__DictParseEngine(*args)
 
@@ -284,6 +294,46 @@ class SqlParser():
         for key in dict_args:
             sqlFragments = self.listReplace(
                 sqlFragments, f':{key}', str(dict_args[key]))
+        sql = self.formatSql(' '.join(sqlFragments))
+        _sql_ = sql.strip()
+        logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
+        return _sql_
+
+    def TempParseEngineT(self, sql, tuple_args, logging):
+        sqlSegments = sql.split('\n')
+        for segIdx in range(len(sqlSegments)):
+            commentIdx = sqlSegments[segIdx].find('--')
+            if commentIdx >= 0:
+                sqlSegments[segIdx] = sqlSegments[segIdx].replace(
+                    sqlSegments[segIdx][commentIdx:], "")
+        sql = ' '.join(sqlSegments)
+        logging("DEBUG", f'****** SQL ****** : \n{sql}')
+        sql = sql % tuple(map(lambda v: str(v) if type(v)==int or type(v)==float else f'\'{str(v)}\'', tuple_args))
+        _sql_ = sql.strip()
+        logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
+        return _sql_
+
+    def StrParseEngineT(self, sql, tuple_args, logging):
+        sqlSegments = sql.split('\n')
+        for segIdx in range(len(sqlSegments)):
+            commentIdx = sqlSegments[segIdx].find('--')
+            if commentIdx >= 0:
+                sqlSegments[segIdx] = sqlSegments[segIdx].replace(
+                    sqlSegments[segIdx][commentIdx:], "")
+        sql = ' '.join(sqlSegments)
+        logging("DEBUG", f'****** SQL ****** : \n{sql}')
+        sql = sql.format(*tuple(map(lambda v: str(v) if type(v)==int or type(v)==float else f'\'{str(v)}\'', tuple_args)))
+        _sql_ = sql.strip()
+        logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
+        return _sql_
+
+    def DictParseEngineT(self, sql, dict_args, logging):
+        sql = self.formatSql(sql)
+        logging("DEBUG", f'****** SQL ****** : \n{sql}')
+        sqlFragments = self.sqlChipMaker(sql)
+        for key in dict_args:
+            sqlFragments = self.listReplace(
+                sqlFragments, f':{key}', str(dict_args[key]) if type(dict_args[key])==int or type(dict_args[key])==float else f'\'{str(dict_args[key])}\'')
         sql = self.formatSql(' '.join(sqlFragments))
         _sql_ = sql.strip()
         logging("DEBUG", f'****** SQL ****** : \n{_sql_}')

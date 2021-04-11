@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from .screws import PathPlant
 from .tool import Str2Bool, Str2Int
 from .definition import __cache__
-from .output_console import LoggerFactory
+from .logger_factory import LoggerFactory
 
 
 # conf文件获取初始化参数
@@ -78,38 +78,38 @@ class GuideArgs(ConfArgs):
             'LOG_PATH') or self.getArg('LOG_PATH') or None)
         # 是否是debug模式
         self.__Args__['DEBUG'] = kwargs.get(
-            'DEBUG') or self.getArg('DEBUG') or True
+            'DEBUG') or self.getArg('DEBUG') or __cache__.debug
         self.__Args__['DEBUG'] = Str2Bool(self.__Args__['DEBUG'])
         # 单个日志文件最大容量(mb)
         self.__Args__['LOG_MAX_SIZE'] = kwargs.get(
-            'LOG_MAX_SIZE') or self.getArg('LOG_MAX_SIZE') or 10
+            'LOG_MAX_SIZE') or self.getArg('LOG_MAX_SIZE') or __cache__.log_max_size
         self.__Args__['LOG_MAX_SIZE'] = Str2Int(self.__Args__['LOG_MAX_SIZE'])
         # 日志最大备份数
         self.__Args__['LOG_BACKUP_CNT'] = kwargs.get(
-            'LOG_BACKUP_CNT') or self.getArg('LOG_BACKUP_CNT') or 1
+            'LOG_BACKUP_CNT') or self.getArg('LOG_BACKUP_CNT') or __cache__.log_backup_cnt
         self.__Args__['LOG_BACKUP_CNT'] = Str2Int(
             self.__Args__['LOG_BACKUP_CNT'])
         # 是否追踪子文件夹下的SQL文件
         self.__Args__['TRACK_SQL_FILE'] = kwargs.get(
-            'TRACK_SQL_FILE') or self.getArg('TRACK_SQL_FILE') or False
+            'TRACK_SQL_FILE') or self.getArg('TRACK_SQL_FILE') or __cache__.track_sql_file
         self.__Args__['TRACK_SQL_FILE'] = Str2Bool(
             self.__Args__['TRACK_SQL_FILE'])
         # 指定model文件夹名称，默认是model
         self.__Args__['MODEL_FOLDER_NAME'] = kwargs.get(
-            'MODEL_FOLDER_NAME') or self.getArg('MODEL_FOLDER_NAME') or __cache__.model_folder
+            'MODEL_FOLDER_NAME') or self.getArg('MODEL_FOLDER_NAME') or __cache__.model_folder_name
 
         # 是否使用Bean来获取数据
         self.__Args__['USE_BEAN'] = kwargs.get(
-            'USE_BEAN') or self.getArg('USE_BEAN') or False
+            'USE_BEAN') or self.getArg('USE_BEAN') or __cache__.use_bean
         # 是否在异常时自动回滚
         self.__Args__['ALLOW_ROLLBACK'] = kwargs.get(
-            "ALLOW_ROLLBACK") or self.getArg('ALLOW_ROLLBACK') or True
+            "ALLOW_ROLLBACK") or self.getArg('ALLOW_ROLLBACK') or __cache__.allow_rollback
         # 是否自动提交
         self.__Args__['AUTO_COMMIT'] = kwargs.get(
-            "AUTO_COMMIT") or self.getArg('AUTO_COMMIT') or True
+            "AUTO_COMMIT") or self.getArg('AUTO_COMMIT') or __cache__.auto_commit
         # SQL模板类型
         self.__Args__['SQL_TEMPLATE_TYPE'] = kwargs.get(
-            "SQL_TEMPLATE_TYPE") or self.getArg('SQL_TEMPLATE_TYPE') or 1
+            "SQL_TEMPLATE_TYPE") or self.getArg('SQL_TEMPLATE_TYPE') or __cache__.sql_template_type
         # 数据库驱动
         self.__Args__['DB_DRIVER'] = kwargs.get(
             "DB_DRIVER") or self.getArg('DB_DRIVER') or None
@@ -338,7 +338,7 @@ class InitGuide(GuideArgs, PathPlant):
 
     # 解析sql文件路径
     def resolveSqlPath(self, func_name, model_path):
-        if self.TRACK_SQL_FILE and MODEL_FOLDER_NAME != None:
+        if self.TRACK_SQL_FILE and self.MODEL_FOLDER_NAME != None:
             # 模块路径截取，model_path是包含文件名的
             model_split_paths = self.splitFolder(
                 model_path, self.MODEL_FOLDER_NAME, includeModel=False)
@@ -349,6 +349,10 @@ class InitGuide(GuideArgs, PathPlant):
         else:
             sql_fullpath = self.getSqlPath(func_name)
             return sql_fullpath
+    # 通过sql_name解析sql文件路径
+    def resolveSqlPathSn(self,sql_name):
+        sql_fullpath = self.getSqlPath(sql_name)
+        return sql_fullpath
 
     # 控制台输出
     def print(self, level, message, *msgs):

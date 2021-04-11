@@ -31,7 +31,7 @@
 > #### definition.py
 > 定义模块, 初始化缓存, 指定缺省值
 
-> #### output_console.py
+> #### logger_factory.py
 > 日志输出和异常打印模块
 
 > #### screws.py
@@ -52,6 +52,9 @@
 > #### loader/extends.py
 > orm插件加载器接口, sql模板转换类
 
+> #### resource_factory.py
+> 资源工厂, 对资源读取与缓存的统一处理
+
 ## 待完成项目
 > 1. 异常处理, 包括路径不存在, 文件不存在, 需要抛出正确错误信息
 > 2. 一次缓存重复调用, 需要全局找可复用缓存
@@ -61,7 +64,9 @@
 > 6. 多db连携,多配置文件
 > 7. 初始执行生成模板案例
 > 8. 多db类型支持, loader扩展化
-> 9. v1.0.0版本测试
+> 9. sql文件通过标记映射方法，通过sql注解参数来指定sql文件名
+> 10. DB类型反射python语言类型，比如说datetime类型对应python的str方式解析
+> 11. 垃圾回收以及效率优化
 
 ## 测试问题一览（待解决）
 > 1. @sql注解函数中的返回值，如果为list，则做多个sql的合并后再执行（增加效率），只作用于增、改、删
@@ -73,9 +78,13 @@
 > 7. @sql注解和全局参数，新增allow_mutisql参数
 > 8. 文件读取逻辑移动到外层db_guide中，而接口的loader中可以直接拿到字符串
 > 9. psycopg和pymysq需要修正
-> 10. DB类型反射python语言类型，比如说datetime类型对应python的str方式解析
+
 
 ## 说明：
 > 1. connection注解不能嵌套使用，非connection注解函数可以调用connection注解函数，反之也可
 > 2. allow_mutisql = True的时候，返回的cursor是list类型，False时返回的cursor是单个对象
 > 3. sql文件以及数据库缓存，在入口注解中添加，如果没有入口注解，则不作缓存
+> 4. 关于factory类，是不嵌入到主类中的，都是单独开辟一块引用处理逻辑（不被主类继承）
+
+## 记事：
+> 1. 参考标准库 https://docs.python.org/zh-cn/3.7/library/index.html，调查扩展与优化

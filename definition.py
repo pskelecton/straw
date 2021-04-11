@@ -16,10 +16,26 @@ __cache__ = ConfStore(
     conf_file=None,  # 配置文件路径
     sql_dir=None,  # sql文件目录
     log_dir=None,  # log文件目录
+    # 是否是debug模式
+    debug=True,
+    # 单个日志文件最大容量(mb)
+    log_max_size=10,
+    # 日志最大备份数
+    log_backup_cnt=1,
+    # 是否追踪子文件夹下的SQL文件
+    track_sql_file=False,
     # 默认模块文件夹名称
-    model_folder='model',
+    model_folder_name='model',
     # 默认模块名
-    model_name='pskel'
+    model_name='pskel',
+    # 自动Bean注入
+    use_bean=True,
+    # 是否自动回滚
+    allow_rollback=True,
+    # 是否自动提交
+    auto_commit=True,
+    # sql模板类型
+    sql_template_type=3,
 )
 
 # DB类型反射python类型
@@ -52,3 +68,6 @@ __type_reflect__ = Store(
         }
     }
 )
+
+GlobalConfig = __cache__
+SQLTypeMap = __type_reflect__
