@@ -88,3 +88,19 @@
 
 ## 记事：
 > 1. 参考标准库 https://docs.python.org/zh-cn/3.7/library/index.html，调查扩展与优化
+
+## 发布：
+```linux
+# 安装上传工具
+pip install twine
+# 打包
+python setup.py sdist build
+# 上传
+# python setup.py sdist upload
+twine upload dist/*
+```
+
+## pip查看
+```
+pip show logzero
+```

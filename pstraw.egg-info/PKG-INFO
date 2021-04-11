@@ -1,0 +1,13 @@
+Metadata-Version: 1.2
+Name: pstraw
+Version: 0.9.1
+Summary: 函数调用的方式操作数据库
+Home-page: https://github.com/pskelecton/straw
+Author: Chalk Yu
+Author-email: yuequn3721@qq.com
+Maintainer: Chalk Yu
+Maintainer-email: yuequn3721@qq.com
+License: MIT License
+Description: # Straw
+Platform: all
+Classifier: Programming Language :: Python :: 3.6
