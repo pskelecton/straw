@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pstraw',
-    version='0.9.1',
+    version='0.9.2',
     description=('函数调用的方式操作数据库'),
     long_description=open('README.md').read(),
     author='Chalk Yu',

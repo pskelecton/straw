@@ -1,2 +1,6 @@
 .history
 *.pyc
+__pycache__
+build
+dist
+pstraw.egg-info
