@@ -26,19 +26,19 @@ os.system('@echo off')
 #
 
 class LoggerFactory():
-    def __init__(self, path='./default.log', console=False, debug=True, maxMb=1, backupCount=5, noLog=True):
+    def __init__(self, path='./default.log', console=False, debug=True, maxMb=1, backupCount=5, logOn=True):
         self.path = path
         self.console = console
         self.maxMb = maxMb
         self.backupCount = backupCount
         self.debug = debug
-        self.noLog = noLog
+        self.logOn = logOn
         self.__create()
 
     # 初始化logging
     def __create(self, debug=None):
         # 无日志设置
-        if self.noLog:
+        if self.logOn == False:
             self.__logger = None
             return
         # 路径截取的文件名做为模块名
@@ -79,7 +79,7 @@ class LoggerFactory():
     # log输出
     def logging(self, level, message, cur_frame=None):
         # 无日志设置
-        if self.noLog:
+        if self.logOn == False:
             self.__logger = None
             return
         # 获取当前帧对象 ， 代表执行到当前的logging函数

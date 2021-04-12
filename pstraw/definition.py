@@ -17,7 +17,7 @@ __cache__ = ConfStore(
     sql_dir=None,  # sql文件目录
     log_dir=None,  # log文件目录
     # 是否不输出日志文件
-    no_log=True,
+    log_on=False,
     # 是否是debug模式
     debug=True,
     # 单个日志文件最大容量(mb)
@@ -29,7 +29,7 @@ __cache__ = ConfStore(
     # 默认模块文件夹名称
     model_folder_name='model',
     # 默认模块名
-    model_name='pskel',
+    model_name='straw',
     # 自动Bean注入
     use_bean=True,
     # 是否自动回滚

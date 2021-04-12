@@ -31,8 +31,8 @@ class OrmLoader():
             @[dbc].connection([allow_rollback],[auto_commit])
     '''
 
-    def connect(self, allowRollback, autoCommit):
-        pass
+    def connect(self, allowRollback=None, autoCommit=None):
+        return None
 
     '''
         sql执行：
@@ -46,20 +46,20 @@ class OrmLoader():
     # def execute(self, sql_path, args, parseType, modelFnName):
     #     pass
 
-    def execute(self, sqls, sqlAction):
-        pass
+    def execute(self, sqls, sqlAction=None):
+        return [None]
 
     def close(self):
-        pass
+        return None
 
     def commit(self):
-        pass
+        return None
 
     def rollback(self):
-        pass
+        return None
 
     def inject(self, curs, bean, resultCreater):
-        pass
+        return None
 
 
 # SQL转换类

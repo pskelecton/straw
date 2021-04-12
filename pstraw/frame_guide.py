@@ -17,7 +17,7 @@ import logging
 import logging.handlers
 from dataclasses import dataclass
 from .screws import PathPlant
-from .tool import Str2Bool, Str2Int
+from .tool import Str2Bool, Str2Int, VarGet
 from .definition import __cache__
 from .logger_factory import LoggerFactory
 
@@ -77,56 +77,56 @@ class GuideArgs(ConfArgs):
         self.__Args__['LOG_PATH'] = PathPlant.transAbspath(kwargs.get(
             'LOG_PATH') or self.getArg('LOG_PATH') or None)
         # 是否不输出日志文件
-        self.__Args__['NO_LOG'] = kwargs.get(
-            'NO_LOG') or self.getArg('NO_LOG') or __cache__.no_log
+        self.__Args__['LOG_ON'] = VarGet(kwargs.get(
+            'LOG_ON'), self.getArg('LOG_ON'), __cache__.log_on)
         # 是否是debug模式
-        self.__Args__['DEBUG'] = kwargs.get(
-            'DEBUG') or self.getArg('DEBUG') or __cache__.debug
+        self.__Args__['DEBUG'] = VarGet(kwargs.get(
+            'DEBUG'), self.getArg('DEBUG'), __cache__.debug)
         self.__Args__['DEBUG'] = Str2Bool(self.__Args__['DEBUG'])
         # 单个日志文件最大容量(mb)
-        self.__Args__['LOG_MAX_SIZE'] = kwargs.get(
-            'LOG_MAX_SIZE') or self.getArg('LOG_MAX_SIZE') or __cache__.log_max_size
+        self.__Args__['LOG_MAX_SIZE'] = VarGet(kwargs.get(
+            'LOG_MAX_SIZE'), self.getArg('LOG_MAX_SIZE'), __cache__.log_max_size)
         self.__Args__['LOG_MAX_SIZE'] = Str2Int(self.__Args__['LOG_MAX_SIZE'])
         # 日志最大备份数
-        self.__Args__['LOG_BACKUP_CNT'] = kwargs.get(
-            'LOG_BACKUP_CNT') or self.getArg('LOG_BACKUP_CNT') or __cache__.log_backup_cnt
+        self.__Args__['LOG_BACKUP_CNT'] = VarGet(kwargs.get(
+            'LOG_BACKUP_CNT'), self.getArg('LOG_BACKUP_CNT'), __cache__.log_backup_cnt)
         self.__Args__['LOG_BACKUP_CNT'] = Str2Int(
             self.__Args__['LOG_BACKUP_CNT'])
         # 是否追踪子文件夹下的SQL文件
-        self.__Args__['TRACK_SQL_FILE'] = kwargs.get(
-            'TRACK_SQL_FILE') or self.getArg('TRACK_SQL_FILE') or __cache__.track_sql_file
+        self.__Args__['TRACK_SQL_FILE'] = VarGet(kwargs.get(
+            'TRACK_SQL_FILE'), self.getArg('TRACK_SQL_FILE'), __cache__.track_sql_file)
         self.__Args__['TRACK_SQL_FILE'] = Str2Bool(
             self.__Args__['TRACK_SQL_FILE'])
         # 指定model文件夹名称，默认是model
-        self.__Args__['MODEL_FOLDER_NAME'] = kwargs.get(
-            'MODEL_FOLDER_NAME') or self.getArg('MODEL_FOLDER_NAME') or __cache__.model_folder_name
+        self.__Args__['MODEL_FOLDER_NAME'] = VarGet(kwargs.get(
+            'MODEL_FOLDER_NAME'), self.getArg('MODEL_FOLDER_NAME'), __cache__.model_folder_name)
 
         # 是否使用Bean来获取数据
-        self.__Args__['USE_BEAN'] = kwargs.get(
-            'USE_BEAN') or self.getArg('USE_BEAN') or __cache__.use_bean
+        self.__Args__['USE_BEAN'] = VarGet(kwargs.get(
+            'USE_BEAN'), self.getArg('USE_BEAN'), __cache__.use_bean)
         # 是否在异常时自动回滚
-        self.__Args__['ALLOW_ROLLBACK'] = kwargs.get(
-            "ALLOW_ROLLBACK") or self.getArg('ALLOW_ROLLBACK') or __cache__.allow_rollback
+        self.__Args__['ALLOW_ROLLBACK'] = VarGet(kwargs.get(
+            "ALLOW_ROLLBACK"), self.getArg('ALLOW_ROLLBACK'), __cache__.allow_rollback)
         # 是否自动提交
-        self.__Args__['AUTO_COMMIT'] = kwargs.get(
-            "AUTO_COMMIT") or self.getArg('AUTO_COMMIT') or __cache__.auto_commit
+        self.__Args__['AUTO_COMMIT'] = VarGet(kwargs.get(
+            "AUTO_COMMIT"), self.getArg('AUTO_COMMIT'), __cache__.auto_commit)
         # SQL模板类型
-        self.__Args__['SQL_TEMPLATE_TYPE'] = kwargs.get(
-            "SQL_TEMPLATE_TYPE") or self.getArg('SQL_TEMPLATE_TYPE') or __cache__.sql_template_type
+        self.__Args__['SQL_TEMPLATE_TYPE'] = VarGet(kwargs.get(
+            "SQL_TEMPLATE_TYPE"), self.getArg('SQL_TEMPLATE_TYPE'), __cache__.sql_template_type)
         # 数据库驱动
-        self.__Args__['DB_DRIVER'] = kwargs.get(
-            "DB_DRIVER") or self.getArg('DB_DRIVER') or None
+        self.__Args__['DB_DRIVER'] = VarGet(kwargs.get(
+            "DB_DRIVER"), self.getArg('DB_DRIVER'), None)
         # 数据库认证
-        self.__Args__['DB_DATABASE'] = kwargs.get(
-            "DB_DATABASE") or self.getArg('DB_DATABASE') or None
-        self.__Args__['DB_USER'] = kwargs.get(
-            "DB_USER") or self.getArg('DB_USER') or None
-        self.__Args__['DB_PASSWORD'] = kwargs.get(
-            "DB_PASSWORD") or self.getArg('DB_PASSWORD') or None
-        self.__Args__['DB_HOST'] = kwargs.get(
-            "DB_HOST") or self.getArg('DB_HOST') or None
-        self.__Args__['DB_PORT'] = kwargs.get(
-            "DB_PORT") or self.getArg('DB_PORT') or None
+        self.__Args__['DB_DATABASE'] = VarGet(kwargs.get(
+            "DB_DATABASE"), self.getArg('DB_DATABASE'), None)
+        self.__Args__['DB_USER'] = VarGet(kwargs.get(
+            "DB_USER"), self.getArg('DB_USER'), None)
+        self.__Args__['DB_PASSWORD'] = VarGet(kwargs.get(
+            "DB_PASSWORD"), self.getArg('DB_PASSWORD'), None)
+        self.__Args__['DB_HOST'] = VarGet(kwargs.get(
+            "DB_HOST"), self.getArg('DB_HOST'), None)
+        self.__Args__['DB_PORT'] = VarGet(kwargs.get(
+            "DB_PORT"), self.getArg('DB_PORT'), None)
     # 获取参数字典
 
     @property
@@ -155,12 +155,12 @@ class GuideArgs(ConfArgs):
 
     # 是否不输出日志文件
     @property
-    def NO_LOG(self):
-        return self.__Args__['NO_LOG']
+    def LOG_ON(self):
+        return self.__Args__['LOG_ON']
 
-    @NO_LOG.setter
-    def NO_LOG(self, value):
-        self.__Args__['NO_LOG'] = value
+    @LOG_ON.setter
+    def LOG_ON(self, value):
+        self.__Args__['LOG_ON'] = value
         # pass  # 可读写属性
 
     # 是否是debug模式
@@ -363,7 +363,8 @@ class InitGuide(GuideArgs, PathPlant):
             sql_fullpath = self.getSqlPath(func_name)
             return sql_fullpath
     # 通过sql_name解析sql文件路径
-    def resolveSqlPathSn(self,sql_name):
+
+    def resolveSqlPathSn(self, sql_name):
         sql_fullpath = self.getSqlPath(sql_name)
         return sql_fullpath
 
@@ -411,18 +412,17 @@ class InitGuide(GuideArgs, PathPlant):
             self.__logger.logging(level, message, cur_frame=bac_frame)
 
     # 打印输出函数
-    def logging(self,level, message, *msgs):
+    def logging(self, level, message, *msgs):
         self.__print(level, message, *msgs)
-        if not self.NO_LOG:
+        if self.LOG_ON:
             self.__logging(level, message, *msgs)
 
     # 初始化logging
     def initLogging(self):
         self.__logger = LoggerFactory(
             path=os.path.join(self.LOG_PATH, self.module_name + ".log"),
-            console=False, 
+            console=False,
             debug=self.DEBUG,
-            maxMb=self.LOG_MAX_SIZE, 
-            backupCount=self.LOG_BACKUP_CNT, 
-            noLog=self.NO_LOG)
-
+            maxMb=self.LOG_MAX_SIZE,
+            backupCount=self.LOG_BACKUP_CNT,
+            logOn=self.LOG_ON)
