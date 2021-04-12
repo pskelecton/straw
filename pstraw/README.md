@@ -55,7 +55,7 @@
 > #### resource_factory.py
 > 资源工厂, 对资源读取与缓存的统一处理
 
-## 待完成项目
+### 待完成项目
 > 1. 异常处理, 包括路径不存在, 文件不存在, 需要抛出正确错误信息
 > 2. 一次缓存重复调用, 需要全局找可复用缓存
 > 3. sqlalchemy的loader
@@ -70,13 +70,13 @@
 > 12. ssl功能追加
 > 13. entry注解通过闭包保存状态，并缓存下次直接获取
 
-## 大功能
+### 大功能
 > 1. 动态sql与模板引擎（外部插件）
 > 2. 核心与插件化分离
 > 3. 非关系型数据库对接
 > 4. 外部执行语言对接（java、js、shell、cmd、c）
 
-## 测试问题一览（待解决）
+### 测试问题一览（待解决）
 > 1. @sql注解函数中的返回值，如果为list，则做多个sql的合并后再执行（增加效率），只作用于增、改、删
 > 2. 识别字符串、数值、日期、布尔、字节等类型，自动拼接单引号''
 > 3. TRACK_SQL_FILE = True的情况下，可以允许手动通过路径匹配sql文件
@@ -89,16 +89,16 @@
 > 10. 文件夹层级比较深，但内容都没什么用的情况不需要深度遍历，或者选择性遍历
 
 
-## 说明：
+### 说明：
 > 1. connection注解不能嵌套使用，非connection注解函数可以调用connection注解函数，反之也可
 > 2. allow_mutisql = True的时候，返回的cursor是list类型，False时返回的cursor是单个对象
 > 3. sql文件以及数据库缓存，在入口注解中添加，如果没有入口注解，则不作缓存
 > 4. 关于factory类，是不嵌入到主类中的，都是单独开辟一块引用处理逻辑（不被主类继承）
 
-## 记事：
+### 记事：
 > 1. 参考标准库 https://docs.python.org/zh-cn/3.7/library/index.html，调查扩展与优化
 
-## 发布：
+### 发布：
 ```linux
 # 安装上传工具
 pip install twine
@@ -124,3 +124,16 @@ pip install pstraw
 git tag v0.9.2
 git push origin v0.9.2
 ```
+
+### 工作日程
+- API文档整理
+- MIT License
+- Example文档整理
+- readme介绍主页
+- Gitpage主页搭建
+
+### 多编程语言支持
+- js/ts
+- go
+- julia
+- rust
