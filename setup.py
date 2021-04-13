@@ -3,11 +3,20 @@
 
 from setuptools import setup, find_packages
 
+long_description = '''
+1. Beta:0.9.x
+2. License:MIT
+3. Python >= 3.7
+4. SQL@Support:postgres|mysql
+'''
+# with open('README.md',encoding='utf-8') as f:
+#     long_description = f.read()
+
 setup(
     name='pstraw',
-    version='0.9.2',
-    description=('函数调用的方式操作数据库'),
-    long_description=open('README.md').read(),
+    version='0.9.3',
+    description=('简单的函数调用来处理数据库'),
+    long_description=long_description,
     author='Chalk Yu',
     author_email='yuequn3721@qq.com',
     maintainer='Chalk Yu',
@@ -21,9 +30,11 @@ setup(
         "sqlalchemy==1.3.22",
         "sqlparse==0.4.1",
         "pychalk==2.0.1",
-        "promise==2.3"
+        "promise==2.3",
+        "psycopg2==2.8.6",
+        "pymysql==0.9.3"
     ],
     classifiers=[
-        'Programming Language :: Python :: 3.6'
+        'Programming Language :: Python :: 3.7'
     ],
 )
