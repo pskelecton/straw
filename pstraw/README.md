@@ -128,6 +128,7 @@ git push origin v0.9.2
 
 ### 工作日程
 - API文档整理
+- Pypi说明文档，readme.rst
 - MIT License
 - Example文档整理
 - readme介绍主页
