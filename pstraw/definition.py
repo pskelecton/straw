@@ -16,8 +16,10 @@ __cache__ = ConfStore(
     conf_file=None,  # 配置文件路径
     sql_dir=None,  # sql文件目录
     log_dir=None,  # log文件目录
-    # 是否不输出日志文件
+    # 是否输出日志文件
     log_on=False,
+    # 是否生成配置目录
+    env_on=False,
     # 是否是debug模式
     debug=True,
     # 单个日志文件最大容量(mb)

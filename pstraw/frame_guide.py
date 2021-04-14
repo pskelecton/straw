@@ -31,8 +31,8 @@ class ConfArgs():
         self.__CONF_PATH = PathPlant.transAbspath(
             kwargs.get('CONF_PATH') or None)
         # 配置文件夹
-        self.__CONF_DIR = PathPlant.transAbspath(None if self.__CONF_PATH == None else os.path.dirname(
-            self.__CONF_PATH))
+        self.__ENV_DIR = PathPlant.transAbspath(VarGet(kwargs.get(
+            'ENV_DIR'), None if self.__CONF_PATH == None else os.path.dirname(self.__CONF_PATH), None))
         # print("ConfArgs", kwargs)
         # 读取配置
         self.loadConf()
@@ -53,12 +53,12 @@ class ConfArgs():
 
     # 配置文件夹
     @property
-    def CONF_DIR(self):
-        return self.__CONF_DIR
+    def ENV_DIR(self):
+        return self.__ENV_DIR
 
-    @CONF_DIR.setter
-    def CONF_DIR(self, value):
-        self.__CONF_DIR = PathPlant.transAbspath(value)
+    @ENV_DIR.setter
+    def ENV_DIR(self, value):
+        self.__ENV_DIR = PathPlant.transAbspath(value)
         pass  # 读写属性
 
 # 初始化参数
@@ -76,9 +76,12 @@ class GuideArgs(ConfArgs):
         # LOG文件存放目录
         self.__Args__['LOG_PATH'] = PathPlant.transAbspath(kwargs.get(
             'LOG_PATH') or self.getArg('LOG_PATH') or None)
-        # 是否不输出日志文件
+        # 是否输出日志文件
         self.__Args__['LOG_ON'] = VarGet(kwargs.get(
             'LOG_ON'), self.getArg('LOG_ON'), __cache__.log_on)
+        # 是否生成配置目录
+        self.__Args__['ENV_ON'] = VarGet(kwargs.get(
+            'ENV_ON'), self.getArg('ENV_ON'), __cache__.env_on)
         # 是否是debug模式
         self.__Args__['DEBUG'] = VarGet(kwargs.get(
             'DEBUG'), self.getArg('DEBUG'), __cache__.debug)
@@ -153,7 +156,7 @@ class GuideArgs(ConfArgs):
         self.__Args__['LOG_PATH'] = PathPlant.transAbspath(value)
         # pass  # 可读写属性
 
-    # 是否不输出日志文件
+    # 是否输出日志文件
     @property
     def LOG_ON(self):
         return self.__Args__['LOG_ON']
@@ -161,6 +164,16 @@ class GuideArgs(ConfArgs):
     @LOG_ON.setter
     def LOG_ON(self, value):
         self.__Args__['LOG_ON'] = value
+        # pass  # 可读写属性
+
+    # 是否生成配置目录
+    @property
+    def ENV_ON(self):
+        return self.__Args__['ENV_ON']
+
+    @ENV_ON.setter
+    def ENV_ON(self, value):
+        self.__Args__['ENV_ON'] = value
         # pass  # 可读写属性
 
     # 是否是debug模式
@@ -318,25 +331,28 @@ class InitGuide(GuideArgs, PathPlant):
         self.module_name = __cache__.model_name if len(args) == 0 else args[0]
 
     # 初始化文件夹
-    def resolvePath(self):
-        # 解决sql文件夹
-        if self.SQL_PATH == None:
-            self.SQL_PATH = os.path.realpath('sql')
-        self.initFolder(self.SQL_PATH)
-        # 路径写入缓存
-        __cache__.modify('sql_dir', self.SQL_PATH)
+    def resolvePath(self,sql_on=False):
+        if sql_on:
+            # 解决sql文件夹
+            if self.SQL_PATH == None:
+                self.SQL_PATH = os.path.realpath('sql')
+            self.initFolder(self.SQL_PATH)
+            # 路径写入缓存
+            __cache__.modify('sql_dir', self.SQL_PATH)
         # 解决log文件夹
-        if self.LOG_PATH == None:
-            self.LOG_PATH = os.path.realpath('log')
-        self.initFolder(self.LOG_PATH)
-        # 路径写入缓存
-        __cache__.modify('log_dir', self.LOG_PATH)
+        if self.LOG_ON:
+            if self.LOG_PATH == None:
+                self.LOG_PATH = os.path.realpath('log')
+            self.initFolder(self.LOG_PATH)
+            # 路径写入缓存
+            __cache__.modify('log_dir', self.LOG_PATH)
         # 解决env文件夹
-        if self.CONF_DIR == None:
-            self.CONF_DIR = os.path.realpath('env')
-        self.initFolder(self.CONF_DIR)
-        # 路径写入缓存
-        __cache__.modify('env_dir', self.CONF_DIR)
+        if self.ENV_ON:
+            if self.ENV_DIR == None:
+                self.ENV_DIR = os.path.realpath('env')
+            self.initFolder(self.ENV_DIR)
+            # 路径写入缓存
+            __cache__.modify('env_dir', self.ENV_DIR)
 
     # 根据sql文件名查找sql路径
     def getSqlPath(self, sqlname):

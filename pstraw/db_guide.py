@@ -54,7 +54,7 @@ def createDbc(*args, **kwargs):
 
             def _sql_(model_fn):
                 # 解析路径
-                self.resolvePath()
+                self.resolvePath(sql_on=_SqlName_==None and _SqlStr_==None)
                 # 初始化log
                 self.initLogging()
                 # 获取sql路径
@@ -141,7 +141,7 @@ def createDbc(*args, **kwargs):
         # 主方法注解，可选注解，用于初始化
         def entry(self, main_fn):
             # 解析路径
-            self.resolvePath(main_fn)
+            self.resolvePath()
             # 主方法做为根目录解析路径
             # 初始化log
             self.initLogging()
