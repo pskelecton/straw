@@ -26,11 +26,6 @@ def createDbc(*args, **kwargs):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.__module_name__ = self.module_name
-            self._SqlPath_ = self.SQL_PATH
-            self._ParseType_ = self.SQL_TEMPLATE_TYPE
-            self._AllowRollback_ = self.ALLOW_ROLLBACK
-            self._AutoCommit_ = self.AUTO_COMMIT
-            self._UseBean_ = self.USE_BEAN
             # 绑定装饰器别名
             self.sql = self.__sql__
             self.conn = self.__connection__
@@ -39,10 +34,10 @@ def createDbc(*args, **kwargs):
         def __sql__(self, *args, **kwargs):
             ''' 装饰器参数 '''
             # 应用模板类型
-            _ParseType_ = self._ParseType_ if kwargs.get(
+            _ParseType_ = self.SQL_TEMPLATE_TYPE if kwargs.get(
                 'SQL_TEMPLATE_TYPE') == None else kwargs.get('SQL_TEMPLATE_TYPE')
             # 是否应用Bean来使用自动注入
-            _UseBean_ = self._UseBean_ if kwargs.get(
+            _UseBean_ = self.USE_BEAN if kwargs.get(
                 'USE_BEAN') == None else kwargs.get('USE_BEAN')
             # 注入的Bean类，USE_BEAN=True才生效
             __bean__ = None if len(args) == 0 else args[0]
@@ -82,14 +77,11 @@ def createDbc(*args, **kwargs):
                         logging=self.logging)
 
                     cur = self.execute(sqls,sqlAction)
-
-                    # cur = self.execute(
-                    #     sql_path, model_fn(*args, **kwargs), _ParseType_, model_fn.__name__)
                     
                     if(cur == None):
-                        raise Exception("The 'cursor' is None", 1)
+                        raise Exception(FormatMsg("The 'cursor' is None"))
                     elif(type(cur) == list and len(cur) == 0):
-                        raise Exception("The 'cursor' is None", 1)
+                        raise Exception(FormatMsg("The 'cursor' is None"))
                     else:
                         if _UseBean_:
                             return self.inject(cur, __bean__, bf.createResultClass)
@@ -99,10 +91,10 @@ def createDbc(*args, **kwargs):
 
         # 链接装饰器
         def __connection__(self, *args, **kwargs):
-            _AllowRollback_ = self._AllowRollback_ if kwargs.get(
-                'allow_rollback') is None else kwargs.get('allow_rollback')
-            _AutoCommit_ = self._AutoCommit_ if kwargs.get(
-                'auto_commit') is None else kwargs.get('auto_commit')
+            _AllowRollback_ = self.ALLOW_ROLLBACK if kwargs.get(
+                'ALLOW_ROLLBACK') is None else kwargs.get('ALLOW_ROLLBACK')
+            _AutoCommit_ = self.AUTO_COMMIT if kwargs.get(
+                'AUTO_COMMIT') is None else kwargs.get('AUTO_COMMIT')
 
             def _connection_(logic_fn):
                 # 解析路径

@@ -55,3 +55,48 @@ if __name__ == '__main__':
 ```
 
 - 参数API
+  - Straw参数
+    | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
+    | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
+    | DB_DRIVER | str | None | :o: | "mysql" \| "postgres" | 驱动类型
+    | DB_DATABASE | str | None | :o: | | 数据库名
+    | DB_USER | str | None | :o: | | 用户名
+    | DB_PASSWORD | str | None | :o: | | 密码
+    | DB_HOST | str | None | :o: | | 数据库连接地址
+    | DB_PORT | int | 3306 \| 2345 | | | 端口号，默认mysql或者postgres的端口
+    | CONF_PATH | str | None |  |  | 配置文件路径
+    | ENV_DIR | str | . |  |  | 环境参数目录
+    | SQL_PATH | str | . |  |  | sql文件目录
+    | LOG_PATH | str | . |  |  | log文件目录
+    | LOG_ON | bool | False |  |  | 是否写入log文件
+    | ENV_ON | bool | False |  |  | 是否使用环境参数目录
+    | DEBUG | bool | False |  |  | 是否开启debug模式
+    | LOG_MAX_SIZE | int | 10 |  |  | log文件最大mb
+    | LOG_BACKUP_CNT | int | 1 |  |  | log文件最大备份数
+    | TRACK_SQL_FILE | bool | False |  |  | 根据model目录来映射sql路径
+    | MODEL_FOLDER_NAME | str | "straw" |  |  | model目录名称
+    | USE_BEAN | bool | True |  |  | 默认是否使用bean
+    | ALLOW_ROLLBACK | bool | True |  |  | 异常是否自动回滚
+    | AUTO_COMMIT | bool | True |  |  | 是否自动提交
+    | SQL_TEMPLATE_TYPE | int | 6 |  | 1\|2\|3\|4\|5\|6 | 模板类型
+    | ORM_LOADER | type(OrmLoader) | None |  |  | 驱动插件扩展(oracle/sqlserver等)
+
+  - @Straw.sql参数
+    | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
+    | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
+    | [Bean] | type(Bean) |  |  |  | 结构体
+    | SQL_TEMPLATE_TYPE | int | 6 |  | 1\|2\|3\|4\|5\|6 | 模板类型
+    | USE_BEAN | bool | True |  |  | 默认是否使用bean
+    | SQL_NAME | str | None |  |  | 直接绑定sql文件
+    | SQL | str | None |  |  | 直接绑定sql语句
+
+  - @Straw.conn参数
+    | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
+    | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
+    | ALLOW_ROLLBACK | bool | True |  |  | 异常是否自动回滚
+    | AUTO_COMMIT | bool | True |  |  | 是否自动提交
+
+  - @Straw.enter参数
+    | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
+    | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
+    | 待扩展
