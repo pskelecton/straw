@@ -127,9 +127,16 @@ class GuideArgs(ConfArgs):
         self.__Args__['DB_PASSWORD'] = VarGet(kwargs.get(
             "DB_PASSWORD"), self.getArg('DB_PASSWORD'), None)
         self.__Args__['DB_HOST'] = VarGet(kwargs.get(
-            "DB_HOST"), self.getArg('DB_HOST'), None)
+            "DB_HOST"), self.getArg('DB_HOST'), __cache__.db_host)
+        # 默认端口号设置
+        __default_port = None
+        if self.__Args__['DB_DRIVER'] == "postgres":
+            __default_port = 5432
+        elif self.__Args__['DB_DRIVER'] == "mysql":
+            __default_port = 3306
+        # 设置端口号
         self.__Args__['DB_PORT'] = VarGet(kwargs.get(
-            "DB_PORT"), self.getArg('DB_PORT'), None)
+            "DB_PORT"), self.getArg('DB_PORT'),__default_port, None)
     # 获取参数字典
 
     @property

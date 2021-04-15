@@ -40,6 +40,8 @@ __cache__ = ConfStore(
     auto_commit=True,
     # sql模板类型
     sql_template_type=6,
+    # 默认hostname
+    db_host='localhost'
 )
 
 # DB类型反射python类型

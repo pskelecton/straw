@@ -23,9 +23,7 @@ db = Straw(
     DB_DRIVER='mysql',
     DB_DATABASE='demo_db',
     DB_USER='root',
-    DB_PASSWORD='root',
-    DB_HOST='localhost',
-    DB_PORT=3306
+    DB_PASSWORD='root'
 )
 # 创建一个结构体，用于保存数据对象
 @dataclass
@@ -59,11 +57,11 @@ if __name__ == '__main__':
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
     | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
     | DB_DRIVER | str | None | :o: | "mysql" \| "postgres" | 驱动类型
-    | DB_DATABASE | str | None | :o: | | 数据库名
+    | DB_DATABASE | str | "localhost" | :o: |  | 数据库名
     | DB_USER | str | None | :o: | | 用户名
     | DB_PASSWORD | str | None | :o: | | 密码
     | DB_HOST | str | None | :o: | | 数据库连接地址
-    | DB_PORT | int | 3306 \| 2345 | | | 端口号，默认mysql或者postgres的端口
+    | DB_PORT | int | 3306 \| 5432 | | | 端口号，默认mysql或者postgres的端口
     | CONF_PATH | str | None |  |  | 配置文件路径
     | ENV_DIR | str | . |  |  | 环境参数目录
     | SQL_PATH | str | . |  |  | sql文件目录
@@ -100,3 +98,6 @@ if __name__ == '__main__':
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
     | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
     | 待扩展 |  |  |  |  |
+
+- 框架应用说明
+- 单脚本应用说明
