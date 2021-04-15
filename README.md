@@ -99,5 +99,18 @@ if __name__ == '__main__':
     | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
     | 待扩展 |  |  |  |  |
 
+- API函数
+  - Straw [主函数]
+  - Store [数据对象生成]
+  - ConfStore [配置生成]
+  - GlobalConfig [全局参数引用]
+  - SQLTypeMap [sql类型映射Map]
+  - ResFactory [资源工厂]
+  - SqlParser [sql转换器类]
+  - OrmLoader [loader接口类]
+  - Bean [bean接口类]
+
 - 框架应用说明
+
+
 - 单脚本应用说明
