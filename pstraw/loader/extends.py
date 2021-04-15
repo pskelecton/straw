@@ -11,6 +11,7 @@ import sqlparse
 import re
 import math
 from ..screws import Store
+from ..tool import formatMsg
 
 
 # ORM Loader接口
@@ -267,10 +268,10 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG", f'****** SQL ****** : \n{sql}')
+        logging("DEBUG",formatMsg('SQL',{sql}))
         sql = sql % tuple(map(lambda v: str(v), tuple_args))
         _sql_ = sql.strip()
-        logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
+        logging("DEBUG",formatMsg('SQL',{_sql_}))
         return _sql_
 
     def StrParseEngine(self, sql, tuple_args, logging):
@@ -281,22 +282,22 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG", f'****** SQL ****** : \n{sql}')
+        logging("DEBUG",formatMsg('SQL',{sql}))
         sql = sql.format(*tuple(map(lambda v: str(v), tuple_args)))
         _sql_ = sql.strip()
-        logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
+        logging("DEBUG",formatMsg('SQL',{_sql_}))
         return _sql_
 
     def DictParseEngine(self, sql, dict_args, logging):
         sql = self.formatSql(sql)
-        logging("DEBUG", f'****** SQL ****** : \n{sql}')
+        logging("DEBUG",formatMsg('SQL',{sql}))
         sqlFragments = self.sqlChipMaker(sql)
         for key in dict_args:
             sqlFragments = self.listReplace(
                 sqlFragments, f':{key}', str(dict_args[key]))
         sql = self.formatSql(' '.join(sqlFragments))
         _sql_ = sql.strip()
-        logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
+        logging("DEBUG",formatMsg('SQL',{_sql_}))
         return _sql_
 
     def TempParseEngineT(self, sql, tuple_args, logging):
@@ -307,10 +308,10 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG", f'****** SQL ****** : \n{sql}')
+        logging("DEBUG",formatMsg('SQL',{sql}))
         sql = sql % tuple(map(lambda v: str(v) if type(v)==int or type(v)==float else f'\'{str(v)}\'', tuple_args))
         _sql_ = sql.strip()
-        logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
+        logging("DEBUG",formatMsg('SQL',{_sql_}))
         return _sql_
 
     def StrParseEngineT(self, sql, tuple_args, logging):
@@ -321,20 +322,20 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG", f'****** SQL ****** : \n{sql}')
+        logging("DEBUG",formatMsg('SQL',{sql}))
         sql = sql.format(*tuple(map(lambda v: str(v) if type(v)==int or type(v)==float else f'\'{str(v)}\'', tuple_args)))
         _sql_ = sql.strip()
-        logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
+        logging("DEBUG",formatMsg('SQL',{_sql_}))
         return _sql_
 
     def DictParseEngineT(self, sql, dict_args, logging):
         sql = self.formatSql(sql)
-        logging("DEBUG", f'****** SQL ****** : \n{sql}')
+        logging("DEBUG",formatMsg('SQL',{sql}))
         sqlFragments = self.sqlChipMaker(sql)
         for key in dict_args:
             sqlFragments = self.listReplace(
                 sqlFragments, f':{key}', str(dict_args[key]) if type(dict_args[key])==int or type(dict_args[key])==float else f'\'{str(dict_args[key])}\'')
         sql = self.formatSql(' '.join(sqlFragments))
         _sql_ = sql.strip()
-        logging("DEBUG", f'****** SQL ****** : \n{_sql_}')
+        logging("DEBUG",formatMsg('SQL',{_sql_}))
         return _sql_

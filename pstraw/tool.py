@@ -32,3 +32,14 @@ def VarGet(*args):
         if arg != None:
             return arg
     return None
+
+# 日志格式化输出
+def FormatMsg(hmsg,*msgs):
+    __msg = ""
+    if len(msgs) > 0:
+        __msg = f'>>> {hmsg} >>>'
+    else:
+        __msg = f'>>> {hmsg}'
+    for msg in msgs:
+        __msg = f'{__msg}\n{msg}'
+    return __msg

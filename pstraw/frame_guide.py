@@ -17,7 +17,7 @@ import logging
 import logging.handlers
 from dataclasses import dataclass
 from .screws import PathPlant
-from .tool import Str2Bool, Str2Int, VarGet
+from .tool import Str2Bool, Str2Int, VarGet, FormatMsg
 from .definition import __cache__
 from .logger_factory import LoggerFactory
 

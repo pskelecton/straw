@@ -13,9 +13,6 @@
 ```shell
 # 安装straw库
 pip install pstraw
-# 安装数据库驱动(二选一)
-pip install pymysql # mysql
-pip install psycopg2 # postgres
 ```
 
 - 快速使用

@@ -12,6 +12,7 @@ from .frame_guide import InitGuide
 from .bean_factory import bf
 from .orm_factory import orm
 from .resource_factory import resf
+from .tool import FormatMsg
 
 
 def createDbc(*args, **kwargs):
@@ -69,8 +70,7 @@ def createDbc(*args, **kwargs):
                     modelFnName = model_fn.__name__
 
                 def __model_fn(*args, **kwargs):
-                    self.logging(
-                        "DEBUG", "****** %s Start ******" % self.__module_name__)
+                    self.logging("DEBUG", FormatMsg("%s Start" % self.__module_name__))
 
                     # 生成sql语句
                     sqls,sqlAction = resf.sqlCompose(
@@ -112,13 +112,13 @@ def createDbc(*args, **kwargs):
 
                 def __logic_fn(*args, **kwargs):
                     self.connect(_AllowRollback_, _AutoCommit_)
-                    self.logging('DEBUG', '\n'.join((f'''
+                    self.logging('DEBUG',FormatMsg('DB Connection','\n'.join((f'''
                         DB_DATABASE:{self.DB_DATABASE}
                         DB_USER:{self.DB_USER}
                         DB_PASSWORD:{self.DB_PASSWORD}
                         DB_HOST:{self.DB_HOST}
                         DB_PORT:{self.DB_PORT}
-                    ''').split()))
+                    ''').split())))
                     result = None
                     try:
                         result = logic_fn(*args, **kwargs)
@@ -128,12 +128,11 @@ def createDbc(*args, **kwargs):
                         if _AllowRollback_ and _AutoCommit_:
                             self.rollback()
                             self.logging("ERROR", exc)
-                            self.logging("WARN", "****** SQL Rollback ******")
+                            self.logging("WARN", FormatMsg("SQL Rollback"))
                             self.close()
                         raise exc
                     self.close()
-                    self.logging("DEBUG", "****** %s End ******" %
-                                 self.__module_name__)
+                    self.logging("DEBUG", FormatMsg("%s End" % self.__module_name__))
                     return result
                 return __logic_fn
             return _connection_

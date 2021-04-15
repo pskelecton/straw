@@ -39,7 +39,7 @@ __cache__ = ConfStore(
     # 是否自动提交
     auto_commit=True,
     # sql模板类型
-    sql_template_type=3,
+    sql_template_type=6,
 )
 
 # DB类型反射python类型
@@ -50,22 +50,7 @@ __type_reflect__ = Store(
             "int":int,
             "datetime":str
         },
-        "db2":{
-            "varchar":str,
-            "int":int,
-            "datetime":str
-        },
         "mysql":{
-            "varchar":str,
-            "int":int,
-            "datetime":str
-        },
-        "sqlite":{
-            "varchar":str,
-            "int":int,
-            "datetime":str
-        },
-        "oracle":{
             "varchar":str,
             "int":int,
             "datetime":str
