@@ -92,6 +92,9 @@
 > 11. 初始化控制，LOG_ON=False的时候，不需要自动生成文件夹
 > 12. 重构logger_factory模块，分离logger和错误追踪处理
 > 13. 添加mysql和postgres数据库类型映射
+> 14. 添加GlobalConfig赋值拦截器，修改取值有限度
+> 15. 返回数组拼接sql那块要重构，生成一个sql语句
+> 16. 添加默认的ssl
 
 
 ### 说明：
