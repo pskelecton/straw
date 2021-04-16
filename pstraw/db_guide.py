@@ -29,6 +29,8 @@ def createDbc(*args, **kwargs):
             # 绑定装饰器别名
             self.sql = self.__sql__
             self.conn = self.__connection__
+            # 初始化connection数据库连接对象
+            self.connection = None
 
         # sql装饰器
         def __sql__(self, *args, **kwargs):
@@ -75,17 +77,24 @@ def createDbc(*args, **kwargs):
                         modelFnName=modelFnName,
                         sql=_SqlStr_,
                         logging=self.logging)
-
-                    cur = self.execute(sqls,sqlAction)
                     
-                    if(cur == None):
+                    cursor = None
+                    if self.RW_EXECUTE:
+                        cursor = self.RW_EXECUTE(self.connection,sqls,sqlAction)
+                    else:
+                        cursor = self.execute(self.connection,sqls,sqlAction)
+                    
+                    if(cursor == None):
                         raise Exception(FormatMsg("The 'cursor' is None"))
-                    elif(type(cur) == list and len(cur) == 0):
+                    elif(type(cursor) == list and len(cursor) == 0):
                         raise Exception(FormatMsg("The 'cursor' is None"))
                     else:
                         if _UseBean_:
-                            return self.inject(cur, __bean__, bf.createResultClass)
-                        return cur
+                            if self.RW_INJECT:
+                                return self.RW_INJECT(self.connection,sqlAction,cursor, __bean__, bf.createResultClass)
+                            else:
+                                return self.inject(self.connection,sqlAction,cursor, __bean__, bf.createResultClass)
+                        return cursor
                 return __model_fn
             return _sql_
 
@@ -103,7 +112,10 @@ def createDbc(*args, **kwargs):
                 self.initLogging()
 
                 def __logic_fn(*args, **kwargs):
-                    self.connect(_AllowRollback_, _AutoCommit_)
+                    if self.RW_CONNECT:
+                        self.connection = self.RW_CONNECT(_AllowRollback_, _AutoCommit_)
+                    else:
+                        self.connection = self.connect(_AllowRollback_, _AutoCommit_)
                     self.logging('DEBUG',FormatMsg('DB Connection','\n'.join((f'''
                         DB_DATABASE:{self.DB_DATABASE}
                         DB_USER:{self.DB_USER}
@@ -115,15 +127,27 @@ def createDbc(*args, **kwargs):
                     try:
                         result = logic_fn(*args, **kwargs)
                         if _AllowRollback_ and _AutoCommit_:
-                            self.commit()
+                            if self.RW_COMMIT:
+                                self.RW_COMMIT(self.connection)
+                            else:
+                                self.commit(self.connection)
                     except Exception as exc:
                         if _AllowRollback_ and _AutoCommit_:
-                            self.rollback()
+                            if self.RW_ROLLBACK:
+                                self.RW_ROLLBACK(self.connection)
+                            else:
+                                self.rollback(self.connection)
                             self.logging("ERROR", exc)
                             self.logging("WARN", FormatMsg("SQL Rollback"))
-                            self.close()
+                            if self.RW_CLOSE:
+                                self.RW_CLOSE(self.connection)
+                            else:
+                                self.close(self.connection)
                         raise exc
-                    self.close()
+                    if self.RW_CLOSE:
+                        self.RW_CLOSE(self.connection)
+                    else:
+                        self.close(self.connection)
                     self.logging("DEBUG", FormatMsg("%s End" % self.__module_name__))
                     return result
                 return __logic_fn

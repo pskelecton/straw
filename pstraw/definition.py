@@ -41,7 +41,15 @@ __cache__ = ConfStore(
     # sql模板类型
     sql_template_type=6,
     # 默认hostname
-    db_host='localhost'
+    db_host='localhost',
+    # 数据库编码
+    encoding='utf-8',
+    # sqlalchemy扩展参数
+    sqlalchemy_args={
+        'create_engine':None,
+        'sessionmaker':None,
+        'scoped_session':None
+    }
 )
 
 # DB类型反射python类型

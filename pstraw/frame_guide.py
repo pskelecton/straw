@@ -8,6 +8,7 @@
 # Author : Chalk Yu
 # ========================================
 from __future__ import absolute_import
+from types import MethodType, FunctionType
 import sys
 import os
 import inspect
@@ -16,7 +17,7 @@ import configparser
 import logging
 import logging.handlers
 from dataclasses import dataclass
-from .screws import PathPlant
+from .screws import PathPlant, Store
 from .tool import Str2Bool, Str2Int, VarGet, FormatMsg
 from .definition import __cache__
 from .logger_factory import LoggerFactory
@@ -50,6 +51,17 @@ class ConfArgs():
             return conf.get(arg.lower())
         else:
             return None
+
+    def getArgs(self, namespace=__cache__.model_name):
+        if self.__configparser__.has_section(namespace):
+            sec = self.__configparser__._sections
+            args = sec.get(namespace)
+            if args:
+                return dict(args)
+            else:
+                return {}
+        else:
+            return {}
 
     # 配置文件夹
     @property
@@ -136,7 +148,39 @@ class GuideArgs(ConfArgs):
             __default_port = 3306
         # 设置端口号
         self.__Args__['DB_PORT'] = VarGet(kwargs.get(
-            "DB_PORT"), self.getArg('DB_PORT'),__default_port, None)
+            "DB_PORT"), self.getArg('DB_PORT'), __default_port, None)
+        # sqlite db文件路径
+        self.__Args__['SQLITE_PATH'] = VarGet(kwargs.get(
+            "SQLITE_PATH"), self.getArg('SQLITE_PATH'), None)
+
+        # 数据库编码
+        self.__Args__['ENCODING'] = VarGet(kwargs.get(
+            "ENCODING"), self.getArg('ENCODING'), __cache__.encoding)
+
+        # sqlalchemy扩展参数
+        self.__Args__['SQLALCHEMY_ARGS'] = Store(VarGet(kwargs.get("SQLALCHEMY_ARGS") if type(
+            kwargs.get("SQLALCHEMY_ARGS")) == dict else None, __cache__.sqlalchemy_args))
+
+        # loader外部重载方法
+        # connect()
+        self.__Args__['RW_CONNECT'] = kwargs.get("RW_CONNECT") if type(
+            kwargs.get("RW_CONNECT")) == FunctionType else None
+        # execute()
+        self.__Args__['RW_EXECUTE'] = kwargs.get("RW_EXECUTE") if type(
+            kwargs.get("RW_EXECUTE")) == FunctionType else None
+        # close()
+        self.__Args__['RW_CLOSE'] = kwargs.get("RW_CLOSE") if type(
+            kwargs.get("RW_CLOSE")) == FunctionType else None
+        # commit()
+        self.__Args__['RW_COMMIT'] = kwargs.get("RW_COMMIT") if type(
+            kwargs.get("RW_COMMIT")) == FunctionType else None
+        # rollback()
+        self.__Args__['RW_ROLLBACK'] = kwargs.get("RW_ROLLBACK") if type(
+            kwargs.get("RW_ROLLBACK")) == FunctionType else None
+        # inject()
+        self.__Args__['RW_INJECT'] = kwargs.get("RW_INJECT") if type(
+            kwargs.get("RW_INJECT")) == FunctionType else None
+
     # 获取参数字典
 
     @property
@@ -330,6 +374,91 @@ class GuideArgs(ConfArgs):
         # self.__Args__['DB_PORT'] = value
         pass  # 只读属性
 
+    # sqlite db文件路径
+    @property
+    def SQLITE_PATH(self):
+        return self.__Args__['SQLITE_PATH']
+
+    @SQLITE_PATH.setter
+    def SQLITE_PATH(self, value):
+        # self.__Args__['SQLITE_PATH'] = value
+        pass  # 只读属性
+
+    # 数据库编码
+    @property
+    def ENCODING(self):
+        return self.__Args__['ENCODING']
+
+    @ENCODING.setter
+    def ENCODING(self, value):
+        # self.__Args__['ENCODING'] = value
+        pass  # 只读属性
+
+    # sqlalchemy扩展参数
+    @property
+    def SQLALCHEMY_ARGS(self):
+        return self.__Args__['SQLALCHEMY_ARGS']
+
+    @SQLALCHEMY_ARGS.setter
+    def SQLALCHEMY_ARGS(self, value):
+        # self.__Args__['SQLALCHEMY_ARGS'] = value
+        pass  # 只读属性
+
+    # loader外部重载方法
+    @property
+    def RW_CONNECT(self):
+        return self.__Args__['RW_CONNECT']
+
+    @RW_CONNECT.setter
+    def RW_CONNECT(self, value):
+        # self.__Args__['RW_CONNECT'] = value
+        pass  # 只读属性
+
+    @property
+    def RW_EXECUTE(self):
+        return self.__Args__['RW_EXECUTE']
+
+    @RW_EXECUTE.setter
+    def RW_EXECUTE(self, value):
+        # self.__Args__['RW_EXECUTE'] = value
+        pass  # 只读属性
+
+    @property
+    def RW_CLOSE(self):
+        return self.__Args__['RW_CLOSE']
+
+    @RW_CLOSE.setter
+    def RW_CLOSE(self, value):
+        # self.__Args__['RW_CLOSE'] = value
+        pass  # 只读属性
+
+    @property
+    def RW_COMMIT(self):
+        return self.__Args__['RW_COMMIT']
+
+    @RW_COMMIT.setter
+    def RW_COMMIT(self, value):
+        # self.__Args__['RW_COMMIT'] = value
+        pass  # 只读属性
+
+    @property
+    def RW_ROLLBACK(self):
+        return self.__Args__['RW_ROLLBACK']
+
+    @RW_ROLLBACK.setter
+    def RW_ROLLBACK(self, value):
+        # self.__Args__['RW_ROLLBACK'] = value
+        pass  # 只读属性
+
+    @property
+    def RW_INJECT(self):
+        return self.__Args__['RW_INJECT']
+
+    @RW_INJECT.setter
+    def RW_INJECT(self, value):
+        # self.__Args__['RW_INJECT'] = value
+        pass  # 只读属性
+
 
 class InitGuide(GuideArgs, PathPlant):
     def __init__(self, *args, **kwargs):
@@ -338,7 +467,7 @@ class InitGuide(GuideArgs, PathPlant):
         self.module_name = __cache__.model_name if len(args) == 0 else args[0]
 
     # 初始化文件夹
-    def resolvePath(self,sql_on=False):
+    def resolvePath(self, sql_on=False):
         if sql_on:
             # 解决sql文件夹
             if self.SQL_PATH == None:

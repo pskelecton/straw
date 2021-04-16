@@ -56,16 +56,19 @@ if __name__ == '__main__':
   - Straw参数
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
     | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
-    | DB_DRIVER | str | None | :o: | "mysql" \| "postgres" | 驱动类型
+    | DB_DRIVER | str | None | :o: | "mysql" \| "postgres" \| "oracle" \| "mssql" \| "sqlite" | 驱动类型
     | DB_DATABASE | str | "localhost" | :o: |  | 数据库名
     | DB_USER | str | None | :o: | | 用户名
     | DB_PASSWORD | str | None | :o: | | 密码
     | DB_HOST | str | None | :o: | | 数据库连接地址
     | DB_PORT | int | 3306 \| 5432 | | | 端口号，默认mysql或者postgres的端口
+    | SQLITE_PATH | str | None |  |  | sqlite db文件路径
+    | ENCODING | str | 'utf-8' |  |  | 数据库编码
+    | SQLALCHEMY_ARGS | dict | {'create_engine':None,<br/>'sessionmaker':None,<br/>'scoped_session':None} |  |  | sqlalchemy扩展参数
     | CONF_PATH | str | None |  |  | 配置文件路径
-    | ENV_DIR | str | . |  |  | 环境参数目录
-    | SQL_PATH | str | . |  |  | sql文件目录
-    | LOG_PATH | str | . |  |  | log文件目录
+    | ENV_DIR | str | "." |  |  | 环境参数目录
+    | SQL_PATH | str | "." |  |  | sql文件目录
+    | LOG_PATH | str | "." |  |  | log文件目录
     | LOG_ON | bool | False |  |  | 是否写入log文件
     | ENV_ON | bool | False |  |  | 是否使用环境参数目录
     | DEBUG | bool | False |  |  | 是否开启debug模式
@@ -78,6 +81,12 @@ if __name__ == '__main__':
     | AUTO_COMMIT | bool | True |  |  | 是否自动提交
     | SQL_TEMPLATE_TYPE | int | 6 |  | 1\|2\|3\|4\|5\|6 | 模板类型
     | ORM_LOADER | type(OrmLoader) | None |  |  | 驱动插件扩展(oracle/sqlserver等)
+    | RW_CONNECT | type(FunctionType) | None |  |  | 重写loader的connect方法
+    | RW_EXECUTE | type(FunctionType) | None |  |  | 重写loader的execute方法
+    | RW_CLOSE | type(FunctionType) | None |  |  | 重写loader的close方法
+    | RW_COMMIT | type(FunctionType) | None |  |  | 重写loader的commit方法
+    | RW_ROLLBACK | type(FunctionType) | None |  |  | 重写loader的rollback方法
+    | RW_INJECT | type(FunctionType) | None |  |  | 重写loader的inject方法
 
   - @Straw.sql参数
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
