@@ -28,12 +28,16 @@ def createDbc(*args, **kwargs):
             # 绑定装饰器别名
             self.sql = self.__sql__
             self.conn = self.__connection__
+            self.entry = self.__entry__
             # 初始化connection数据库连接对象
             self.connection = None
 
         # sql装饰器
         def __sql__(self, *args, **kwargs):
             ''' 装饰器参数 '''
+            # 直接读取sql文件，不从缓存中拿去
+            _HardLoadSql_ = self.HARD_LOAD_SQL if kwargs.get(
+                'HARD_LOAD_SQL') == None else kwargs.get('HARD_LOAD_SQL')
             # 应用模板类型
             _ParseType_ = self.SQL_TEMPLATE_TYPE if kwargs.get(
                 'SQL_TEMPLATE_TYPE') == None else kwargs.get('SQL_TEMPLATE_TYPE')
@@ -66,14 +70,21 @@ def createDbc(*args, **kwargs):
 
                 def __model_fn(*args, **kwargs):
                     self.logging("DEBUG", FormatMsg("%s Start" % self.__module_name__))
-
-                    # 获取缓存中的sql字符串
-                    if self.cache.all_sqls_cached:
-                        _SqlStr_ = self.cache.sql_str_dict.get(sql_path)
-
+                    
+                    # 每次都重新读取sql文件
+                    if _HardLoadSql_:
+                        _SqlStr_ = resf.sqlLoad(sql_path)
+                    else:
+                        # 获取缓存中的sql字符串
+                        if self.cache.all_sqls_cached:
+                            _SqlStr_ = self.cache.sql_str_dict.get(sql_path)
+                        else:
+                            # 重新读取文件，并写入缓存
+                            _SqlStr_ = resf.sqlLoad(sql_path)
+                            self.cache.sql_str_dict[sql_path] = _SqlStr_
+                            
                     # 生成sql语句
                     sqls,sqlAction = resf.sqlCompose(
-                        sqlPath=sql_path,
                         args=model_fn(*args, **kwargs),
                         parseType=_ParseType_,
                         modelFnName=modelFnName,
@@ -167,15 +178,19 @@ def createDbc(*args, **kwargs):
                 self.initFolder(self.SQL_PATH)
                 self.initFolder(self.LOG_PATH)
                 self.initFolder(self.ENV_DIR)
-            # 是否缓存所有sqls数据
-            _CacheSqls_ = kwargs.get('CACHE_SQLS')
-            if _CacheSqls_ == True:
-                # 读取全部sql文件
-                self.cacheSqlPaths()
-                # 读取全部的sql字符串
-                self.cacheSqlString(self.cache.folder_structure.PATH_LIST)
-                # 把已缓存sql标记为True
-                self.cache.modify('all_sqls_cached',True)
+            
+            # 全局 HARD_LOAD_SQL 生效
+            if not self.HARD_LOAD_SQL:
+                # 是否缓存所有sqls数据
+                _CacheSqls_ = kwargs.get('CACHE_SQLS')
+                if _CacheSqls_ == True:
+                    # 读取全部sql文件
+                    self.cacheSqlPaths()
+                    # 读取全部的sql字符串
+                    self.cacheSqlString(self.cache.folder_structure.PATH_LIST)
+                    # 把已缓存sql标记为True
+                    self.cache.modify('all_sqls_cached',True)
+                
             # 初始化log
             self.initLogging()
             def _entry_(logic_fn):

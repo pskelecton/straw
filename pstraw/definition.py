@@ -49,7 +49,9 @@ __cache__ = ConfStore(
         'create_engine':None,
         'sessionmaker':None,
         'scoped_session':None
-    }
+    },
+    # 每次都重新读取sql文件，不进缓存
+    hard_load_sql=False
 )
 
 # DB类型反射python类型

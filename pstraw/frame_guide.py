@@ -180,6 +180,11 @@ class GuideArgs(ConfArgs):
         # inject()
         self.__Args__['RW_INJECT'] = kwargs.get("RW_INJECT") if type(
             kwargs.get("RW_INJECT")) == FunctionType else None
+        
+        # 每次都重新读取sql文件，不进缓存
+        self.__Args__['HARD_LOAD_SQL'] = VarGet(kwargs.get(
+            "HARD_LOAD_SQL"), self.getArg('HARD_LOAD_SQL'), __cache__.hard_load_sql)
+
 
     # 获取参数字典
 
@@ -458,7 +463,16 @@ class GuideArgs(ConfArgs):
     def RW_INJECT(self, value):
         # self.__Args__['RW_INJECT'] = value
         pass  # 只读属性
+    
+    # 每次都重新读取sql文件，不进缓存
+    @property
+    def HARD_LOAD_SQL(self):
+        return self.__Args__['HARD_LOAD_SQL']
 
+    @HARD_LOAD_SQL.setter
+    def HARD_LOAD_SQL(self, value):
+        # self.__Args__['HARD_LOAD_SQL'] = value
+        pass  # 只读属性
 
 class InitGuide(GuideArgs, PathPlant):
     def __init__(self, *args, **kwargs):

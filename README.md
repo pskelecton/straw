@@ -87,6 +87,7 @@ if __name__ == '__main__':
     | RW_COMMIT | type(FunctionType) | None |  |  | 重写loader的commit方法
     | RW_ROLLBACK | type(FunctionType) | None |  |  | 重写loader的rollback方法
     | RW_INJECT | type(FunctionType) | None |  |  | 重写loader的inject方法
+    | HARD_LOAD_SQL | bool | False |  |  | 是否每次都重新读取sql文件
 
   - @Straw.sql参数
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
@@ -96,6 +97,7 @@ if __name__ == '__main__':
     | USE_BEAN | bool | True |  |  | 默认是否使用bean
     | SQL_NAME | str | None |  |  | 直接绑定sql文件
     | SQL | str | None |  |  | 直接绑定sql语句
+    | HARD_LOAD_SQL | bool | False |  |  | 是否每次都重新读取sql文件
 
   - @Straw.conn参数
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
@@ -106,7 +108,8 @@ if __name__ == '__main__':
   - @Straw.enter参数
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
     | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
-    | 待扩展 |  |  |  |  |
+    | START_GUARD |  |  |  |  | 启动向导，自动生成文件夹以及模板
+    | CACHE_SQLS |  |  |  |  | 是否缓存所有sqls数据（HARD_LOAD_SQL=True不做任何缓存）
 
 - API函数
   - Straw [主函数]
