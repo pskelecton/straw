@@ -105,7 +105,7 @@ if __name__ == '__main__':
     | ALLOW_ROLLBACK | bool | True |  |  | 异常是否自动回滚
     | AUTO_COMMIT | bool | True |  |  | 是否自动提交
 
-  - @Straw.enter参数
+  - @Straw.entry参数
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
     | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
     | START_GUARD | bool | False |  |  | 启动向导，自动生成文件夹以及模板
