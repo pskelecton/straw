@@ -58,18 +58,18 @@
 ### 待完成项目
 > 1. 异常处理, 包括路径不存在, 文件不存在, 需要抛出正确错误信息
 > 2. 一次缓存重复调用, 需要全局找可复用缓存
-> 3. sqlalchemy的loader
+> 3. sqlalchemy的loader（完成）
 > 4. bean工具扩展
-> 5. 连接池, db可重复连接
+> 5. 连接池, db可重复连接（调用sqlalchemy连接池，待测试）
 > 6. 多db连携,多配置文件
 > 7. 初始执行生成模板案例
-> 8. 多db类型支持, loader扩展化
+> 8. 多db类型支持, loader扩展化（完成-待测试）
 > 9. sql文件通过标记映射方法，通过sql注解参数来指定sql文件名
 > 10. DB类型反射python语言类型，比如说datetime类型对应python的str方式解析
 > 11. 垃圾回收以及效率优化
-> 12. ssl功能追加
+> 12. ssl功能追加（调用sqlalchemy库connect_args参数，需要测试）
 > 13. entry注解通过闭包保存状态，并缓存下次直接获取
-> 14. sql生成器
+> 14. sql生成器（完成-待测试）
 
 ### 大功能
 > 1. 动态sql与模板引擎（外部插件）
@@ -80,21 +80,21 @@
 
 ### 测试问题一览（待解决）
 > 1. @sql注解函数中的返回值，如果为list，则做多个sql的合并后再执行（增加效率），只作用于增、改、删
-> 2. 识别字符串、数值、日期、布尔、字节等类型，自动拼接单引号''
-> 3. TRACK_SQL_FILE = True的情况下，可以允许手动通过路径匹配sql文件
-> 4. sql类型新增Truncate等
+> 2. 识别字符串、数值、日期、布尔、字节等类型，自动拼接单引号''（暂时完成-需结合不同数据库的sql类型map表match）
+> 3. TRACK_SQL_FILE = True的情况下，可以允许手动通过路径匹配sql文件（完成-待测试）
+> 4. sql类型新增Truncate等（完成-待测试）
 > 5. bean继承的数组支持数组运算
-> 6. 异常文件追踪，从发生问题的文件上一个文件开始，应该是从发生问题的文件开始
-> 7. @sql注解和全局参数，新增allow_mutisql参数
-> 8. 文件读取逻辑移动到外层db_guide中，而接口的loader中可以直接拿到字符串
-> 9. psycopg和pymysq需要修正
+> 6. 异常文件追踪，从发生问题的文件上一个文件开始，应该是从发生问题的文件开始（暂时完成-需要与logging拆分插件化重构）
+> 7. @sql注解和全局参数，新增allow_mutisql参数（完成-未加参数-通过返回数组类型作为allow_mutisql）
+> 8. 文件读取逻辑移动到外层db_guide中，而接口的loader中可以直接拿到字符串（完成-待测试）
+> 9. psycopg和pymysq需要修正（取消这两个loader，改用统一的dqlalchemy）
 > 10. 文件夹层级比较深，但内容都没什么用的情况不需要深度遍历，或者选择性遍历
-> 11. 初始化控制，LOG_ON=False的时候，不需要自动生成文件夹
+> 11. 初始化控制，LOG_ON=False的时候，不需要自动生成文件夹（完成）
 > 12. 重构logger_factory模块，分离logger和错误追踪处理
 > 13. 添加mysql和postgres数据库类型映射
-> 14. 添加GlobalConfig赋值拦截器，修改取值有限度
+> 14. 添加GlobalConfig赋值拦截器，修改取值优先度，如果GlobalConfig值被修改，则被修改的值优先于所有方式传过来的值
 > 15. 返回数组拼接sql那块要重构，生成一个sql语句
-> 16. 添加默认的ssl
+> 16. 添加默认的ssl（用connect_args）
 
 
 ### 说明：
@@ -136,7 +136,7 @@ git push origin v0.9.3
 ### 工作日程
 - API文档整理
 - Pypi说明文档，readme.rst
-- MIT License
+- MIT License（完成）
 - Example文档整理
 - readme介绍主页
 - Gitpage主页搭建
