@@ -17,7 +17,7 @@ import configparser
 import logging
 import logging.handlers
 from dataclasses import dataclass
-from .screws import PathPlant, Store
+from .screws import PathPlant, Store,ConfStore
 from .tool import Str2Bool, Str2Int, VarGet, FormatMsg
 from .definition import __cache__
 from .logger_factory import LoggerFactory
@@ -465,28 +465,40 @@ class InitGuide(GuideArgs, PathPlant):
         super().__init__(*args, **kwargs)
         # 模块名字
         self.module_name = __cache__.model_name if len(args) == 0 else args[0]
+        # 生成缓存对象，一个实例生成一个缓存对象
+        self.cache = ConfStore(
+            # 已缓存全部sql数据
+            all_sqls_cached=False,
+            # @entry注解调用计数，目前只允许一个
+            entry_cnt=0,
+            # # 一次性读取的sql文件路径
+            # folder_structure=list(),
+            # # 一次性缓存的sql数据
+            # sql_str_dict=dict()
+        )
 
-    # 初始化文件夹
+
+    # 解析文件夹路径
     def resolvePath(self, sql_on=False):
         if sql_on:
             # 解决sql文件夹
             if self.SQL_PATH == None:
                 self.SQL_PATH = os.path.realpath('sql')
-            self.initFolder(self.SQL_PATH)
+            # self.initFolder(self.SQL_PATH)
             # 路径写入缓存
             __cache__.modify('sql_dir', self.SQL_PATH)
         # 解决log文件夹
         if self.LOG_ON:
             if self.LOG_PATH == None:
                 self.LOG_PATH = os.path.realpath('log')
-            self.initFolder(self.LOG_PATH)
+            # self.initFolder(self.LOG_PATH)
             # 路径写入缓存
             __cache__.modify('log_dir', self.LOG_PATH)
         # 解决env文件夹
         if self.ENV_ON:
             if self.ENV_DIR == None:
                 self.ENV_DIR = os.path.realpath('env')
-            self.initFolder(self.ENV_DIR)
+            # self.initFolder(self.ENV_DIR)
             # 路径写入缓存
             __cache__.modify('env_dir', self.ENV_DIR)
 
@@ -495,11 +507,26 @@ class InitGuide(GuideArgs, PathPlant):
         # 解析后缀名
         _sqlname = sqlname if sqlname[-4] == '.sql' else sqlname + '.sql'
         # 获取sql文件列表
-        folder_structure = self.deepenFolder(self.SQL_PATH)
-        for sqlpath in folder_structure.PATH_LIST:
+        self.cacheSqlPaths()
+        for sqlpath in self.cache.folder_structure.PATH_LIST:
             if os.path.basename(sqlpath) == _sqlname:
                 return sqlpath
         return None
+
+    # 缓存sql文件路径
+    def cacheSqlPaths(self):
+        if not self.cache.folder_structure:
+            folder_structure = self.deepenFolder(self.SQL_PATH)
+            self.cache.create('folder_structure',folder_structure)
+
+    # 缓存sql字符串
+    def cacheSqlString(self,sql_path_list):
+        sql_str_dict = {}
+        for sqlPath in sql_path_list:
+            with open(sqlPath, "r", encoding='utf-8') as fs_sql:
+                sqlStr = fs_sql.read()
+                sql_str_dict[sqlPath] = sqlStr
+        self.cache.create('sql_str_dict',sql_str_dict)
 
     # 解析sql文件路径
     def resolveSqlPath(self, func_name, model_path):

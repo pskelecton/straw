@@ -14,7 +14,6 @@ from .orm_factory import orm
 from .resource_factory import resf
 from .tool import FormatMsg
 
-
 def createDbc(*args, **kwargs):
     # 采用的数据库关系映射的库
     ORM_LOADER = kwargs.get('ORM_LOADER') or 'sqlalchemy'
@@ -49,7 +48,6 @@ def createDbc(*args, **kwargs):
             # 直接设置sql语句
             _SqlStr_ = None if kwargs.get(
                 'SQL') == None else kwargs.get('SQL')
-
             def _sql_(model_fn):
                 # 解析路径
                 self.resolvePath(sql_on=_SqlName_==None and _SqlStr_==None)
@@ -68,6 +66,10 @@ def createDbc(*args, **kwargs):
 
                 def __model_fn(*args, **kwargs):
                     self.logging("DEBUG", FormatMsg("%s Start" % self.__module_name__))
+
+                    # 获取缓存中的sql字符串
+                    if self.cache.all_sqls_cached:
+                        _SqlStr_ = self.cache.sql_str_dict.get(sql_path)
 
                     # 生成sql语句
                     sqls,sqlAction = resf.sqlCompose(
@@ -104,13 +106,11 @@ def createDbc(*args, **kwargs):
                 'ALLOW_ROLLBACK') is None else kwargs.get('ALLOW_ROLLBACK')
             _AutoCommit_ = self.AUTO_COMMIT if kwargs.get(
                 'AUTO_COMMIT') is None else kwargs.get('AUTO_COMMIT')
-
             def _connection_(logic_fn):
                 # 解析路径
                 self.resolvePath()
                 # 初始化log
                 self.initLogging()
-
                 def __logic_fn(*args, **kwargs):
                     if self.RW_CONNECT:
                         self.connection = self.RW_CONNECT(_AllowRollback_, _AutoCommit_)
@@ -154,15 +154,40 @@ def createDbc(*args, **kwargs):
             return _connection_
 
         # 主方法注解，可选注解，用于初始化
-        def entry(self, main_fn):
-            # 解析路径
+        def __entry__(self, *args, **kwargs):
+            # @entry注解计数器
+            self.cache.modify('entry_cnt', self.cache.entry_cnt + 1)
+            if self.cache.entry_cnt > 1:
+                raise Exception(FormatMsg("%s >> %s >> End" % (self.__module_name__,'@entry annotation must be unique.')))
+            # 解析sql,log,env文件夹路径
             self.resolvePath()
-            # 主方法做为根目录解析路径
+            # 向导生成文件夹以及文件结构
+            _StartGuard_ = kwargs.get('START_GUARD')
+            if _StartGuard_:
+                self.initFolder(self.SQL_PATH)
+                self.initFolder(self.LOG_PATH)
+                self.initFolder(self.ENV_DIR)
+            # 是否缓存所有sqls数据
+            _CacheSqls_ = kwargs.get('CACHE_SQLS')
+            if _CacheSqls_ == True:
+                # 读取全部sql文件
+                self.cacheSqlPaths()
+                # 读取全部的sql字符串
+                self.cacheSqlString(self.cache.folder_structure.PATH_LIST)
+                # 把已缓存sql标记为True
+                self.cache.modify('all_sqls_cached',True)
             # 初始化log
             self.initLogging()
+            def _entry_(logic_fn):
+                # 解析路径
+                self.resolvePath()
+                # 主方法做为根目录解析路径
+                # 初始化log
+                self.initLogging()
 
-            def __entry_fn(*args, **kwargs):
-                return main_fn(*args, **kwargs)
+                def __entry_fn(*args, **kwargs):
+                    return logic_fn(*args, **kwargs)
+            return _entry_
 
     # 实例化数据库向导
     return Dbc(*args, **kwargs)

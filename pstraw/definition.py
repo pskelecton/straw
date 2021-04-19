@@ -9,7 +9,7 @@
 from .screws import ConfStore, Store
 # 默认参数常量
 __cache__ = ConfStore(
-    # 路径缓存定义
+    # 默认路径设置
     root_dir=None,  # 项目根目录
     model_dir=None,  # 模型文件目录
     env_dir=None,  # 配置目录
