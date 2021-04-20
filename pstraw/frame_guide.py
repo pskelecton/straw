@@ -45,16 +45,16 @@ class ConfArgs():
         return self.__configparser__
 
     def getArg(self, arg, namespace=__cache__.model_name):
+        sec = self.__configparser__._sections
         if self.__configparser__.has_section(namespace):
-            sec = self.__configparser__._sections
             conf = sec.get(namespace)
             return conf.get(arg.lower())
         else:
             return None
 
     def getArgs(self, namespace=__cache__.model_name):
+        sec = self.__configparser__._sections
         if self.__configparser__.has_section(namespace):
-            sec = self.__configparser__._sections
             args = sec.get(namespace)
             if args:
                 return dict(args)
@@ -62,6 +62,18 @@ class ConfArgs():
                 return {}
         else:
             return {}
+
+    def getArgsBySuffix(self, suffix, arg):
+        namespace = f'{__cache__.conf_section_prefix}_{suffix}'
+        return self.getArg(arg,namespace=namespace)
+
+    def getSections(self, prefix=None):
+        sec = self.__configparser__._sections
+        secList = list(sec.keys())
+        if prefix == None:
+            return secList
+        else:
+            return list(filter(lambda x:(f'{prefix}_' in x) and x.index(f'{prefix}_')==0,secList))
 
     # 配置文件夹
     @property
@@ -185,6 +197,13 @@ class GuideArgs(ConfArgs):
         self.__Args__['HARD_LOAD_SQL'] = VarGet(kwargs.get(
             "HARD_LOAD_SQL"), self.getArg('HARD_LOAD_SQL'), __cache__.hard_load_sql)
 
+        # 缓存数据库连接，保持数据库连接对象，数据库关闭失效
+        self.__Args__['CACHE_CONNECT'] = VarGet(kwargs.get(
+            "CACHE_CONNECT"), self.getArg('CACHE_CONNECT'), __cache__.cache_connect)
+
+        # 缓存DB预设
+        self.__Args__['DB_CONF'] = VarGet(kwargs.get(
+            "DB_CONF"), self.getArg('DB_CONF'), None)
 
     # 获取参数字典
 
@@ -330,8 +349,8 @@ class GuideArgs(ConfArgs):
 
     @DB_DRIVER.setter
     def DB_DRIVER(self, value):
-        # self.__Args__['DB_DRIVER'] = value
-        pass  # 只读属性
+        self.__Args__['DB_DRIVER'] = value
+        # pass  # 只读属性
 
     # 数据库认证
     @property
@@ -340,8 +359,8 @@ class GuideArgs(ConfArgs):
 
     @DB_DATABASE.setter
     def DB_DATABASE(self, value):
-        # self.__Args__['DB_DATABASE'] = value
-        pass  # 只读属性
+        self.__Args__['DB_DATABASE'] = value
+        # pass  # 只读属性
 
     @property
     def DB_USER(self):
@@ -349,8 +368,8 @@ class GuideArgs(ConfArgs):
 
     @DB_USER.setter
     def DB_USER(self, value):
-        # self.__Args__['DB_USER'] = value
-        pass  # 只读属性
+        self.__Args__['DB_USER'] = value
+        # pass  # 只读属性
 
     @property
     def DB_PASSWORD(self):
@@ -358,8 +377,8 @@ class GuideArgs(ConfArgs):
 
     @DB_PASSWORD.setter
     def DB_PASSWORD(self, value):
-        # self.__Args__['DB_PASSWORD'] = value
-        pass  # 只读属性
+        self.__Args__['DB_PASSWORD'] = value
+        # pass  # 只读属性
 
     @property
     def DB_HOST(self):
@@ -367,8 +386,8 @@ class GuideArgs(ConfArgs):
 
     @DB_HOST.setter
     def DB_HOST(self, value):
-        # self.__Args__['DB_HOST'] = value
-        pass  # 只读属性
+        self.__Args__['DB_HOST'] = value
+        # pass  # 只读属性
 
     @property
     def DB_PORT(self):
@@ -376,8 +395,8 @@ class GuideArgs(ConfArgs):
 
     @DB_PORT.setter
     def DB_PORT(self, value):
-        # self.__Args__['DB_PORT'] = value
-        pass  # 只读属性
+        self.__Args__['DB_PORT'] = value
+        # pass  # 只读属性
 
     # sqlite db文件路径
     @property
@@ -386,8 +405,8 @@ class GuideArgs(ConfArgs):
 
     @SQLITE_PATH.setter
     def SQLITE_PATH(self, value):
-        # self.__Args__['SQLITE_PATH'] = value
-        pass  # 只读属性
+        self.__Args__['SQLITE_PATH'] = value
+        # pass  # 只读属性
 
     # 数据库编码
     @property
@@ -396,8 +415,8 @@ class GuideArgs(ConfArgs):
 
     @ENCODING.setter
     def ENCODING(self, value):
-        # self.__Args__['ENCODING'] = value
-        pass  # 只读属性
+        self.__Args__['ENCODING'] = value
+        # pass  # 只读属性
 
     # sqlalchemy扩展参数
     @property
@@ -406,8 +425,8 @@ class GuideArgs(ConfArgs):
 
     @SQLALCHEMY_ARGS.setter
     def SQLALCHEMY_ARGS(self, value):
-        # self.__Args__['SQLALCHEMY_ARGS'] = value
-        pass  # 只读属性
+        self.__Args__['SQLALCHEMY_ARGS'] = value
+        # pass  # 只读属性
 
     # loader外部重载方法
     @property
@@ -474,6 +493,26 @@ class GuideArgs(ConfArgs):
         # self.__Args__['HARD_LOAD_SQL'] = value
         pass  # 只读属性
 
+    # 缓存数据库连接，保持数据库连接对象，数据库关闭失效
+    @property
+    def CACHE_CONNECT(self):
+        return self.__Args__['CACHE_CONNECT']
+
+    @CACHE_CONNECT.setter
+    def CACHE_CONNECT(self, value):
+        # self.__Args__['CACHE_CONNECT'] = value
+        pass  # 只读属性
+
+    # 多DB预设
+    @property
+    def DB_CONF(self):
+        return self.__Args__['DB_CONF']
+
+    @DB_CONF.setter
+    def DB_CONF(self, value):
+        # self.__Args__['DB_CONF'] = value
+        pass  # 只读属性
+
 class InitGuide(GuideArgs, PathPlant):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -488,11 +527,53 @@ class InitGuide(GuideArgs, PathPlant):
             # # 一次性读取的sql文件路径
             # folder_structure=list(),
             # # 一次性缓存的sql数据
-            # sql_str_dict=dict()
+            # sql_str_dict=dict(),
+            # 缓存DB连接头
+            # conn_headstr = list()
         )
+        # 缓存DB连接的字典
+        self.conn_cache = dict()
         # 解析sql,log,env文件夹路径
         self.resolvePath()
 
+    # 从配置中获取DB信息
+    def getDBInfoFromConf(self,dbModelName):
+        return Store({
+            'DB_DRIVER':self.getArgsBySuffix(dbModelName,'DB_DRIVER'),
+            'DB_DATABASE':self.getArgsBySuffix(dbModelName,'DB_DATABASE'),
+            'DB_USER':self.getArgsBySuffix(dbModelName,'DB_USER'),
+            'DB_PASSWORD':self.getArgsBySuffix(dbModelName,'DB_PASSWORD'),
+            'DB_HOST':self.getArgsBySuffix(dbModelName,'DB_HOST'),
+            'DB_PORT':self.getArgsBySuffix(dbModelName,'DB_PORT'),
+            'ALLOW_ROLLBACK':self.getArgsBySuffix(dbModelName,'ALLOW_ROLLBACK'),
+            'AUTO_COMMIT':self.getArgsBySuffix(dbModelName,'AUTO_COMMIT'),
+            'ENCODING':self.getArgsBySuffix(dbModelName,'ENCODING'),
+        })
+
+    # 获取数据库连接信息
+    def getAccessInfo(self,dbModelName):
+        if self.DB_CONF == None:
+             DB_CONF = self.getDBInfoFromConf(dbModelName)
+        else:
+            if self.DB_CONF.get(dbModelName) == None:
+                DB_CONF = self.getDBInfoFromConf(dbModelName)
+            else:
+                DB_CONF = self.DB_CONF.get(dbModelName)
+        return DB_CONF
+
+    # 获取数据库连接头列表
+    def getAccessHeadStr(self):
+        # 从参数中获取
+        conn_headstr = []
+        for model_name in self.DB_CONF:
+            conn_headstr.append(model_name)
+        # 从配置文件中获取
+        for model_name in self.getSections(__cache__.conf_section_prefix):
+            conn_headstr.append(model_name)
+        # 去重
+        conn_headstr = list(set(conn_headstr))
+        self.cache.create('conn_headstr',conn_headstr)
+        return conn_headstr
 
     # 解析文件夹路径
     def resolvePath(self, sql_on=False):

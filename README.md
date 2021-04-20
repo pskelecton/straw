@@ -88,6 +88,8 @@ if __name__ == '__main__':
     | RW_ROLLBACK | type(FunctionType) | None |  |  | 重写loader的rollback方法
     | RW_INJECT | type(FunctionType) | None |  |  | 重写loader的inject方法
     | HARD_LOAD_SQL | bool | False |  |  | 是否每次都重新读取sql文件
+    | CACHE_CONNECT | bool | False |  |  | 缓存数据库连接，并保持不关闭
+    | DB_CONF | dict | False |  | {[DbModelName]:{'DB_DRIVER':?,'DB_DATABASE':?,...}} | 缓存数据库连接时，需要配置的数据库信息
 
   - @Straw.sql参数
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
@@ -102,6 +104,7 @@ if __name__ == '__main__':
   - @Straw.conn参数
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
     | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
+    | [DbModelName]] | type(Bean) |  |  |  | 缓存数据库连接的情况下根据这个名称拿到连接对象
     | ALLOW_ROLLBACK | bool | True |  |  | 异常是否自动回滚
     | AUTO_COMMIT | bool | True |  |  | 是否自动提交
 

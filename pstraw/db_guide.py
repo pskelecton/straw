@@ -13,6 +13,7 @@ from .bean_factory import bf
 from .orm_factory import orm
 from .resource_factory import resf
 from .tool import FormatMsg
+from .screws import Store
 
 def createDbc(*args, **kwargs):
     # 采用的数据库关系映射的库
@@ -113,6 +114,9 @@ def createDbc(*args, **kwargs):
 
         # 链接装饰器
         def __connection__(self, *args, **kwargs):
+            # 接受缓存数据库的model_name
+            _db_model_name_ = None if len(args) == 0 else args[0]
+            #
             _AllowRollback_ = self.ALLOW_ROLLBACK if kwargs.get(
                 'ALLOW_ROLLBACK') is None else kwargs.get('ALLOW_ROLLBACK')
             _AutoCommit_ = self.AUTO_COMMIT if kwargs.get(
@@ -122,11 +126,34 @@ def createDbc(*args, **kwargs):
                 # self.resolvePath()
                 # 初始化log
                 self.initLogging()
+                # 校验缓存的数据库连接
+                if self.CACHE_CONNECT and self.conn_cache.get(_db_model_name_) == None:
+                        raise Exception(FormatMsg("%s >> %s >> End" % (_db_model_name_,'@conn can`t get db connection.')))
+                #
                 def __logic_fn(*args, **kwargs):
-                    if self.RW_CONNECT:
-                        self.connection = self.RW_CONNECT(_AllowRollback_, _AutoCommit_)
+                    if self.CACHE_CONNECT:
+                        _AllowRollback_ = self.getAccessInfo(_db_model_name_).get('ALLOW_ROLLBACK') or self.ALLOW_ROLLBACK
+                        _AutoCommit_ = self.getAccessInfo(_db_model_name_).get('AUTO_COMMIT') or self.AUTO_COMMIT
+                        # 获取连接
+                        self.connection = self.conn_cache.get(_db_model_name_)
                     else:
-                        self.connection = self.connect(_AllowRollback_, _AutoCommit_)
+                        dbConf = Store({
+                            'DB_DRIVER':self.DB_DRIVER,
+                            'DB_USER':self.DB_USER,
+                            'DB_PASSWORD':self.DB_PASSWORD,
+                            'DB_HOST':self.DB_HOST,
+                            'DB_PORT':self.DB_PORT,
+                            'DB_DATABASE':self.DB_DATABASE,
+                            'ENCODING':self.ENCODING,
+                            'ALLOW_ROLLBACK':_AllowRollback_,
+                            'AUTO_COMMIT':_AutoCommit_,
+                            'SQLALCHEMY_ARGS':self.SQLALCHEMY_ARGS
+                        })
+                        if self.RW_CONNECT:
+                            self.connection = self.RW_CONNECT(dbConf=dbConf)
+                        else:
+                            self.connection = self.connect(dbConf=dbConf)
+
                     self.logging('DEBUG',FormatMsg('DB Connection','\n'.join((f'''
                         DB_DATABASE:{self.DB_DATABASE}
                         DB_USER:{self.DB_USER}
@@ -150,15 +177,23 @@ def createDbc(*args, **kwargs):
                                 self.rollback(self.connection)
                             self.logging("ERROR", exc)
                             self.logging("WARN", FormatMsg("SQL Rollback"))
-                            if self.RW_CLOSE:
-                                self.RW_CLOSE(self.connection)
+                            # 如果保持连接状态，数据库不关闭
+                            if self.CACHE_CONNECT:
+                                pass
                             else:
-                                self.close(self.connection)
+                                if self.RW_CLOSE:
+                                    self.RW_CLOSE(self.connection)
+                                else:
+                                    self.close(self.connection)
                         raise exc
-                    if self.RW_CLOSE:
-                        self.RW_CLOSE(self.connection)
+                    # 如果保持连接状态，数据库不关闭
+                    if self.CACHE_CONNECT:
+                        pass
                     else:
-                        self.close(self.connection)
+                        if self.RW_CLOSE:
+                            self.RW_CLOSE(self.connection)
+                        else:
+                            self.close(self.connection)
                     self.logging("DEBUG", FormatMsg("%s End" % self.__module_name__))
                     return result
                 return __logic_fn
@@ -186,15 +221,26 @@ def createDbc(*args, **kwargs):
                 
             # 初始化log
             self.initLogging()
+
+            # 缓存数据库连接
+            if self.CACHE_CONNECT:
+                for model_name in self.getAccessHeadStr():
+                    dbConf = self.getAccessInfo(model_name)
+                    if self.RW_CONNECT:
+                        self.conn_cache[model_name] = self.RW_CONNECT(dbConf=dbConf)
+                    else:
+                        self.conn_cache[model_name] = self.connect(dbConf=dbConf)
+
             def _entry_(logic_fn):
                 # 解析路径
-                self.resolvePath()
+                # self.resolvePath()
                 # 主方法做为根目录解析路径
                 # 初始化log
                 self.initLogging()
 
                 def __entry_fn(*args, **kwargs):
                     return logic_fn(*args, **kwargs)
+                return __entry_fn
             return _entry_
 
     # 实例化数据库向导

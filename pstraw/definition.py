@@ -51,7 +51,11 @@ __cache__ = ConfStore(
         'scoped_session':None
     },
     # 每次都重新读取sql文件，不进缓存
-    hard_load_sql=False
+    hard_load_sql=False,
+    # 缓存数据库连接，保持数据库连接对象，数据库关闭失效
+    cache_connect=False,
+    # 预设db配置文件的section前缀
+    conf_section_prefix='db'
 )
 
 # DB类型反射python类型

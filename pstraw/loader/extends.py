@@ -32,7 +32,7 @@ class OrmLoader():
             @[dbc].connection([allow_rollback],[auto_commit])
     '''
 
-    def connect(self, allowRollback=None, autoCommit=None):
+    def connect(self,dbConf=None):
         return None
 
     '''
