@@ -108,7 +108,7 @@ if __name__ == '__main__':
   - @Straw.entry参数
     | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
     | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
-    | START_GUARD | bool | False |  |  | 启动向导，自动生成文件夹以及模板
+    | START_GUIDE | bool | False |  |  | 启动向导，自动生成文件夹以及模板
     | CACHE_SQLS | bool | False |  |  | 是否缓存所有sqls数据（HARD_LOAD_SQL=True不做任何缓存）
 
 - API函数
