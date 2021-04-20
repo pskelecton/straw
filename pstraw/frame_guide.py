@@ -653,6 +653,15 @@ class InitGuide(GuideArgs, PathPlant):
         # 把已缓存sql标记为True
         self.cache.modify('all_sqls_cached',True)
     
+    # 主动缓存db连接
+    def cacheDbConn(self):
+        for model_name in self.getAccessHeadStr():
+            dbConf = self.getAccessInfo(model_name)
+            if self.RW_CONNECT:
+                self.conn_cache[model_name] = self.RW_CONNECT(dbConf=dbConf)
+            else:
+                self.conn_cache[model_name] = self.connect(dbConf=dbConf)
+
     # 主动调用路径模板向导
     def runGuide(self):
         self.initFolder(self.SQL_PATH)

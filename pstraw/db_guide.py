@@ -224,12 +224,7 @@ def createDbc(*args, **kwargs):
 
             # 缓存数据库连接
             if self.CACHE_CONNECT:
-                for model_name in self.getAccessHeadStr():
-                    dbConf = self.getAccessInfo(model_name)
-                    if self.RW_CONNECT:
-                        self.conn_cache[model_name] = self.RW_CONNECT(dbConf=dbConf)
-                    else:
-                        self.conn_cache[model_name] = self.connect(dbConf=dbConf)
+                self.cacheDbConn()
 
             def _entry_(logic_fn):
                 # 解析路径
