@@ -54,7 +54,7 @@ def createDbc(*args, **kwargs):
                 'SQL') == None else kwargs.get('SQL')
             def _sql_(model_fn):
                 # 解析路径
-                self.resolvePath(sql_on=_SqlName_==None and _SqlStr_==None)
+                # self.resolvePath(sql_on=_SqlName_==None and _SqlStr_==None)
                 # 初始化log
                 self.initLogging()
                 # 获取sql路径
@@ -119,7 +119,7 @@ def createDbc(*args, **kwargs):
                 'AUTO_COMMIT') is None else kwargs.get('AUTO_COMMIT')
             def _connection_(logic_fn):
                 # 解析路径
-                self.resolvePath()
+                # self.resolvePath()
                 # 初始化log
                 self.initLogging()
                 def __logic_fn(*args, **kwargs):
@@ -171,25 +171,18 @@ def createDbc(*args, **kwargs):
             if self.cache.entry_cnt > 1:
                 raise Exception(FormatMsg("%s >> %s >> End" % (self.__module_name__,'@entry annotation must be unique.')))
             # 解析sql,log,env文件夹路径
-            self.resolvePath()
+            # self.resolvePath()
             # 向导生成文件夹以及文件结构
-            _StartGuard_ = kwargs.get('START_GUARD')
-            if _StartGuard_:
-                self.initFolder(self.SQL_PATH)
-                self.initFolder(self.LOG_PATH)
-                self.initFolder(self.ENV_DIR)
+            _StartGuide_ = kwargs.get('START_GUIDE')
+            if _StartGuide_:
+                self.runGuide()
             
             # 全局 HARD_LOAD_SQL 生效
             if not self.HARD_LOAD_SQL:
                 # 是否缓存所有sqls数据
                 _CacheSqls_ = kwargs.get('CACHE_SQLS')
                 if _CacheSqls_ == True:
-                    # 读取全部sql文件
-                    self.cacheSqlPaths()
-                    # 读取全部的sql字符串
-                    self.cacheSqlString(self.cache.folder_structure.PATH_LIST)
-                    # 把已缓存sql标记为True
-                    self.cache.modify('all_sqls_cached',True)
+                    self.cacheSqlFiles()
                 
             # 初始化log
             self.initLogging()
