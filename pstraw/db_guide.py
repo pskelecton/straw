@@ -126,11 +126,12 @@ def createDbc(*args, **kwargs):
                 # self.resolvePath()
                 # 初始化log
                 self.initLogging()
-                # 校验缓存的数据库连接
-                if self.CACHE_CONNECT and self.conn_cache.get(_db_model_name_) == None:
-                        raise Exception(FormatMsg("%s >> %s >> End" % (_db_model_name_,'@conn can`t get db connection.')))
                 #
                 def __logic_fn(*args, **kwargs):
+                    # 校验缓存的数据库连接
+                    if self.CACHE_CONNECT and self.conn_cache.get(_db_model_name_) == None:
+                            raise Exception(FormatMsg("%s >> %s >> End" % (_db_model_name_,'@conn can`t get db connection.')))
+                    #
                     if self.CACHE_CONNECT:
                         _AllowRollback_ = self.getAccessInfo(_db_model_name_).get('ALLOW_ROLLBACK') or self.ALLOW_ROLLBACK
                         _AutoCommit_ = self.getAccessInfo(_db_model_name_).get('AUTO_COMMIT') or self.AUTO_COMMIT
