@@ -490,6 +490,8 @@ class InitGuide(GuideArgs, PathPlant):
             # # 一次性缓存的sql数据
             # sql_str_dict=dict()
         )
+        # 解析sql,log,env文件夹路径
+        self.resolvePath()
 
 
     # 解析文件夹路径
@@ -555,12 +557,27 @@ class InitGuide(GuideArgs, PathPlant):
         else:
             sql_fullpath = self.getSqlPath(func_name)
             return sql_fullpath
+    
     # 通过sql_name解析sql文件路径
-
     def resolveSqlPathSn(self, sql_name):
         sql_fullpath = self.getSqlPath(sql_name)
         return sql_fullpath
 
+    # 主动缓存sql文件
+    def cacheSqlFiles(self):
+        # 读取全部sql文件
+        self.cacheSqlPaths()
+        # 读取全部的sql字符串
+        self.cacheSqlString(self.cache.folder_structure.PATH_LIST)
+        # 把已缓存sql标记为True
+        self.cache.modify('all_sqls_cached',True)
+    
+    # 主动调用路径模板向导
+    def runGuide(self):
+        self.initFolder(self.SQL_PATH)
+        self.initFolder(self.LOG_PATH)
+        self.initFolder(self.ENV_DIR)
+    
     # 控制台输出
     def __print(self, level, message, *msgs):
         # 获取当前帧对象 ， 代表执行到当前的logging函数
