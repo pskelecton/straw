@@ -43,8 +43,7 @@ def createDbc(*args, **kwargs):
             _ParseType_ = self.SQL_TEMPLATE_TYPE if kwargs.get(
                 'SQL_TEMPLATE_TYPE') == None else kwargs.get('SQL_TEMPLATE_TYPE')
             # 是否应用Bean来使用自动注入
-            _UseBean_ = self.USE_BEAN if kwargs.get(
-                'USE_BEAN') == None else kwargs.get('USE_BEAN')
+            _UseBean_ = self.USE_BEAN
             # 注入的Bean类，USE_BEAN=True才生效
             __bean__ = None if len(args) == 0 else args[0]
             # 直接指定sql文件
@@ -85,7 +84,7 @@ def createDbc(*args, **kwargs):
                             self.cache.sql_str_dict[sql_path] = _SqlStr_
                             
                     # 生成sql语句
-                    sqls,sqlAction = resf.sqlCompose(
+                    sqlStr,sqlAction = resf.sqlCompose(
                         args=model_fn(*args, **kwargs),
                         parseType=_ParseType_,
                         modelFnName=modelFnName,
@@ -94,20 +93,19 @@ def createDbc(*args, **kwargs):
                     
                     cursor = None
                     if self.RW_EXECUTE:
-                        cursor = self.RW_EXECUTE(self.connection,sqls,sqlAction)
+                        cursor = self.RW_EXECUTE(self.connection,sqlStr,sqlAction)
                     else:
-                        cursor = self.execute(self.connection,sqls,sqlAction)
+                        cursor = self.execute(self.connection,sqlStr,sqlAction)
                     
-                    if(cursor == None):
-                        raise Exception(FormatMsg("The 'cursor' is None"))
-                    elif(type(cursor) == list and len(cursor) == 0):
-                        raise Exception(FormatMsg("The 'cursor' is None"))
-                    else:
-                        if _UseBean_:
+                    if _UseBean_:
+                        if __bean__ == None:
+                            return cursor
+                        else:
                             if self.RW_INJECT:
                                 return self.RW_INJECT(self.connection,sqlAction,cursor, __bean__, bf.createResultClass)
                             else:
                                 return self.inject(self.connection,sqlAction,cursor, __bean__, bf.createResultClass)
+                    else:
                         return cursor
                 return __model_fn
             return _sql_

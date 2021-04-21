@@ -170,11 +170,10 @@ class SqlParser():
         return sqlSegs[0].upper()
 
     # 合并sql字符串
-    def multiSqlParse(self, base_sql, args_list, logging, parseType, maxSize=1024*512, comb=False):
+    def multiSqlParse(self, base_sql, args_list, logging, parseType, maxSize=1024*512, combType=None):
         sqlCache = []
         transSqls = ''
         transLen = 0
-        mutiSqls = []
         #
         for args in args_list:
             transSql = self.sqlParse(
@@ -187,7 +186,7 @@ class SqlParser():
             # 缓存sql
             sqlCache.append(transSql)
             # 合并sql
-            if comb:
+            if combType=='INSERT':
                 '''
                     # 只适用 insert into ??? values ??? 语句
                 '''
@@ -206,27 +205,25 @@ class SqlParser():
                     else:
                         # 截取VALUES后面的值，并且去分号，与前一个sql去分号合并添加逗号
                         transSqls = transSqls[:-1] + ',' + sqlValuesStr
-                else:
-                    mutiSqls.append(transSqls)
-                    transSqls = transSql
-                    transLen = len(transSql)
-            else:
+            elif combType=='UPDATE':
+                pass
+            elif combType=='DELETE':
+                pass
+            elif combType=='SELECT':
+                pass
+            elif combType=='TRUNCATE':
+                pass
+            elif combType==None:
                 '''
                     # 直接合并sql语句，泛用各类sql语句，包括嵌套、表关联、子查询等等
                 '''
                 transLen += len(transSql)
                 if transLen < maxSize:
                     transSqls += transSql
-                else:
-                    mutiSqls.append(transSqls)
-                    transSqls = transSql
-                    transLen = len(transSql)
-        # 总长度没超过上限时，此时mutiSqls是空数组
-        if len(mutiSqls) == 0:
-            mutiSqls.append(transSqls)
+
         return Store({
             'sqls': sqlCache,
-            'mutiSqls': mutiSqls,  # 字符串连接后的sql数组
+            'transSqls': transSqls,  # 字符串连接后的sql字符串
         })
 
     # sql模板参数转换

@@ -13,7 +13,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.pool import NullPool
-from ..tool import formatMsg
+from ..tool import FormatMsg
 from ..screws import Store
 
 
@@ -53,7 +53,7 @@ class loader(OrmLoader, SqlParser):
         elif dbAccess.DB_DRIVER == "sqlite":
             conn_str = 'sqlite:///%s' %dbAccess.SQLITE_PATH
         else:
-            raise Exception(formatMsg("DB Driver must be one of postgres/mysql."))
+            raise Exception(FormatMsg("DB Driver must be one of postgres/mysql."))
         # 连接数据库
         if conn_str != '':
             # sqlalchemy扩展参数
@@ -83,18 +83,14 @@ class loader(OrmLoader, SqlParser):
             #
             return __connection__
 
-    def execute(self,conn, sqls, sqlAction):
+    def execute(self,conn, sqlStr, sqlAction):
         # self._SqlAction_ = sqlAction
         try:
-            # cursor数组
-            curs = []
-            for sql in sqls:
-                cur = conn.execute(sql)
-                curs.append(cur)
-                self.logging("DEBUG", formatMsg("SQL execute success."))
-            return curs
+            cur = conn.execute(sqlStr)
+            self.logging("DEBUG", FormatMsg("SQL execute success."))
+            return cur
         except Exception as exc:
-            self.logging("ERROR", formatMsg("SQL execute error."))
+            self.logging("ERROR", FormatMsg("SQL execute error."))
             raise Exception("%s: %s" %(exc.__class__.__name__, exc))
 
     def close(self,conn):
@@ -106,42 +102,28 @@ class loader(OrmLoader, SqlParser):
     def rollback(self,conn):
         conn.rollback()
 
-    def inject(self,conn,sqlAction, curs, bean, resultCreater):
+    def inject(self,conn,sqlAction, cursor, bean, resultCreater):
+        if(cursor == None):
+            raise Exception(FormatMsg("The 'cursor' returned by the 'execute' function cannot be 'None'."))
         if sqlAction == 'SELECT':
-            if type(bean) == type:
-                res = resultCreater(list)(cursor=curs, count=None)
-                rowcount = 0
-                for cur in curs:
-                    for record in cur:
-                        res.append(bean(*record))
-                    rowcount += cur.rowcount
-                res.count = rowcount
-            else:
-                return curs
+            res = resultCreater(list)(cursor=cursor, count=None)
+            rowcount = 0
+            for record in cursor:
+                res.append(bean(*record))
+                rowcount += 1
+            res.count = rowcount
             return res
         elif sqlAction == 'INSERT':
-            res = resultCreater()(cursor=curs, count=None)
-            rowcount = 0
-            for cur in curs:
-                rowcount += cur.rowcount
-            res.count = rowcount
+            res = resultCreater()(cursor=cursor, count=None)
             return res
         elif sqlAction == 'UPDATE':
-            res = resultCreater()(cursor=curs, count=None)
-            rowcount = 0
-            for cur in curs:
-                rowcount += cur.rowcount
-            res.count = rowcount
+            res = resultCreater()(cursor=cursor, count=None)
             return res
         elif sqlAction == 'DELETE':
-            res = resultCreater()(cursor=curs, count=None)
-            rowcount = 0
-            for cur in curs:
-                rowcount += cur.rowcount
-            res.count = rowcount
+            res = resultCreater()(cursor=cursor, count=None)
             return res
         elif sqlAction == 'TRUNCATE':
-            res = resultCreater()(cursor=curs, count=None)
+            res = resultCreater()(cursor=cursor, count=None)
             return res
         else:
-            raise Exception(formatMsg(f'SQL action \[{sqlAction}\] is not in \[SELECT,INSERT,UPDATE,DELETE,TRUNCATE\]'))
+            raise Exception(FormatMsg(f'The sql action must be one of SELECT, INSERT, UPDATE, DELETE, TRUNCATE.'))

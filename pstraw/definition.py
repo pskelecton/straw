@@ -18,7 +18,7 @@ __cache__ = ConfStore(
     log_dir=None,  # log文件目录
     # 是否输出日志文件
     log_on=False,
-    # 是否生成配置目录
+    # 是否使用多环境切换
     env_on=False,
     # 是否是debug模式
     debug=True,
@@ -55,7 +55,11 @@ __cache__ = ConfStore(
     # 缓存数据库连接，保持数据库连接对象，数据库关闭失效
     cache_connect=False,
     # 预设db配置文件的section前缀
-    conf_section_prefix='db'
+    conf_section_prefix='db',
+    # 环境类型，用于多个环境切换
+    env_type='dev',
+    # 默认的env路径名
+    env_dir = 'env'
 )
 
 # DB类型反射python类型

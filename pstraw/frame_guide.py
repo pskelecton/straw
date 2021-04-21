@@ -28,18 +28,24 @@ class ConfArgs():
     def __init__(self, *args, **kwargs):
         # 初始化配置
         self.__configparser__ = configparser.ConfigParser()
-        # 配置文件路径
-        self.__CONF_PATH = PathPlant.transAbspath(
-            kwargs.get('CONF_PATH') or None)
+
+        # 使用多环境切换
+        self.__ENV_ON = kwargs.get("ENV_ON") or __cache__.env_on
+        # 环境类型，用于多个环境切换
+        self.__ENV_TYPE = kwargs.get("ENV_TYPE") or __cache__.env_type
         # 配置文件夹
-        self.__ENV_DIR = PathPlant.transAbspath(VarGet(kwargs.get(
-            'ENV_DIR'), None if self.__CONF_PATH == None else os.path.dirname(self.__CONF_PATH), None))
-        # print("ConfArgs", kwargs)
+        self.__ENV_DIR = PathPlant.transAbspath(kwargs.get('ENV_DIR') or __cache__.env_dir)
+        if self.__Args__['ENV_ON']:
+            self.__CONF_PATH = os.path.join(self.__ENV_DIR,f'{self.__ENV_TYPE}.ini')
+        else:
+            # 配置文件路径
+            self.__CONF_PATH = PathPlant.transAbspath(
+                kwargs.get('CONF_PATH') or None)
         # 读取配置
         self.loadConf()
 
+
     def loadConf(self):
-        # print(self.__CONF_PATH)
         if self.__CONF_PATH != None:
             self.__configparser__.read(self.__CONF_PATH, encoding="utf-8")
         return self.__configparser__
@@ -83,7 +89,27 @@ class ConfArgs():
     @ENV_DIR.setter
     def ENV_DIR(self, value):
         self.__ENV_DIR = PathPlant.transAbspath(value)
-        pass  # 读写属性
+        # pass  # 读写属性
+
+    # 环境类型，用于多个环境切换
+    @property
+    def ENV_TYPE(self):
+        return self.__ENV_TYPE
+
+    @ENV_TYPE.setter
+    def ENV_TYPE(self, value):
+        self.__ENV_TYPE = value
+        # pass  # 只读属性
+
+    # 使用多环境切换
+    @property
+    def ENV_ON(self):
+        return self.__ENV_ON
+
+    @ENV_ON.setter
+    def ENV_ON(self, value):
+        self.__ENV_ON = value
+        # pass  # 只读属性
 
 # 初始化参数
 
@@ -103,9 +129,6 @@ class GuideArgs(ConfArgs):
         # 是否输出日志文件
         self.__Args__['LOG_ON'] = VarGet(kwargs.get(
             'LOG_ON'), self.getArg('LOG_ON'), __cache__.log_on)
-        # 是否生成配置目录
-        self.__Args__['ENV_ON'] = VarGet(kwargs.get(
-            'ENV_ON'), self.getArg('ENV_ON'), __cache__.env_on)
         # 是否是debug模式
         self.__Args__['DEBUG'] = VarGet(kwargs.get(
             'DEBUG'), self.getArg('DEBUG'), __cache__.debug)
@@ -239,16 +262,6 @@ class GuideArgs(ConfArgs):
     @LOG_ON.setter
     def LOG_ON(self, value):
         self.__Args__['LOG_ON'] = value
-        # pass  # 可读写属性
-
-    # 是否生成配置目录
-    @property
-    def ENV_ON(self):
-        return self.__Args__['ENV_ON']
-
-    @ENV_ON.setter
-    def ENV_ON(self, value):
-        self.__Args__['ENV_ON'] = value
         # pass  # 可读写属性
 
     # 是否是debug模式
