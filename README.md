@@ -56,6 +56,7 @@ if __name__ == '__main__':
 
 ### 参数API
 - Straw参数
+
 | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
 | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
 | DB_DRIVER | str | None | :o: | "mysql" \| "postgres" \| "oracle" \| "mssql" \| "sqlite" | 驱动类型
@@ -94,6 +95,7 @@ if __name__ == '__main__':
 | DB_CONF | dict | False |  | {[DbModelName]:{'DB_DRIVER':?,'DB_DATABASE':?,...}} | 缓存数据库连接时，需要配置的数据库信息
 
 - @Straw.sql参数
+
 | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
 | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
 | [Bean] | type(Bean) |  |  |  | 结构体
@@ -111,6 +113,7 @@ if __name__ == '__main__':
 | AUTO_COMMIT | bool | True |  |  | 是否自动提交
 
 - @Straw.entry参数
+
 | 参数 | 类型 | 默认值 | 必输项 | 取值范围 | 说明 |
 | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
 | START_GUIDE | bool | False |  |  | 启动向导，自动生成文件夹以及模板
@@ -128,28 +131,38 @@ if __name__ == '__main__':
 
 ### Straw对象的方法
 > 初始化调用Straw()返回一个Straw对象，可调用方法如下所示
- - 装饰器函数
-  - @sql() [sql绑定]
-  - @conn() [数据库连接]
-  - @entry() [入口]
- - 数据库操作函数
-  - connect(DB_CONF=DB_CONF) [连接数据库]
-  - execute(connection,sql,sqlAction=None) [执行sql]
-  - commit(connection) [提交]
-  - rollback(connection) [回滚]
-  - close(connection) [关闭数据库]
-  - inject() [实现注入]
- - 缓存处理函数
-  - getAccessHeadStr() [获取数据库配置列表]
-  - cacheSqlFiles() [缓存所有的sql文件]
-  - cacheDbConn() [根据数据库配置列表连接所有的数据库，并缓存]
- - 向导函数
-  - runGuide() [自动生成框架文件夹与模板]
- - 调试、日志、输出
-  - logging(level,msg,*msgs) [输出在日志文件]
-  - print(level,msg,*msgs) [输出在控制台]
  
-- 框架使用
+ - 装饰器函数
+
+   - @sql() [sql绑定]
+   - @conn() [数据库连接]
+   - @entry() [入口]
+ 
+ - 数据库操作函数
+  
+   - connect(DB_CONF=DB_CONF) [连接数据库]
+   - execute(connection,sql,sqlAction=None) [执行sql]
+   - commit(connection) [提交]
+   - rollback(connection) [回滚]
+   - close(connection) [关闭数据库]
+   - inject() [实现注入]
+ 
+ - 缓存处理函数
+  
+   - getAccessHeadStr() [获取数据库配置列表]
+   - cacheSqlFiles() [缓存所有的sql文件]
+   - cacheDbConn() [根据数据库配置列表连接所有的数据库，并缓存]
+ 
+ - 向导函数
+  
+   - runGuide() [自动生成框架文件夹与模板]
+ 
+ - 调试、日志、输出
+  
+   - logging(level,msg,*msgs) [输出在日志文件]
+   - print(level,msg,*msgs) [输出在控制台]
+ 
+## 框架使用
 
 
-- 单脚使用
+## 单脚使用
