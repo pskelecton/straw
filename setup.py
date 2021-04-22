@@ -3,18 +3,12 @@
 
 from setuptools import setup, find_packages
 
-long_description = '''
-1. Beta:0.9.x
-2. License:MIT
-3. Python >= 3.7
-4. SQL@Support:postgres|mysql
-'''
-# with open('README.md',encoding='utf-8') as f:
-#     long_description = f.read()
+with open('readme.rst',encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='pstraw',
-    version='0.9.3',
+    version='0.9.4-beta',
     description=('简单的函数调用来处理数据库'),
     long_description=long_description,
     author='Chalk Yu',
