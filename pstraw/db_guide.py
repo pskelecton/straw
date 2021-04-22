@@ -59,29 +59,37 @@ def createDbc(*args, **kwargs):
                 self.initLogging()
                 # 获取sql路径
                 sql_path = None
+                # 设置sql段落名，优先级： SQL参数 > SQL_NAME参数 > 自动查找
                 modelFnName = None
-                if _SqlName_ == None:
-                    sql_path = self.resolveSqlPath(
-                        model_fn.__name__, self.getModelPath(model_fn))
-                    modelFnName = None
+                if _SqlStr_ == None:
+                    if _SqlName_ == None:
+                        sql_path = self.resolveSqlPath(
+                            model_fn.__name__, self.getModelPath(model_fn))
+                        modelFnName = None
+                    else:
+                        sql_path = self.resolveSqlPathSn(_SqlName_)
+                        modelFnName = model_fn.__name__
                 else:
-                    sql_path = self.resolveSqlPathSn(_SqlName_)
                     modelFnName = model_fn.__name__
 
                 def __model_fn(*args, **kwargs):
                     self.logging("DEBUG", FormatMsg("%s Start" % self.__module_name__))
-                    
-                    # 每次都重新读取sql文件
-                    if _HardLoadSql_:
-                        _SqlStr_ = resf.sqlLoad(sql_path)
-                    else:
-                        # 获取缓存中的sql字符串
-                        if self.cache.all_sqls_cached:
-                            _SqlStr_ = self.cache.sql_str_dict.get(sql_path)
+                    # 如果参数传SQL，直接用参数的sql语句
+                    if _SqlStr_ == None:
+                        if _SqlName_ == None:
+                            # 每次都重新读取sql文件
+                            if _HardLoadSql_:
+                                _SqlStr_ = resf.sqlLoad(sql_path)
+                            else:
+                                # 获取缓存中的sql字符串
+                                if self.cache.all_sqls_cached:
+                                    _SqlStr_ = self.cache.sql_str_dict.get(sql_path)
+                                else:
+                                    # 重新读取文件，并写入缓存
+                                    _SqlStr_ = resf.sqlLoad(sql_path)
+                                    self.cache.sql_str_dict[sql_path] = _SqlStr_
                         else:
-                            # 重新读取文件，并写入缓存
                             _SqlStr_ = resf.sqlLoad(sql_path)
-                            self.cache.sql_str_dict[sql_path] = _SqlStr_
                             
                     # 生成sql语句
                     sqlStr,sqlAction = resf.sqlCompose(

@@ -12,6 +12,7 @@ from .screws import Store
 from .loader import SqlParser
 from types import MethodType, FunctionType
 from .tool import FormatMsg
+from .template_factory import templatePaser # 模板转换器
 
 # 根据外部传入的转换器，解析sql字符串，如果未传转换器，则直接读取sql字符串
 class sqlLoad():
@@ -39,6 +40,7 @@ class sqlLoad():
 
 class ResourceFactory():
     def __init__(self):
+        # sql转换器
         self.sqlParser = SqlParser()
     
     def sqlCompose(self, args=None, parseType=None, modelFnName=None, sql=None, logging=None):
@@ -46,12 +48,12 @@ class ResourceFactory():
             logging = self.sqlParser.logging
         # 读取sql字符串
         sqlStr = None
-        sqlChips = self.sqlTrans(sql)
+        sqlChips = templatePaser.Model(sql)
         if modelFnName == None:
-            sqlStr = sqlChips._default_
+            sqlStr = sql
         else:
             if sqlChips[modelFnName] == None:
-                sqlStr = sqlChips._default_
+                sqlStr = sql
             else:
                 sqlStr = sqlChips[modelFnName]
         # 解析sql动作
@@ -74,21 +76,5 @@ class ResourceFactory():
         with sqlLoad(sqlPath) as res:
             sqlStr = res.read()
         return sqlStr
-    
-    # sql模板转换方法
-    @classmethod
-    def sqlTrans(cls,sqlStr):
-        sqlChips = Store()
-        sqlChips._default_ = sqlStr
-        tmpModuleFnName = None
-        sqlLines = sqlStr.split('\n')
-        for sqlLine in sqlLines:
-            if sqlLine.strip()[:2]=='@@':
-                tmpModuleFnName = sqlLine.strip()[2:]
-                sqlChips[tmpModuleFnName] = ""
-            else:
-                if tmpModuleFnName != None:
-                    sqlChips[tmpModuleFnName] = sqlChips[tmpModuleFnName] + '\n' + sqlLine
-        return sqlChips
 
 resf = ResourceFactory()

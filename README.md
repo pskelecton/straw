@@ -73,7 +73,9 @@ if __name__ == '__main__':
 | SQL_PATH | str | "." |  |  | sql文件目录
 | LOG_PATH | str | "." |  |  | log文件目录
 | LOG_ON | bool | False |  |  | 是否写入log文件
-| ENV_ON | bool | False |  |  | 是否使用环境参数目录
+| ENV_ON | bool | False |  |  | 是否使用环境参数
+| ENV_TYPE | str | "dev" |  |  | 指定名dev.ini的环境配置文件
+| ENV_DIR | str | "./env" |  |  | 环境配置文件指定的目录
 | DEBUG | bool | False |  |  | 是否开启debug模式
 | LOG_MAX_SIZE | int | 10 |  |  | log文件最大mb
 | LOG_BACKUP_CNT | int | 1 |  |  | log文件最大备份数
@@ -100,7 +102,6 @@ if __name__ == '__main__':
 | ------------ | :------------: | :------------: | :------------: | ------------ | ------------ |
 | [Bean] | type(Bean) |  |  |  | 结构体
 | SQL_TEMPLATE_TYPE | int | 6 |  | 1\|2\|3\|4\|5\|6 | 模板类型
-| USE_BEAN | bool | True |  |  | 默认是否使用bean
 | SQL_NAME | str | None |  |  | 直接绑定sql文件
 | SQL | str | None |  |  | 直接绑定sql语句
 | HARD_LOAD_SQL | bool | False |  |  | 是否每次都重新读取sql文件
