@@ -13,54 +13,26 @@ Straw 数据管
 他可以像MyBatis一样，分离sql层和逻辑层，但又不同于MyBatis的是你可以在脚本中使用它，你还可以同时连接多个数据库
 如果你只想写一个简单的脚本，把爬到的数据插到数据中，Straw会非常简单*
 
-快速开始
----------
-- 运行环境
+`[How to start] <https://github.com/pskelecton/straw>`_
 
- .. image:: https://img.shields.io/badge/Python-%3E%3D%203.7-blue
+**MIT License**
 
-- 安装
+*Copyright (c) 2021 Chalk Yu (Straw)*
 
-  .. code-block:: shell
-    :linenos:
+*Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:*
 
-    # 安装straw库
-    pip install pstraw
+*The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.*
 
-- 快速使用
-
-  .. code-block:: python
-    :linenos:
-
-      from pstraw import Straw
-      # 实例化straw对象
-      db = Straw(
-          DB_DRIVER='mysql',
-          DB_DATABASE='demo_db',
-          DB_USER='root',
-          DB_PASSWORD='root'
-      )
-      # 创建一个结构体，用于保存数据对象
-      @dataclass
-      class USER_TABLE():
-          ID: int
-          USER: str
-          PASSWORD: str
-          CREATE_TIME:datetime
-          CREATE_BY: str
-          UPDATE_TIME:datetime
-          UPDATE_BY: str
-      # 绑定一条sql语句，函数的返回值为sql中的参数映射
-      @db.sql(USER_TABLE,SQL='SELECT * FROM USER_TABLE WHERE USER = :USER')
-      def SearchUser(user:str):
-          return {'USER':user}
-      # 通过注解创建一个链接
-      @db.conn()
-      def ExecSQL():
-          # 调用函数来执行sql，函数调用的返回值res为sql查询的结果
-          res:list(USER_TABLE) = SearchUser('Chalk Yu')
-          for userStore in res:
-              print(f'ID={userStore.ID}',f'USER={userStore.USER}',f'PASSWORD={userStore.PASSWORD}')
-
-      if __name__ == '__main__':
-          ExecSQL()
+*THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.*
