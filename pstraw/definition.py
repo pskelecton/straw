@@ -10,12 +10,12 @@ from .screws import ConfStore, Store
 # 默认参数常量
 __cache__ = ConfStore(
     # 默认路径设置
-    root_dir=None,  # 项目根目录
-    model_dir=None,  # 模型文件目录
-    env_dir=None,  # 配置目录
-    conf_file=None,  # 配置文件路径
-    sql_dir=None,  # sql文件目录
-    log_dir=None,  # log文件目录
+    # root_dir=None,  # 项目根目录
+    # model_dir=None,  # 模型文件目录
+    # conf_file=None,  # 配置文件路径
+    env_dir='env',  # 配置目录
+    sql_dir='sql',  # sql文件目录
+    log_dir='log',  # log文件目录
     # 是否输出日志文件
     log_on=False,
     # 是否使用多环境切换
