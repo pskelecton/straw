@@ -238,8 +238,91 @@ if __name__ == '__main__':
 ```
 
 ### 通过SQL_NAME指定一个sql文件
-
 > 绑定sql文件
+#### 目录结构如下
+```
+|-- [项目文件夹]
+    | -- demo.py
+    | -- select_user.sql
+    | -- insert_client.sql
+```
+#### 代码如下
+```sql
+-- select_user.sql文件
+SELECT ID,USER
+FROM USER_TABLE
+WHERE USER = :USER;
+```
+```sql
+-- insert_client.sql文件
+INSERT INTO CLIENT_TABLE(
+  CLIENT_ID,
+  CLIENT_NAME
+)
+VALUES (
+  :CLIENT_ID,
+  :CLIENT_NAME
+);
+```
+```python
+## demo.py文件
+from pstraw import Straw
+# 实例化straw对象
+db = Straw(
+    DB_DRIVER='mysql', # 必须输入
+    DB_DATABASE='demo_db', # 必须输入
+    DB_USER='root', # 必须输入3306, # mysql默认值：3306 ， postgres默认值：5432
+    DB_PASSWORD='root', # 必须输入
+    DB_HOST='127.0.0.1', # 默认值：localhost
+    DB_PORT='3306', # mysql默认值：3306 ， postgres默认值：5432
+    USE_BEAN=True, # 是否使用结构体用于查询后的数据注入
+)
+'''
+  创建一个结构体，用于保存数据对象
+'''
+@dataclass
+class USER_TABLE():
+    ID: int
+    USER: str
+'''
+  @db.sql注解：绑定一个sql方法
+  通过SQL参数绑定一个sql查询语句，@db.sql注解的第一个参数是上面定义的结构体
+  注意：这只有查询的时候才会用到
+'''
+@db.sql(USER_TABLE,SQL='SELECT * FROM USER_TABLE WHERE USER = :USER')
+def SearchUser(user:str):
+    '''
+      函数返回的参数是个字典，其中字典的key：'USER'对应SQL语句中的:USER
+      如果user='Chalk Yu'，那么这个方法执行的就是：
+      SELECT * FROM USER_TABLE WHERE USER = 'Chalk Yu'
+    '''
+    return {'USER':user}
+
+@db.sql(SQL='INSERT INTO CLIENT_TABLE(CLIENT_ID,CLIENT_NAME) VALUES (:CLIENT_ID,:CLIENT_NAME)')
+def AddClient(clientId:str,clientName:str):
+  return {'CLIENT_ID':clientId,'CLIENT_NAME':clientName}
+'''
+  @db.conn注解：创建一个连接
+  注意1：@db.sql注解的方法只能在@db.conn中被调用，但@db.sql可以调任何无注解方法
+  注意2：@db.conn可以调用任何无注解方法，也可以被任何无注解方法调用，但不能调用@db.conn注解的方法
+'''
+@db.conn()
+def ExecSQL():
+    '''
+      调用函数来执行sql，函数调用的返回值userList为sql查询的结果
+      结果是一个list类型，每个元素都是USER_TABLE对象
+      注意：在定义Straw对象时，如果USE_BEAN=False，SearchUser返回的是一个游标
+      如果@db.sql注解的第一个参数不指定USER_TABLE，SearchUser返回的是一个游标
+    '''
+    userList:list(USER_TABLE) = SearchUser('Chalk Yu')
+    for userStore in userList:
+        print(f'ID={userStore.ID}',f'USER={userStore.USER}',f'PASSWORD={userStore.PASSWORD}')
+        # 插入到CLIENT_TABLE表中
+        AddClient(userStore.ID,userStore.USER)
+
+if __name__ == '__main__':
+    ExecSQL()
+```
 
 ### 通过@model(func_name)在一个sql文件中绑定多个方法
 
