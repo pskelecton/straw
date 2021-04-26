@@ -17,7 +17,7 @@ import configparser
 import logging
 import logging.handlers
 from dataclasses import dataclass
-from .screws import PathPlant, Store,ConfStore
+from .screws import PathPlant, Store, ConfStore
 from .tool import Str2Bool, Str2Int, VarGet, FormatMsg
 from .definition import __cache__
 from .logger_factory import LoggerFactory
@@ -34,16 +34,17 @@ class ConfArgs():
         # 环境类型，用于多个环境切换
         self.__ENV_TYPE = kwargs.get("ENV_TYPE") or __cache__.env_type
         # 配置文件夹
-        self.__ENV_DIR = PathPlant.transAbspath(kwargs.get('ENV_DIR') or __cache__.env_dir)
-        if self.__Args__['ENV_ON']:
-            self.__CONF_PATH = os.path.join(self.__ENV_DIR,f'{self.__ENV_TYPE}.ini')
+        self.__ENV_DIR = PathPlant.transAbspath(
+            kwargs.get('ENV_DIR') or __cache__.env_dir)
+        if self.__ENV_ON:
+            self.__CONF_PATH = os.path.join(
+                self.__ENV_DIR, f'{self.__ENV_TYPE}.ini')
         else:
             # 配置文件路径
             self.__CONF_PATH = PathPlant.transAbspath(
                 kwargs.get('CONF_PATH') or None)
         # 读取配置
         self.loadConf()
-
 
     def loadConf(self):
         if self.__CONF_PATH != None:
@@ -71,7 +72,7 @@ class ConfArgs():
 
     def getArgsBySuffix(self, suffix, arg):
         namespace = f'{__cache__.conf_section_prefix}_{suffix}'
-        return self.getArg(arg,namespace=namespace)
+        return self.getArg(arg, namespace=namespace)
 
     def getSections(self, prefix=None):
         sec = self.__configparser__._sections
@@ -79,7 +80,7 @@ class ConfArgs():
         if prefix == None:
             return secList
         else:
-            return list(filter(lambda x:(f'{prefix}_' in x) and x.index(f'{prefix}_')==0,secList))
+            return list(filter(lambda x: (f'{prefix}_' in x) and x.index(f'{prefix}_') == 0, secList))
 
     # 配置文件夹
     @property
@@ -215,7 +216,7 @@ class GuideArgs(ConfArgs):
         # inject()
         self.__Args__['RW_INJECT'] = kwargs.get("RW_INJECT") if type(
             kwargs.get("RW_INJECT")) == FunctionType else None
-        
+
         # 每次都重新读取sql文件，不进缓存
         self.__Args__['HARD_LOAD_SQL'] = VarGet(kwargs.get(
             "HARD_LOAD_SQL"), self.getArg('HARD_LOAD_SQL'), __cache__.hard_load_sql)
@@ -495,7 +496,7 @@ class GuideArgs(ConfArgs):
     def RW_INJECT(self, value):
         # self.__Args__['RW_INJECT'] = value
         pass  # 只读属性
-    
+
     # 每次都重新读取sql文件，不进缓存
     @property
     def HARD_LOAD_SQL(self):
@@ -526,6 +527,7 @@ class GuideArgs(ConfArgs):
         # self.__Args__['DB_CONF'] = value
         pass  # 只读属性
 
+
 class InitGuide(GuideArgs, PathPlant):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -550,23 +552,23 @@ class InitGuide(GuideArgs, PathPlant):
         self.resolvePath()
 
     # 从配置中获取DB信息
-    def getDBInfoFromConf(self,dbModelName):
-        return Store({
-            'DB_DRIVER':self.getArgsBySuffix(dbModelName,'DB_DRIVER'),
-            'DB_DATABASE':self.getArgsBySuffix(dbModelName,'DB_DATABASE'),
-            'DB_USER':self.getArgsBySuffix(dbModelName,'DB_USER'),
-            'DB_PASSWORD':self.getArgsBySuffix(dbModelName,'DB_PASSWORD'),
-            'DB_HOST':self.getArgsBySuffix(dbModelName,'DB_HOST'),
-            'DB_PORT':self.getArgsBySuffix(dbModelName,'DB_PORT'),
-            'ALLOW_ROLLBACK':self.getArgsBySuffix(dbModelName,'ALLOW_ROLLBACK'),
-            'AUTO_COMMIT':self.getArgsBySuffix(dbModelName,'AUTO_COMMIT'),
-            'ENCODING':self.getArgsBySuffix(dbModelName,'ENCODING'),
-        })
+    def getDBInfoFromConf(self, dbModelName):
+        return {
+            'DB_DRIVER': None if dbModelName == None else self.getArgsBySuffix(dbModelName, 'DB_DRIVER'),
+            'DB_DATABASE': None if dbModelName == None else self.getArgsBySuffix(dbModelName, 'DB_DATABASE'),
+            'DB_USER': None if dbModelName == None else self.getArgsBySuffix(dbModelName, 'DB_USER'),
+            'DB_PASSWORD': None if dbModelName == None else self.getArgsBySuffix(dbModelName, 'DB_PASSWORD'),
+            'DB_HOST': None if dbModelName == None else self.getArgsBySuffix(dbModelName, 'DB_HOST'),
+            'DB_PORT': None if dbModelName == None else self.getArgsBySuffix(dbModelName, 'DB_PORT'),
+            'ALLOW_ROLLBACK': None if dbModelName == None else self.getArgsBySuffix(dbModelName, 'ALLOW_ROLLBACK'),
+            'AUTO_COMMIT': None if dbModelName == None else self.getArgsBySuffix(dbModelName, 'AUTO_COMMIT'),
+            'ENCODING': None if dbModelName == None else self.getArgsBySuffix(dbModelName, 'ENCODING'),
+        }
 
     # 获取数据库连接信息
-    def getAccessInfo(self,dbModelName):
+    def getAccessInfo(self, dbModelName):
         if self.DB_CONF == None:
-             DB_CONF = self.getDBInfoFromConf(dbModelName)
+            DB_CONF = self.getDBInfoFromConf(dbModelName)
         else:
             if self.DB_CONF.get(dbModelName) == None:
                 DB_CONF = self.getDBInfoFromConf(dbModelName)
@@ -585,7 +587,7 @@ class InitGuide(GuideArgs, PathPlant):
             conn_headstr.append(model_name)
         # 去重
         conn_headstr = list(set(conn_headstr))
-        self.cache.create('conn_headstr',conn_headstr)
+        self.cache.create('conn_headstr', conn_headstr)
         return conn_headstr
 
     # 解析文件夹路径
@@ -627,16 +629,16 @@ class InitGuide(GuideArgs, PathPlant):
     def cacheSqlPaths(self):
         if not self.cache.folder_structure:
             folder_structure = self.deepenFolder(self.SQL_PATH)
-            self.cache.create('folder_structure',folder_structure)
+            self.cache.create('folder_structure', folder_structure)
 
     # 缓存sql字符串
-    def cacheSqlString(self,sql_path_list):
+    def cacheSqlString(self, sql_path_list):
         sql_str_dict = {}
         for sqlPath in sql_path_list:
             with open(sqlPath, "r", encoding='utf-8') as fs_sql:
                 sqlStr = fs_sql.read()
                 sql_str_dict[sqlPath] = sqlStr
-        self.cache.create('sql_str_dict',sql_str_dict)
+        self.cache.create('sql_str_dict', sql_str_dict)
 
     # 解析sql文件路径
     def resolveSqlPath(self, func_name, model_path):
@@ -651,7 +653,7 @@ class InitGuide(GuideArgs, PathPlant):
         else:
             sql_fullpath = self.getSqlPath(func_name)
             return sql_fullpath
-    
+
     # 通过sql_name解析sql文件路径
     def resolveSqlPathSn(self, sql_name):
         sql_fullpath = self.getSqlPath(sql_name)
@@ -664,8 +666,8 @@ class InitGuide(GuideArgs, PathPlant):
         # 读取全部的sql字符串
         self.cacheSqlString(self.cache.folder_structure.PATH_LIST)
         # 把已缓存sql标记为True
-        self.cache.modify('all_sqls_cached',True)
-    
+        self.cache.modify('all_sqls_cached', True)
+
     # 主动缓存db连接
     def cacheDbConn(self):
         for model_name in self.getAccessHeadStr():
@@ -680,7 +682,7 @@ class InitGuide(GuideArgs, PathPlant):
         self.initFolder(self.SQL_PATH)
         self.initFolder(self.LOG_PATH)
         self.initFolder(self.ENV_DIR)
-    
+
     # 控制台输出
     def __print(self, level, message, *msgs):
         # 获取当前帧对象 ， 代表执行到当前的logging函数
