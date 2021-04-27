@@ -129,8 +129,8 @@ pip install pstraw
 
  - git打标签
 ```
-git tag v0.9.3
-git push origin v0.9.3
+git tag v0.9.5
+git push origin v0.9.5
 ```
 
 ### 工作日程
