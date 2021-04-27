@@ -51,7 +51,11 @@ def createDbc(*args, **kwargs):
                 # 直接指定sql文件
                 'SQL_NAME': kwargs.get('SQL_NAME'),
                 # 直接设置sql语句
-                'SQL': kwargs.get('SQL')
+                'SQL': kwargs.get('SQL'),
+                # 可识别最大sql长度
+                'MAX_SQL_SIZE': self.MAX_SQL_SIZE,
+                # 默认引号类型
+                'QUOTATION':VarGet(kwargs.get('QUOTATION'), self.QUOTATION)
             }
 
             def _sql_(model_fn):
@@ -101,7 +105,12 @@ def createDbc(*args, **kwargs):
                         parseType=argsDict['SQL_TEMPLATE_TYPE'],
                         modelFnName=modelFnName,
                         sql=argsDict['SQL'],
-                        logging=self.logging)
+                        logging=self.logging,
+                        parserOptions={
+                            'maxSize':argsDict['MAX_SQL_SIZE'],
+                            'quotation':argsDict['QUOTATION']
+                        }
+                    )
 
                     cursor = None
                     if self.RW_EXECUTE:

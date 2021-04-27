@@ -12,6 +12,8 @@ def Str2Bool(boolVar):
         return bool(boolVar)
 
 # bool型的True和False转字符串的True和False
+
+
 def Bool2Str(boolVar):
     if bool(boolVar):
         return "True"
@@ -19,14 +21,20 @@ def Bool2Str(boolVar):
         return "False"
 
 # 字符串转整型
+
+
 def Str2Int(intVar):
     return int(intVar)
 
 # 整型转字符串
+
+
 def Int2Str(intVar):
     return str(int(intVar))
 
 # 获取第一个不为空的变量
+
+
 def VarGet(*args):
     for arg in args:
         if arg != None:
@@ -34,7 +42,9 @@ def VarGet(*args):
     return None
 
 # 日志格式化输出
-def FormatMsg(hmsg,*msgs):
+
+
+def FormatMsg(hmsg, *msgs):
     __msg = ""
     if len(msgs) > 0:
         __msg = f'>>> {hmsg} >>>'
@@ -43,3 +53,11 @@ def FormatMsg(hmsg,*msgs):
     for msg in msgs:
         __msg = f'{__msg}\n{msg}'
     return __msg
+
+# 段落字符串去每行前后空格
+
+
+def TrimParagraph(pStr):
+    fr = pStr.split('\n')
+    trimStr = '\n'.join(list(map(lambda s: s.strip(), fr)))
+    return trimStr

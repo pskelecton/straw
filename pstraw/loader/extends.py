@@ -11,7 +11,8 @@ import sqlparse
 import re
 import math
 from ..screws import Store
-from ..tool import FormatMsg
+from ..tool import FormatMsg,TrimParagraph,VarGet
+from ..definition import __cache__
 
 
 # ORM Loader接口
@@ -89,6 +90,7 @@ class SqlParser():
         parsed = sqlparse.parse(format_sql)
         stmt = parsed[loc]
         sql = str(stmt)
+        sql = TrimParagraph(sql) # 清除缩进产生的前后空格
         return sql
 
     # list替换
@@ -170,14 +172,20 @@ class SqlParser():
         return sqlSegs[0].upper()
 
     # 合并sql字符串
-    def multiSqlParse(self, base_sql, args_list, logging, parseType, maxSize=1024*512, combType=None):
+    # options = {maxSize:int,combType:bool}
+    def multiSqlParse(self, base_sql, args_list, logging, parseType, options={}):
+        # 解析参数
+        maxSize = VarGet(options.get('maxSize'),__cache__.max_sql_size)
+        combType = options.get('combType')
+        quotation = VarGet(options.get('quotation'),__cache__.quotation)
+        #
         sqlCache = []
         transSqls = ''
         transLen = 0
         #
         for args in args_list:
             transSql = self.sqlParse(
-                base_sql, args, logging, parseType=parseType)
+                base_sql, args, logging, parseType=parseType, quotation=quotation)
             # 通过正则去掉首尾的分号 ;
             pattern = re.compile(r'(^;*)|(;*$)', re.M)
             transSql = re.sub(pattern, '', transSql)
@@ -241,7 +249,7 @@ class SqlParser():
     #   @return：str(sql)
     # 注意： parseType = 4 | 5 | 6 转换方式同 1 | 2 | 3 , 只是对于非数值类型的值自动补充双引号
 
-    def sqlParse(self, *args, parseType):
+    def sqlParse(self, *args, parseType, quotation):
         if str(parseType) == "1":
             return self.TempParseEngine(*args)
         elif str(parseType) == "2":
@@ -249,13 +257,13 @@ class SqlParser():
         elif str(parseType) == "3":
             return self.DictParseEngine(*args)
         elif str(parseType) == "4":
-            return self.TempParseEngineT(*args)
+            return self.TempParseEngineT(*args, quotation=quotation)
         elif str(parseType) == "5":
-            return self.StrParseEngineT(*args)
+            return self.StrParseEngineT(*args, quotation=quotation)
         elif str(parseType) == "6":
-            return self.DictParseEngineT(*args)
+            return self.DictParseEngineT(*args, quotation=quotation)
         else:
-            return self.__DictParseEngine(*args)
+            return self.DictParseEngine(*args)
 
     def TempParseEngine(self, sql, tuple_args, logging):
         sqlSegments = sql.split('\n')
@@ -265,10 +273,10 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG", FormatMsg('SQL', {sql}))
+        logging("DEBUG", FormatMsg('SQL', sql))
         sql = sql % tuple(map(lambda v: str(v), tuple_args))
         _sql_ = sql.strip()
-        logging("DEBUG", FormatMsg('SQL', {_sql_}))
+        logging("DEBUG", FormatMsg('SQL', _sql_))
         return _sql_
 
     def StrParseEngine(self, sql, tuple_args, logging):
@@ -279,25 +287,25 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG", FormatMsg('SQL', {sql}))
+        logging("DEBUG", FormatMsg('SQL', sql))
         sql = sql.format(*tuple(map(lambda v: str(v), tuple_args)))
         _sql_ = sql.strip()
-        logging("DEBUG", FormatMsg('SQL', {_sql_}))
+        logging("DEBUG", FormatMsg('SQL', _sql_))
         return _sql_
 
     def DictParseEngine(self, sql, dict_args, logging):
         sql = self.formatSql(sql)
-        logging("DEBUG", FormatMsg('SQL', {sql}))
+        logging("DEBUG", FormatMsg('SQL', sql))
         sqlFragments = self.sqlChipMaker(sql)
         for key in dict_args:
             sqlFragments = self.listReplace(
                 sqlFragments, f':{key}', str(dict_args[key]))
         sql = self.formatSql(' '.join(sqlFragments))
         _sql_ = sql.strip()
-        logging("DEBUG", FormatMsg('SQL', {_sql_}))
+        logging("DEBUG", FormatMsg('SQL', _sql_))
         return _sql_
 
-    def TempParseEngineT(self, sql, tuple_args, logging):
+    def TempParseEngineT(self, sql, tuple_args, logging, quotation):
         sqlSegments = sql.split('\n')
         for segIdx in range(len(sqlSegments)):
             commentIdx = sqlSegments[segIdx].find('--')
@@ -305,14 +313,14 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG", FormatMsg('SQL', {sql}))
+        logging("DEBUG", FormatMsg('SQL', sql))
         sql = sql % tuple(map(lambda v: str(v) if type(v) == int or type(
-            v) == float else f'\'{str(v)}\'', tuple_args))
+            v) == float else f'{quotation}{str(v)}{quotation}', tuple_args))
         _sql_ = sql.strip()
-        logging("DEBUG", FormatMsg('SQL', {_sql_}))
+        logging("DEBUG", FormatMsg('SQL', _sql_))
         return _sql_
 
-    def StrParseEngineT(self, sql, tuple_args, logging):
+    def StrParseEngineT(self, sql, tuple_args, logging, quotation):
         sqlSegments = sql.split('\n')
         for segIdx in range(len(sqlSegments)):
             commentIdx = sqlSegments[segIdx].find('--')
@@ -320,21 +328,21 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG", FormatMsg('SQL', {sql}))
+        logging("DEBUG", FormatMsg('SQL', sql))
         sql = sql.format(*tuple(map(lambda v: str(v) if type(v) ==
-                                    int or type(v) == float else f'\'{str(v)}\'', tuple_args)))
+                                    int or type(v) == float else f'{quotation}{str(v)}{quotation}', tuple_args)))
         _sql_ = sql.strip()
-        logging("DEBUG", FormatMsg('SQL', {_sql_}))
+        logging("DEBUG", FormatMsg('SQL', _sql_))
         return _sql_
 
-    def DictParseEngineT(self, sql, dict_args, logging):
+    def DictParseEngineT(self, sql, dict_args, logging, quotation):
         sql = self.formatSql(sql)
-        logging("DEBUG", FormatMsg('SQL', {sql}))
+        logging("DEBUG", FormatMsg('SQL', sql))
         sqlFragments = self.sqlChipMaker(sql)
         for key in dict_args:
             sqlFragments = self.listReplace(
-                sqlFragments, f':{key}', str(dict_args[key]) if type(dict_args[key]) == int or type(dict_args[key]) == float else f'\'{str(dict_args[key])}\'')
+                sqlFragments, f':{key}', str(dict_args[key]) if type(dict_args[key]) == int or type(dict_args[key]) == float else f'{quotation}{str(dict_args[key])}{quotation}')
         sql = self.formatSql(' '.join(sqlFragments))
         _sql_ = sql.strip()
-        logging("DEBUG", FormatMsg('SQL', {_sql_}))
+        logging("DEBUG", FormatMsg('SQL', _sql_))
         return _sql_

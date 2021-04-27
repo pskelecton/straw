@@ -164,6 +164,13 @@ class GuideArgs(ConfArgs):
         # SQL模板类型
         self.__Args__['SQL_TEMPLATE_TYPE'] = VarGet(kwargs.get(
             "SQL_TEMPLATE_TYPE"), self.getArg('SQL_TEMPLATE_TYPE'), __cache__.sql_template_type)
+        # 可识别最大sql长度
+        self.__Args__['MAX_SQL_SIZE'] = VarGet(kwargs.get(
+            "MAX_SQL_SIZE"), self.getArg('MAX_SQL_SIZE'), __cache__.max_sql_size)
+        # 默认引号类型
+        self.__Args__['QUOTATION'] = VarGet(kwargs.get(
+            "QUOTATION"), self.getArg('QUOTATION'), __cache__.quotation)
+
         # 数据库驱动
         self.__Args__['DB_DRIVER'] = VarGet(kwargs.get(
             "DB_DRIVER"), self.getArg('DB_DRIVER'), None)
@@ -354,6 +361,26 @@ class GuideArgs(ConfArgs):
     @SQL_TEMPLATE_TYPE.setter
     def SQL_TEMPLATE_TYPE(self, value):
         # self.__Args__['SQL_TEMPLATE_TYPE'] = value
+        pass  # 只读属性
+
+    # 可识别最大sql长度
+    @property
+    def MAX_SQL_SIZE(self):
+        return self.__Args__['MAX_SQL_SIZE']
+
+    @MAX_SQL_SIZE.setter
+    def MAX_SQL_SIZE(self, value):
+        # self.__Args__['MAX_SQL_SIZE'] = value
+        pass  # 只读属性
+
+    # 默认引号类型
+    @property
+    def QUOTATION(self):
+        return self.__Args__['QUOTATION']
+
+    @QUOTATION.setter
+    def QUOTATION(self, value):
+        # self.__Args__['QUOTATION'] = value
         pass  # 只读属性
 
     # 数据库驱动

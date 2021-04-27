@@ -58,7 +58,12 @@ __cache__ = ConfStore(
     # 环境类型，用于多个环境切换
     env_type='dev',
     # 默认的env路径名
-    env_dir = 'env'
+    env_dir = 'env',
+    # 最大sql长度
+    max_sql_size = 1024*512,
+    # sql默认引号
+    quotation = '\''
+
 )
 
 # DB类型反射python类型
