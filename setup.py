@@ -8,7 +8,7 @@ with open('readme.rst',encoding='utf-8') as f:
 
 setup(
     name='pstraw',
-    version='0.9.4-beta',
+    version='0.9.5',
     description=('简单的函数调用来处理数据库'),
     long_description=long_description,
     author='Chalk Yu',
