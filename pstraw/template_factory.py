@@ -17,6 +17,7 @@ from .screws import Store
 @repeat``
 '''
 
+
 class TemplateFactory():
     def __init__(self):
         self.keywords = [
@@ -25,37 +26,51 @@ class TemplateFactory():
             'execute',
             'repeat'
         ]
-    # 碎片化
-    def fragmentization(self,strContent, keywordIndex=0):
-        if len(self.keywords) == keywordIndex:
-            return [strContent]
+
+    def composition(self, strContent, keywordIndex):
+        expIdxArr = []
+        # 表达式不存在
+        if not self.keywords[keywordIndex]:
+            return ([strContent], [])
         partern = re.compile(f'\@{self.keywords[keywordIndex]}\s*\`[^\`]*\`')
-        expArr = partern.findall(strContent) # 表达式数组
-        self.expIdx = 0 # 表达式数组当前指针
+        expArr = partern.findall(strContent)  # 表达式数组
+        expSpl = partern.split(strContent)  # 被表达式分割的字符串数组
+        # 匹配不到表达式
         if len(expArr) == 0:
-            return [strContent]
-        strFra = partern.split(strContent) # 被表达式分割的字符串数组
+            return ([strContent], [])
+        return (expArr, expSpl)
+
+    # 碎片化
+
+    def fragmentization(self, strContent, keywordIndex=0):
+        expArr, expSpl = self.composition(strContent, keywordIndex)
+        if len(expSpl) == 0:
+            return expArr
+        self.expCur = 0  # 表达式数组当前指针
+
         def callback(target, current):
             resArr = []
-            if(type(target)==str):
-                resArr = self.fragmentization(target,keywordIndex+1) + [expArr[self.expIdx]] + self.fragmentization(current,keywordIndex+1)
+            if(type(target) == str):
+                resArr = self.fragmentization(
+                    target, keywordIndex+1) + [expArr[self.expCur]] + self.fragmentization(current, keywordIndex+1)
             else:
-                resArr = target + [expArr[self.expIdx]] + self.fragmentization(current,keywordIndex+1)
-            self.expIdx = self.expIdx + 1
+                resArr = target + [expArr[self.expCur]] + \
+                    self.fragmentization(current, keywordIndex+1)
+            self.expCur = self.expCur + 1
             return resArr
-        return reduce(callback,strFra)
+        return reduce(callback, expSpl)
 
     # 从指令函数中，拆解指令参数，如： @model`User` => User
-    def getArg(self, strExp,directName):
+    def getArg(self, strExp, directName):
         if f'@{directName}' in strExp and strExp.strip().index(f'@{directName}') == 0:
-            arg = strExp.replace(f'@{directName}','').strip()
+            arg = strExp.replace(f'@{directName}', '').strip()
             return arg[1:-1]
 
     # 判断是否是某个指令
     def checkIsDirective(self, strExp, directName):
         if f'@{directName}' in strExp and strExp.strip().index(f'@{directName}') == 0:
-            arg = strExp.replace(f'@{directName}','').strip()
-            if arg[0] == '`' and arg[-1] =='`':
+            arg = strExp.replace(f'@{directName}', '').strip()
+            if arg[0] == '`' and arg[-1] == '`':
                 return True
             else:
                 return False
@@ -72,19 +87,27 @@ class TemplateFactory():
         @model`address`
         select * from address;
     '''
+
     def Model(self, fullSql):
         sqlChips = Store()
         sectionName = None
         sqlLines = fullSql.split('\n')
         for sqlLine in sqlLines:
-            fraArr = self.fragmentization(sqlLine)
             # 数据如： ['   ', '@model`user`', '   ']
-            if len(fraArr) == 3 and fraArr[0].strip() == "" and self.checkIsDirective(fraArr[1], 'model') and fraArr[2].strip() == "":
-                sectionName = self.splitDirective(fraArr[1]).strip()
+            # fraArr = self.fragmentization(sqlLine)
+            # if len(fraArr) == 3 and fraArr[0].strip() == "" and self.checkIsDirective(fraArr[1], 'model') and fraArr[2].strip() == "":
+            # directive = fraArr[1]
+            fraArr, splitStr = self.composition(sqlLine, 0)
+            if len(splitStr) > 0 and ''.join(splitStr).strip() == "":
+                directive = fraArr[0]
+                sectionName = self.getArg(directive, 'model').strip()
                 sqlChips[sectionName] = ""
             else:
                 if sectionName != None:
-                    sqlChips[sectionName] = sqlChips[sectionName] + '\n' + sqlLine
+                    sqlChips[sectionName] = sqlChips[sectionName] + \
+                        '\n' + sqlLine
+                    sqlChips[sectionName] = sqlChips[sectionName].strip()
         return sqlChips
+
 
 templatePaser = TemplateFactory()

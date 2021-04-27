@@ -23,16 +23,16 @@ class loader(OrmLoader, SqlParser):
 
     def connect(self, dbConf=None):
         dbAccess = Store({
-            'DB_DRIVER':self.DB_DRIVER,
-            'DB_USER':self.DB_USER,
-            'DB_PASSWORD':self.DB_PASSWORD,
-            'DB_HOST':self.DB_HOST,
-            'DB_PORT':self.DB_PORT,
-            'DB_DATABASE':self.DB_DATABASE,
-            'ENCODING':self.ENCODING,
-            'ALLOW_ROLLBACK':self.ALLOW_ROLLBACK,
-            'AUTO_COMMIT':self.AUTO_COMMIT,
-            'SQLALCHEMY_ARGS':self.SQLALCHEMY_ARGS
+            'DB_DRIVER': self.DB_DRIVER,
+            'DB_USER': self.DB_USER,
+            'DB_PASSWORD': self.DB_PASSWORD,
+            'DB_HOST': self.DB_HOST,
+            'DB_PORT': self.DB_PORT,
+            'DB_DATABASE': self.DB_DATABASE,
+            'ENCODING': self.ENCODING,
+            'ALLOW_ROLLBACK': self.ALLOW_ROLLBACK,
+            'AUTO_COMMIT': self.AUTO_COMMIT,
+            'SQLALCHEMY_ARGS': self.SQLALCHEMY_ARGS
         })
         if dbConf != None:
             dbAccess = dbConf
@@ -42,18 +42,19 @@ class loader(OrmLoader, SqlParser):
             conn_str = 'postgresql+psycopg2://%s:%s@%s:%s/%s' % (
                 dbAccess.DB_USER, dbAccess.DB_PASSWORD, dbAccess.DB_HOST, dbAccess.DB_PORT, dbAccess.DB_DATABASE)
         elif dbAccess.DB_DRIVER == "mysql":
-            conn_str = 'mysql+pymysql://%s:%s@%s:%s/%s' %(
-                dbAccess.DB_USER,dbAccess.DB_PASSWORD,dbAccess.DB_HOST,dbAccess.DB_PORT,dbAccess.DB_DATABASE)
+            conn_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (
+                dbAccess.DB_USER, dbAccess.DB_PASSWORD, dbAccess.DB_HOST, dbAccess.DB_PORT, dbAccess.DB_DATABASE)
         elif dbAccess.DB_DRIVER == "oracle":
-            conn_str = 'oracle+cx_oracle://%s:%s@%s:%s/%s' %(
-                dbAccess.DB_USER,dbAccess.DB_PASSWORD,dbAccess.DB_HOST,dbAccess.DB_PORT,dbAccess.DB_DATABASE)
+            conn_str = 'oracle+cx_oracle://%s:%s@%s:%s/%s' % (
+                dbAccess.DB_USER, dbAccess.DB_PASSWORD, dbAccess.DB_HOST, dbAccess.DB_PORT, dbAccess.DB_DATABASE)
         elif dbAccess.DB_DRIVER == "mssql":
-            conn_str = 'mssql+pymssql://%s:%s@%s:%s/%s' %(
-                dbAccess.DB_USER,dbAccess.DB_PASSWORD,dbAccess.DB_HOST,dbAccess.DB_PORT,dbAccess.DB_DATABASE)
+            conn_str = 'mssql+pymssql://%s:%s@%s:%s/%s' % (
+                dbAccess.DB_USER, dbAccess.DB_PASSWORD, dbAccess.DB_HOST, dbAccess.DB_PORT, dbAccess.DB_DATABASE)
         elif dbAccess.DB_DRIVER == "sqlite":
-            conn_str = 'sqlite:///%s' %dbAccess.SQLITE_PATH
+            conn_str = 'sqlite:///%s' % dbAccess.SQLITE_PATH
         else:
-            raise Exception(FormatMsg("DB Driver must be one of postgres/mysql."))
+            raise Exception(
+                FormatMsg("DB Driver must be one of postgres/mysql."))
         # 连接数据库
         if conn_str != '':
             # sqlalchemy扩展参数
@@ -63,27 +64,31 @@ class loader(OrmLoader, SqlParser):
                     dbAccess.SQLALCHEMY_ARGS.create_engine['poolclass'] = NullPool
                 if dbAccess.SQLALCHEMY_ARGS.create_engine['encoding'] == None:
                     dbAccess.SQLALCHEMY_ARGS.create_engine['encoding'] = dbAccess.ENCODING
-                engine = create_engine(conn_str, **dbAccess.SQLALCHEMY_ARGS.create_engine)
+                engine = create_engine(
+                    conn_str, **dbAccess.SQLALCHEMY_ARGS.create_engine)
             else:
-                engine = create_engine(conn_str, poolclass=NullPool,encoding=dbAccess.ENCODING)
+                engine = create_engine(
+                    conn_str, poolclass=NullPool, encoding=dbAccess.ENCODING)
             #
             sessionFacory = None
-            if dbAccess.SQLALCHEMY_ARGS and  type(dbAccess.SQLALCHEMY_ARGS.sessionFacory) == dict:
-                if dbAccess.SQLALCHEMY_ARGS.sessionFacory['autoflush'] == None:
-                    dbAccess.SQLALCHEMY_ARGS.sessionFacory['autoflush'] = True
-                sessionFacory = sessionmaker(bind=engine, **dbAccess.SQLALCHEMY_ARGS.sessionFacory)
+            if dbAccess.SQLALCHEMY_ARGS and type(dbAccess.SQLALCHEMY_ARGS.sessionmaker) == dict:
+                if dbAccess.SQLALCHEMY_ARGS.sessionmaker['autoflush'] == None:
+                    dbAccess.SQLALCHEMY_ARGS.sessionmaker['autoflush'] = True
+                sessionFacory = sessionmaker(
+                    bind=engine, **dbAccess.SQLALCHEMY_ARGS.sessionmaker)
             else:
                 sessionFacory = sessionmaker(bind=engine, autoflush=True)
             #
             __connection__ = None
-            if dbAccess.SQLALCHEMY_ARGS and  type(dbAccess.SQLALCHEMY_ARGS.scoped_session) == dict:
-                __connection__ = scoped_session(sessionFacory, **dbAccess.SQLALCHEMY_ARGS.scoped_session)
+            if dbAccess.SQLALCHEMY_ARGS and type(dbAccess.SQLALCHEMY_ARGS.scoped_session) == dict:
+                __connection__ = scoped_session(
+                    sessionFacory, **dbAccess.SQLALCHEMY_ARGS.scoped_session)
             else:
                 __connection__ = scoped_session(sessionFacory)
             #
             return __connection__
 
-    def execute(self,conn, sqlStr, sqlAction):
+    def execute(self, conn, sqlStr, sqlAction):
         # self._SqlAction_ = sqlAction
         try:
             cur = conn.execute(sqlStr)
@@ -91,20 +96,21 @@ class loader(OrmLoader, SqlParser):
             return cur
         except Exception as exc:
             self.logging("ERROR", FormatMsg("SQL execute error."))
-            raise Exception("%s: %s" %(exc.__class__.__name__, exc))
+            raise Exception("%s: %s" % (exc.__class__.__name__, exc))
 
-    def close(self,conn):
+    def close(self, conn):
         conn.close()
 
-    def commit(self,conn):
+    def commit(self, conn):
         conn.commit()
 
-    def rollback(self,conn):
+    def rollback(self, conn):
         conn.rollback()
 
-    def inject(self,conn,sqlAction, cursor, bean, resultCreater):
+    def inject(self, conn, sqlAction, cursor, bean, resultCreater):
         if(cursor == None):
-            raise Exception(FormatMsg("The 'cursor' returned by the 'execute' function cannot be 'None'."))
+            raise Exception(
+                FormatMsg("The 'cursor' returned by the 'execute' function cannot be 'None'."))
         if sqlAction == 'SELECT':
             res = resultCreater(list)(cursor=cursor, count=None)
             rowcount = 0
@@ -126,4 +132,5 @@ class loader(OrmLoader, SqlParser):
             res = resultCreater()(cursor=cursor, count=None)
             return res
         else:
-            raise Exception(FormatMsg(f'The sql action must be one of SELECT, INSERT, UPDATE, DELETE, TRUNCATE.'))
+            raise Exception(FormatMsg(
+                f'The sql action must be one of SELECT, INSERT, UPDATE, DELETE, TRUNCATE.'))

@@ -37,39 +37,39 @@ def createDbc(*args, **kwargs):
         # sql装饰器
         def __sql__(self, *args, **kwargs):
             ''' 装饰器参数 '''
-            # 直接读取sql文件，不从缓存中拿去
-            _HardLoadSql_ = self.HARD_LOAD_SQL if kwargs.get(
-                'HARD_LOAD_SQL') == None else kwargs.get('HARD_LOAD_SQL')
-            # 应用模板类型
-            _ParseType_ = self.SQL_TEMPLATE_TYPE if kwargs.get(
-                'SQL_TEMPLATE_TYPE') == None else kwargs.get('SQL_TEMPLATE_TYPE')
-            # 是否应用Bean来使用自动注入
-            _UseBean_ = self.USE_BEAN
             # 注入的Bean类，USE_BEAN=True才生效
             __bean__ = None if len(args) == 0 else args[0]
-            # 直接指定sql文件
-            _SqlName_ = None if kwargs.get(
-                'SQL_NAME') == None else kwargs.get('SQL_NAME')
-            # 直接设置sql语句
-            _SqlStr_ = None if kwargs.get(
-                'SQL') == None else kwargs.get('SQL')
+            argsDict = {
+                # 直接读取sql文件，不从缓存中拿去
+                'HARD_LOAD_SQL': VarGet(kwargs.get('HARD_LOAD_SQL'), self.HARD_LOAD_SQL),
+                # 应用模板类型
+                'SQL_TEMPLATE_TYPE': VarGet(kwargs.get('SQL_TEMPLATE_TYPE'), self.SQL_TEMPLATE_TYPE),
+                # 是否应用Bean来使用自动注入
+                'USE_BEAN': self.USE_BEAN,
+                # 注入的Bean类
+                'BEAN': __bean__,
+                # 直接指定sql文件
+                'SQL_NAME': kwargs.get('SQL_NAME'),
+                # 直接设置sql语句
+                'SQL': kwargs.get('SQL')
+            }
 
             def _sql_(model_fn):
                 # 解析路径
-                # self.resolvePath(sql_on=_SqlName_==None and _SqlStr_==None)
+                # self.resolvePath(sql_on=argsDict['SQL_NAME']==None and argsDict['SQL']==None)
                 # 初始化log
                 self.initLogging()
                 # 获取sql路径
                 sql_path = None
                 # 设置sql段落名，优先级： SQL参数 > SQL_NAME参数 > 自动查找
                 modelFnName = None
-                if _SqlStr_ == None:
-                    if _SqlName_ == None:
+                if argsDict['SQL'] == None:
+                    if argsDict['SQL_NAME'] == None:
                         sql_path = self.resolveSqlPath(
                             model_fn.__name__, self.getModelPath(model_fn))
                         modelFnName = None
                     else:
-                        sql_path = self.resolveSqlPathSn(_SqlName_)
+                        sql_path = self.resolveSqlPathSn(argsDict['SQL_NAME'])
                         modelFnName = model_fn.__name__
                 else:
                     modelFnName = model_fn.__name__
@@ -78,29 +78,29 @@ def createDbc(*args, **kwargs):
                     self.logging("DEBUG", FormatMsg(
                         "%s Start" % self.__module_name__))
                     # 如果参数传SQL，直接用参数的sql语句
-                    if _SqlStr_ == None:
-                        if _SqlName_ == None:
+                    if argsDict['SQL'] == None:
+                        if argsDict['SQL_NAME'] == None:
                             # 每次都重新读取sql文件
-                            if _HardLoadSql_:
-                                _SqlStr_ = resf.sqlLoad(sql_path)
+                            if argsDict['HARD_LOAD_SQL']:
+                                argsDict['SQL'] = resf.sqlLoad(sql_path)
                             else:
                                 # 获取缓存中的sql字符串
                                 if self.cache.all_sqls_cached:
-                                    _SqlStr_ = self.cache.sql_str_dict.get(
+                                    argsDict['SQL'] = self.cache.sql_str_dict.get(
                                         sql_path)
                                 else:
                                     # 重新读取文件，并写入缓存
-                                    _SqlStr_ = resf.sqlLoad(sql_path)
-                                    self.cache.sql_str_dict[sql_path] = _SqlStr_
+                                    argsDict['SQL'] = resf.sqlLoad(sql_path)
+                                    self.cache.sql_str_dict[sql_path] = argsDict['SQL']
                         else:
-                            _SqlStr_ = resf.sqlLoad(sql_path)
+                            argsDict['SQL'] = resf.sqlLoad(sql_path)
 
                     # 生成sql语句
                     sqlStr, sqlAction = resf.sqlCompose(
                         args=model_fn(*args, **kwargs),
-                        parseType=_ParseType_,
+                        parseType=argsDict['SQL_TEMPLATE_TYPE'],
                         modelFnName=modelFnName,
-                        sql=_SqlStr_,
+                        sql=argsDict['SQL'],
                         logging=self.logging)
 
                     cursor = None
@@ -111,14 +111,14 @@ def createDbc(*args, **kwargs):
                         cursor = self.execute(
                             self.connection, sqlStr, sqlAction)
 
-                    if _UseBean_:
-                        if __bean__ == None:
+                    if argsDict['USE_BEAN']:
+                        if argsDict['BEAN'] == None:
                             return cursor
                         else:
                             if self.RW_INJECT:
-                                return self.RW_INJECT(self.connection, sqlAction, cursor, __bean__, bf.createResultClass)
+                                return self.RW_INJECT(self.connection, sqlAction, cursor, argsDict['BEAN'], bf.createResultClass)
                             else:
-                                return self.inject(self.connection, sqlAction, cursor, __bean__, bf.createResultClass)
+                                return self.inject(self.connection, sqlAction, cursor, argsDict['BEAN'], bf.createResultClass)
                     else:
                         return cursor
                 return __model_fn
@@ -130,10 +130,10 @@ def createDbc(*args, **kwargs):
             _db_model_name_ = None if len(args) == 0 else args[0]
             # 防止闭包引用被垃圾回收
             argsDict = {
-                'MODEL_NAME':_db_model_name_,
-                'DB_CONFIG':self.getAccessInfo(_db_model_name_),
-                'ALLOW_ROLLBACK':VarGet(self.ALLOW_ROLLBACK,kwargs.get('ALLOW_ROLLBACK')),
-                'AUTO_COMMIT':VarGet(self.AUTO_COMMIT,kwargs.get('AUTO_COMMIT'))
+                'MODEL_NAME': _db_model_name_,
+                'DB_CONFIG': self.getAccessInfo(_db_model_name_),
+                'ALLOW_ROLLBACK': VarGet(kwargs.get('ALLOW_ROLLBACK'), self.ALLOW_ROLLBACK),
+                'AUTO_COMMIT': VarGet(kwargs.get('AUTO_COMMIT'), self.AUTO_COMMIT)
             }
 
             def _connection_(logic_fn):
@@ -155,7 +155,8 @@ def createDbc(*args, **kwargs):
                         argsDict['AUTO_COMMIT'] = VarGet(argsDict['DB_CONFIG'].get(
                             'AUTO_COMMIT'), self.AUTO_COMMIT)
                         # 获取连接
-                        self.connection = self.conn_cache.get(argsDict['MODEL_NAME'])
+                        self.connection = self.conn_cache.get(
+                            argsDict['MODEL_NAME'])
                     else:
                         dbConf = Store({
                             'DB_DRIVER': VarGet(self.DB_DRIVER, argsDict['DB_CONFIG'].get('DB_DRIVER')),

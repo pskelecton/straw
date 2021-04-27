@@ -1,0 +1,1050 @@
+2021-04-27 13:50:12,788 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 13:50:12,793 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 13:50:15,591 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'@model(DropTable)\nDROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 13:50:15,639 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"@model (DropTable)\nDROP TABLE IF EXISTS 'USER' ;"}
+
+2021-04-27 13:50:19,910 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> >>> SQL execute error.
+
+2021-04-27 13:50:20,455 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 13:50:20,718 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 583, in connect
+    **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\socket.py", line 727, in create_connection
+    raise err
+  File "C:\workspace\Sony_onewex\Environment\python\lib\socket.py", line 716, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] 由于目标计算机积极拒绝，无法连接。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 2336, in _wrap_pool_connect
+    return fn()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 364, in connect
+    return _ConnectionFairy._checkout(self)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 778, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 495, in checkout
+    rec = pool._do_get()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\impl.py", line 241, in _do_get
+    return self._create_connection()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 309, in _create_connection
+    return _ConnectionRecord(self)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 440, in __init__
+    self.__connect(first_connect_check=True)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 661, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 656, in __connect
+    connection = pool._invoke_creator(self)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 509, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 325, in __init__
+    self.connect()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 630, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] 由于目标计算机积极拒绝，无法连接。)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 94, in execute
+    cur = conn.execute(sqlStr)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\scoping.py", line 163, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\session.py", line 1295, in execute
+    return self._connection_for_bind(bind, close_with_result=True).execute(
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\session.py", line 1151, in _connection_for_bind
+    engine, execution_options
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\session.py", line 433, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 2302, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 2340, in _wrap_pool_connect
+    e, dialect, self
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1584, in _handle_dbapi_exception_noconnection
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 2336, in _wrap_pool_connect
+    return fn()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 364, in connect
+    return _ConnectionFairy._checkout(self)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 778, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 495, in checkout
+    rec = pool._do_get()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\impl.py", line 241, in _do_get
+    return self._create_connection()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 309, in _create_connection
+    return _ConnectionRecord(self)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 440, in __init__
+    self.__connect(first_connect_check=True)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 661, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\pool\base.py", line 656, in __connect
+    connection = pool._invoke_creator(self)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 509, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\__init__.py", line 94, in Connect
+    return Connection(*args, **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 325, in __init__
+    self.connect()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 630, in connect
+    raise exc
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] 由于目标计算机积极拒绝，无法连接。)")
+(Background on this error at: http://sqlalche.me/e/13/e3q8)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 36, in CreateTables
+    DropTable('USER')
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 112, in __model_fn
+    self.connection, sqlStr, sqlAction)
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 99, in execute
+    raise Exception("%s: %s" % (exc.__class__.__name__, exc))
+Exception: OperationalError: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] 由于目标计算机积极拒绝，无法连接。)")
+(Background on this error at: http://sqlalche.me/e/13/e3q8)
+
+2021-04-27 13:50:20,722 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 13:53:26,136 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 13:53:26,149 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 13:53:26,399 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'@model(DropTable)\nDROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 13:53:26,421 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"@model (DropTable)\nDROP TABLE IF EXISTS 'USER' ;"}
+
+2021-04-27 13:53:26,537 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> >>> SQL execute error.
+
+2021-04-27 13:53:26,803 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 13:53:26,902 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@model (DropTable)\nDROP TABLE IF EXISTS 'USER'' at line 1")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 94, in execute
+    cur = conn.execute(sqlStr)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\scoping.py", line 163, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\session.py", line 1296, in execute
+    clause, params or {}
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
+    return meth(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1130, in _execute_clauseelement
+    distilled_params,
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1317, in _execute_context
+    e, statement, parameters, cursor, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1511, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@model (DropTable)\nDROP TABLE IF EXISTS 'USER'' at line 1")
+[SQL: @model (DropTable)
+DROP TABLE IF EXISTS 'USER' ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 36, in CreateTables
+    DropTable('USER')
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 112, in __model_fn
+    self.connection, sqlStr, sqlAction)
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 99, in execute
+    raise Exception("%s: %s" % (exc.__class__.__name__, exc))
+Exception: ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@model (DropTable)\nDROP TABLE IF EXISTS 'USER'' at line 1")
+[SQL: @model (DropTable)
+DROP TABLE IF EXISTS 'USER' ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+2021-04-27 13:53:26,905 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 13:54:21,040 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 13:54:21,069 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 13:54:25,154 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'@model(DropTable)\nDROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 13:54:25,186 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"@model (DropTable)\nDROP TABLE IF EXISTS 'USER' ;"}
+
+2021-04-27 13:55:31,537 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 13:55:31,569 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 13:55:56,803 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'@model(DropTable)\nDROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 13:55:56,850 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"@model (DropTable)\nDROP TABLE IF EXISTS 'USER' ;"}
+
+2021-04-27 13:55:56,977 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> >>> SQL execute error.
+
+2021-04-27 13:55:57,296 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 13:55:57,479 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@model (DropTable)\nDROP TABLE IF EXISTS 'USER'' at line 1")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 94, in execute
+    cur = conn.execute(sqlStr)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\scoping.py", line 163, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\session.py", line 1296, in execute
+    clause, params or {}
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
+    return meth(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1130, in _execute_clauseelement
+    distilled_params,
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1317, in _execute_context
+    e, statement, parameters, cursor, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1511, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@model (DropTable)\nDROP TABLE IF EXISTS 'USER'' at line 1")
+[SQL: @model (DropTable)
+DROP TABLE IF EXISTS 'USER' ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 36, in CreateTables
+    DropTable('USER')
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 112, in __model_fn
+    self.connection, sqlStr, sqlAction)
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 99, in execute
+    raise Exception("%s: %s" % (exc.__class__.__name__, exc))
+Exception: ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@model (DropTable)\nDROP TABLE IF EXISTS 'USER'' at line 1")
+[SQL: @model (DropTable)
+DROP TABLE IF EXISTS 'USER' ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+2021-04-27 13:55:57,496 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 13:56:24,722 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 13:56:24,771 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 13:57:28,805 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 13:57:28,836 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 13:58:33,154 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 13:58:33,218 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 13:59:20,514 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 13:59:20,534 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 15:00:17,099 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 15:00:17,110 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 15:00:24,572 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'@model(DropTable)\nDROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 15:00:24,598 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"@model (DropTable)\nDROP TABLE IF EXISTS 'USER' ;"}
+
+2021-04-27 15:00:24,747 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> >>> SQL execute error.
+
+2021-04-27 15:00:25,319 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 15:00:25,416 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@model (DropTable)\nDROP TABLE IF EXISTS 'USER'' at line 1")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 94, in execute
+    cur = conn.execute(sqlStr)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\scoping.py", line 163, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\session.py", line 1296, in execute
+    clause, params or {}
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
+    return meth(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1130, in _execute_clauseelement
+    distilled_params,
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1317, in _execute_context
+    e, statement, parameters, cursor, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1511, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@model (DropTable)\nDROP TABLE IF EXISTS 'USER'' at line 1")
+[SQL: @model (DropTable)
+DROP TABLE IF EXISTS 'USER' ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 36, in CreateTables
+    DropTable('USER')
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 112, in __model_fn
+    self.connection, sqlStr, sqlAction)
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 99, in execute
+    raise Exception("%s: %s" % (exc.__class__.__name__, exc))
+Exception: ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@model (DropTable)\nDROP TABLE IF EXISTS 'USER'' at line 1")
+[SQL: @model (DropTable)
+DROP TABLE IF EXISTS 'USER' ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+2021-04-27 15:00:25,432 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 15:00:48,543 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 15:00:48,554 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 15:21:37,132 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 15:21:37,144 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 15:21:37,209 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 15:21:37,226 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 36, in CreateTables
+    DropTable('USER')
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 104, in __model_fn
+    logging=self.logging)
+  File "C:\workspace_vscode\straw-master\pstraw\resource_factory.py", line 51, in sqlCompose
+    sqlChips = templatePaser.Model(sql)
+  File "C:\workspace_vscode\straw-master\pstraw\template_factory.py", line 95, in Model
+    fraArr = self.fragmentization(sqlLine)
+  File "C:\workspace_vscode\straw-master\pstraw\template_factory.py", line 46, in fragmentization
+    expArr = partern.findall(strContent)  # 表达式数组
+NameError: name 'partern' is not defined
+
+2021-04-27 15:21:37,230 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 15:24:16,659 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 15:24:16,665 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 15:44:28,402 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 15:44:28,415 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 15:44:28,538 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 15:44:28,611 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 36, in CreateTables
+    DropTable('USER')
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 104, in __model_fn
+    logging=self.logging)
+  File "C:\workspace_vscode\straw-master\pstraw\resource_factory.py", line 51, in sqlCompose
+    sqlChips = templatePaser.Model(sql)
+  File "C:\workspace_vscode\straw-master\pstraw\template_factory.py", line 99, in Model
+    sectionName = self.splitDirective(fraArr[1]).strip()
+AttributeError: 'TemplateFactory' object has no attribute 'splitDirective'
+
+2021-04-27 15:44:28,637 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 15:45:14,007 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 15:45:14,015 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 15:46:03,313 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 15:46:03,329 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 36, in CreateTables
+    DropTable('USER')
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 104, in __model_fn
+    logging=self.logging)
+  File "C:\workspace_vscode\straw-master\pstraw\resource_factory.py", line 51, in sqlCompose
+    sqlChips = templatePaser.Model(sql)
+  File "C:\workspace_vscode\straw-master\pstraw\template_factory.py", line 99, in Model
+    sectionName = self.splitDirective(fraArr[1]).strip()
+AttributeError: 'TemplateFactory' object has no attribute 'splitDirective'
+
+2021-04-27 15:46:03,344 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 15:46:16,505 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 15:46:16,515 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 15:48:11,782 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 15:48:11,822 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 15:50:14,640 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 15:50:14,643 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:10:46,037 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 16:10:46,104 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:11:03,867 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 16:11:03,879 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:11:03,948 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 16:11:03,995 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"DROP TABLE IF EXISTS 'USER' ;"}
+
+2021-04-27 16:11:04,127 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> >>> SQL execute error.
+
+2021-04-27 16:11:04,680 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 16:11:04,798 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''USER'' at line 1")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 94, in execute
+    cur = conn.execute(sqlStr)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\scoping.py", line 163, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\session.py", line 1296, in execute
+    clause, params or {}
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
+    return meth(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1130, in _execute_clauseelement
+    distilled_params,
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1317, in _execute_context
+    e, statement, parameters, cursor, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1511, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''USER'' at line 1")
+[SQL: DROP TABLE IF EXISTS 'USER' ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 36, in CreateTables
+    DropTable('USER')
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 112, in __model_fn
+    self.connection, sqlStr, sqlAction)
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 99, in execute
+    raise Exception("%s: %s" % (exc.__class__.__name__, exc))
+Exception: ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''USER'' at line 1")
+[SQL: DROP TABLE IF EXISTS 'USER' ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+2021-04-27 16:11:04,815 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 16:11:33,271 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 16:11:33,275 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:11:33,302 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 16:11:33,323 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"DROP TABLE IF EXISTS 'USER' ;"}
+
+2021-04-27 16:22:10,569 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 16:22:10,578 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:22:10,648 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 16:22:10,709 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS USER ;'}
+
+2021-04-27 16:22:14,529 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL execute success.
+
+2021-04-27 16:22:14,533 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:22:14,847 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"CREATE TABLE IF NOT EXISTS USER\n  (ID INT(10) NOT NULL AUTO_INCREMENT,\n                       NAME VARCHAR(200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci', DESC TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',\n                                                                                                                             VALID INT(10) NULL DEFAULT '1',\n                                                                                                                                                        CREATEBY VARCHAR(200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci', CREATE DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                           UPDATEBY VARCHAR(200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci', UPDATE DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                                                                                                              PRIMARY KEY (`ID`) USING BTREE) COLLATE='utf8mb4_0900_ai_ci' ENGINE=InnoDB ;"}
+
+2021-04-27 16:22:15,362 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"CREATE TABLE IF NOT EXISTS USER\n  (ID INT (10) NOT NULL AUTO_INCREMENT,\n                        NAME VARCHAR (200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci' , DESC TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',\n                                                                                                                                VALID INT (10) NULL DEFAULT '1',\n                                                                                                                                                            CREATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci' , CREATE DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                 UPDATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci' , UPDATE DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                                                                                                                      PRIMARY KEY (`ID`) USING BTREE) COLLATE = 'utf8mb4_0900_ai_ci' ENGINE = InnoDB ;"}
+
+2021-04-27 16:22:15,495 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> >>> SQL execute error.
+
+2021-04-27 16:22:16,009 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 16:22:16,431 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',\n                      ' at line 3")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 94, in execute
+    cur = conn.execute(sqlStr)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\scoping.py", line 163, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\session.py", line 1296, in execute
+    clause, params or {}
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
+    return meth(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1130, in _execute_clauseelement
+    distilled_params,
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1317, in _execute_context
+    e, statement, parameters, cursor, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1511, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',\n                      ' at line 3")
+[SQL: CREATE TABLE IF NOT EXISTS USER
+  (ID INT (10) NOT NULL AUTO_INCREMENT,
+                        NAME VARCHAR (200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci' , DESC TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
+                                                                                                                                VALID INT (10) NULL DEFAULT '1',
+                                                                                                                                                            CREATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci' , CREATE DATETIME NULL DEFAULT NULL,
+                                                                                                                                                                                                                                                                 UPDATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci' , UPDATE DATETIME NULL DEFAULT NULL,
+                                                                                                                                                                                                                                                                                                                                                                      PRIMARY KEY (`ID`) USING BTREE) COLLATE = 'utf8mb4_0900_ai_ci' ENGINE = InnoDB ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 37, in CreateTables
+    CreateUserTable()
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 112, in __model_fn
+    self.connection, sqlStr, sqlAction)
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 99, in execute
+    raise Exception("%s: %s" % (exc.__class__.__name__, exc))
+Exception: ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',\n                      ' at line 3")
+[SQL: CREATE TABLE IF NOT EXISTS USER
+  (ID INT (10) NOT NULL AUTO_INCREMENT,
+                        NAME VARCHAR (200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci' , DESC TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
+                                                                                                                                VALID INT (10) NULL DEFAULT '1',
+                                                                                                                                                            CREATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci' , CREATE DATETIME NULL DEFAULT NULL,
+                                                                                                                                                                                                                                                                 UPDATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci' , UPDATE DATETIME NULL DEFAULT NULL,
+                                                                                                                                                                                                                                                                                                                                                                      PRIMARY KEY (`ID`) USING BTREE) COLLATE = 'utf8mb4_0900_ai_ci' ENGINE = InnoDB ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+2021-04-27 16:22:16,527 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 16:25:18,422 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 16:25:18,428 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:25:18,459 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 16:25:18,513 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS USER ;'}
+
+2021-04-27 16:25:18,673 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL execute success.
+
+2021-04-27 16:25:18,681 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:25:19,012 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"CREATE TABLE IF NOT EXISTS USER\n  (ID INT(10) NOT NULL AUTO_INCREMENT,\n                       NAME VARCHAR(200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci, DESC TEXT NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                           VALID INT(10) NULL DEFAULT '1',\n                                                                                                                                                      CREATEBY VARCHAR(200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci, CREATE DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                       UPDATEBY VARCHAR(200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci, UPDATE DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                                                                                                        PRIMARY KEY (ID) USING BTREE) COLLATE=utf8mb4_0900_ai_ci ENGINE=InnoDB ;"}
+
+2021-04-27 16:25:19,549 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"CREATE TABLE IF NOT EXISTS USER\n  (ID INT (10) NOT NULL AUTO_INCREMENT,\n                        NAME VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci , DESC TEXT NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                              VALID INT (10) NULL DEFAULT '1',\n                                                                                                                                                          CREATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci , CREATE DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                             UPDATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci , UPDATE DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                                                                                                                PRIMARY KEY (ID) USING BTREE) COLLATE = utf8mb4_0900_ai_ci ENGINE = InnoDB ;"}
+
+2021-04-27 16:25:19,631 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> >>> SQL execute error.
+
+2021-04-27 16:25:19,994 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> 
+2021-04-27 16:25:20,113 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> ERROR  >>> Traceback (most recent call last):
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC TEXT NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                        ' at line 3")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 94, in execute
+    cur = conn.execute(sqlStr)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\scoping.py", line 163, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\orm\session.py", line 1296, in execute
+    clause, params or {}
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
+    return meth(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1130, in _execute_clauseelement
+    distilled_params,
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1317, in _execute_context
+    e, statement, parameters, cursor, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1511, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\sqlalchemy\engine\default.py", line 609, in do_execute
+    cursor.execute(statement, parameters)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\connections.py", line 684, in _read_packet
+    packet.check_error()
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\protocol.py", line 220, in check_error
+    err.raise_mysql_exception(self._data)
+  File "C:\workspace\Sony_onewex\Environment\python\lib\site-packages\pymysql\err.py", line 109, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC TEXT NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                        ' at line 3")
+[SQL: CREATE TABLE IF NOT EXISTS USER
+  (ID INT (10) NOT NULL AUTO_INCREMENT,
+                        NAME VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci , DESC TEXT NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,
+                                                                                                                              VALID INT (10) NULL DEFAULT '1',
+                                                                                                                                                          CREATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci , CREATE DATETIME NULL DEFAULT NULL,
+                                                                                                                                                                                                                                                             UPDATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci , UPDATE DATETIME NULL DEFAULT NULL,
+                                                                                                                                                                                                                                                                                                                                                                PRIMARY KEY (ID) USING BTREE) COLLATE = utf8mb4_0900_ai_ci ENGINE = InnoDB ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 187, in __logic_fn
+    result = logic_fn(*args, **kwargs)
+  File "C:\workspace_vscode\straw-master\ptest\test_db_create\main.py", line 37, in CreateTables
+    CreateUserTable()
+  File "C:\workspace_vscode\straw-master\pstraw\db_guide.py", line 112, in __model_fn
+    self.connection, sqlStr, sqlAction)
+  File "C:\workspace_vscode\straw-master\pstraw\loader\sqlalchemy.py", line 99, in execute
+    raise Exception("%s: %s" % (exc.__class__.__name__, exc))
+Exception: ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC TEXT NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                        ' at line 3")
+[SQL: CREATE TABLE IF NOT EXISTS USER
+  (ID INT (10) NOT NULL AUTO_INCREMENT,
+                        NAME VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci , DESC TEXT NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,
+                                                                                                                              VALID INT (10) NULL DEFAULT '1',
+                                                                                                                                                          CREATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci , CREATE DATETIME NULL DEFAULT NULL,
+                                                                                                                                                                                                                                                             UPDATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci , UPDATE DATETIME NULL DEFAULT NULL,
+                                                                                                                                                                                                                                                                                                                                                                PRIMARY KEY (ID) USING BTREE) COLLATE = utf8mb4_0900_ai_ci ENGINE = InnoDB ;]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+
+2021-04-27 16:25:20,127 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> WARN   >>> >>> SQL Rollback
+
+2021-04-27 16:30:05,712 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> DB Connection >>>
+DB_DATABASE:None
+DB_USER:None
+DB_PASSWORD:None
+DB_HOST:localhost
+DB_PORT:None
+
+2021-04-27 16:30:05,716 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:30:05,738 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 16:30:05,802 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS USER ;'}
+
+2021-04-27 16:30:05,859 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL execute success.
+
+2021-04-27 16:30:05,862 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:30:06,210 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"CREATE TABLE IF NOT EXISTS USER (ID INT(10) NOT NULL AUTO_INCREMENT,\n                                                     NAME VARCHAR(200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                 USERDESC TEXT NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                         VALID INT(10) NULL DEFAULT '1',\n                                                                                                                                                                    CREATEBY VARCHAR(200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                                                                                                    CREATETIME DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                     UPDATEBY VARCHAR(200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                                                                                                                                                                                     UPDATETIME DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                                                                                      PRIMARY KEY (ID) USING BTREE) COLLATE=utf8mb4_0900_ai_ci ENGINE=InnoDB ;"}
+
+2021-04-27 16:30:06,742 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"CREATE TABLE IF NOT EXISTS USER (ID INT (10) NOT NULL AUTO_INCREMENT,\n                                                      NAME VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                   USERDESC TEXT NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                           VALID INT (10) NULL DEFAULT '1',\n                                                                                                                                                                       CREATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                                                                                                        CREATETIME DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                         UPDATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                                                                                                                                                                                          UPDATETIME DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                                                                                           PRIMARY KEY (ID) USING BTREE) COLLATE = utf8mb4_0900_ai_ci ENGINE = InnoDB ;"}
+
+2021-04-27 16:30:06,873 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL execute success.
+
+2021-04-27 16:30:06,885 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:30:06,902 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS :TBNAME;'}
+
+2021-04-27 16:30:06,918 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{'DROP TABLE IF EXISTS CLIENT ;'}
+
+2021-04-27 16:30:06,952 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL execute success.
+
+2021-04-27 16:30:06,965 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create Start
+
+2021-04-27 16:30:07,461 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"CREATE TABLE IF NOT EXISTS CLIENT (ID INT(10) NOT NULL AUTO_INCREMENT,\n                                                       USERID BIGINT(19) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                   PHONE VARCHAR(16) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                               VALID INT(10) NULL DEFAULT '1',\n                                                                                                                                                                          CREATEBY VARCHAR(200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                                                                                                          CREATETIME DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                           UPDATEBY VARCHAR(200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                                                                                                                                                                                           UPDATETIME DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                                                                                            PRIMARY KEY (ID) USING BTREE) COLLATE=utf8mb4_0900_ai_ci ENGINE=InnoDB ;"}
+
+2021-04-27 16:30:07,984 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL >>>
+{"CREATE TABLE IF NOT EXISTS CLIENT (ID INT (10) NOT NULL AUTO_INCREMENT,\n                                                        USERID BIGINT (19) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                     PHONE VARCHAR (16) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                                  VALID INT (10) NULL DEFAULT '1',\n                                                                                                                                                                              CREATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                                                                                                               CREATETIME DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                UPDATEBY VARCHAR (200) NULL DEFAULT NULL COLLATE utf8mb4_0900_ai_ci,\n                                                                                                                                                                                                                                                                                                                 UPDATETIME DATETIME NULL DEFAULT NULL,\n                                                                                                                                                                                                                                                                                                                                                  PRIMARY KEY (ID) USING BTREE) COLLATE = utf8mb4_0900_ai_ci ENGINE = InnoDB ;"}
+
+2021-04-27 16:30:08,053 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> SQL execute success.
+
+2021-04-27 16:30:08,085 - C:\workspace_vscode\straw-master\pstraw\frame_guide.py[740] >>> DEBUG  >>> >>> test_db_create End
+

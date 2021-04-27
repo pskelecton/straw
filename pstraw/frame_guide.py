@@ -614,12 +614,18 @@ class InitGuide(GuideArgs, PathPlant):
             # 路径写入缓存
             __cache__.modify('env_dir', self.ENV_DIR)
 
+    # 解决sql后缀名
+    def resolveSqlExtension(self, sqlname):
+        return sqlname if sqlname[-4:] == '.sql' else sqlname + '.sql'
+
     # 根据sql文件名查找sql路径
     def getSqlPath(self, sqlname):
         # 解析后缀名
-        _sqlname = sqlname if sqlname[-4] == '.sql' else sqlname + '.sql'
-        # 获取sql文件列表
-        self.cacheSqlPaths()
+        _sqlname = self.resolveSqlExtension(sqlname)
+        # 缓存sql文件列表
+        if self.cache.folder_structure == None:
+            self.cacheSqlPaths()
+        #
         for sqlpath in self.cache.folder_structure.PATH_LIST:
             if os.path.basename(sqlpath) == _sqlname:
                 return sqlpath
@@ -644,11 +650,11 @@ class InitGuide(GuideArgs, PathPlant):
     def resolveSqlPath(self, func_name, model_path):
         if self.TRACK_SQL_FILE and self.MODEL_FOLDER_NAME != None:
             # 模块路径截取，model_path是包含文件名的
-            model_split_paths = self.splitFolder(
+            preModelPath, relModelPath = self.splitFolder(
                 model_path, self.MODEL_FOLDER_NAME, includeModel=False)
             # sql文件全路径,[:-3]是去掉后缀名.py
             sql_fullpath = os.path.join(
-                self.SQL_PATH, model_split_paths[1][:-3], func_name + '.sql')
+                self.SQL_PATH, relModelPath[:-3], func_name + '.sql')
             return sql_fullpath
         else:
             sql_fullpath = self.getSqlPath(func_name)
@@ -656,7 +662,8 @@ class InitGuide(GuideArgs, PathPlant):
 
     # 通过sql_name解析sql文件路径
     def resolveSqlPathSn(self, sql_name):
-        sql_fullpath = self.getSqlPath(sql_name)
+        sql_fullpath = os.path.join(
+            self.SQL_PATH, self.resolveSqlExtension(sql_name))
         return sql_fullpath
 
     # 主动缓存sql文件

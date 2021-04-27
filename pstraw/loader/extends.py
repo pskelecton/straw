@@ -32,7 +32,7 @@ class OrmLoader():
             @[dbc].connection([allow_rollback],[auto_commit])
     '''
 
-    def connect(self,dbConf=None):
+    def connect(self, dbConf=None):
         return None
 
     '''
@@ -186,7 +186,7 @@ class SqlParser():
             # 缓存sql
             sqlCache.append(transSql)
             # 合并sql
-            if combType=='INSERT':
+            if combType == 'INSERT':
                 '''
                     # 只适用 insert into ??? values ??? 语句
                 '''
@@ -205,15 +205,15 @@ class SqlParser():
                     else:
                         # 截取VALUES后面的值，并且去分号，与前一个sql去分号合并添加逗号
                         transSqls = transSqls[:-1] + ',' + sqlValuesStr
-            elif combType=='UPDATE':
+            elif combType == 'UPDATE':
                 pass
-            elif combType=='DELETE':
+            elif combType == 'DELETE':
                 pass
-            elif combType=='SELECT':
+            elif combType == 'SELECT':
                 pass
-            elif combType=='TRUNCATE':
+            elif combType == 'TRUNCATE':
                 pass
-            elif combType==None:
+            elif combType == None:
                 '''
                     # 直接合并sql语句，泛用各类sql语句，包括嵌套、表关联、子查询等等
                 '''
@@ -242,17 +242,17 @@ class SqlParser():
     # 注意： parseType = 4 | 5 | 6 转换方式同 1 | 2 | 3 , 只是对于非数值类型的值自动补充双引号
 
     def sqlParse(self, *args, parseType):
-        if parseType == 1:
+        if str(parseType) == "1":
             return self.TempParseEngine(*args)
-        elif parseType == 2:
+        elif str(parseType) == "2":
             return self.StrParseEngine(*args)
-        elif parseType == 3:
+        elif str(parseType) == "3":
             return self.DictParseEngine(*args)
-        elif parseType == 4:
+        elif str(parseType) == "4":
             return self.TempParseEngineT(*args)
-        elif parseType == 5:
+        elif str(parseType) == "5":
             return self.StrParseEngineT(*args)
-        elif parseType == 6:
+        elif str(parseType) == "6":
             return self.DictParseEngineT(*args)
         else:
             return self.__DictParseEngine(*args)
@@ -265,10 +265,10 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG",FormatMsg('SQL',{sql}))
+        logging("DEBUG", FormatMsg('SQL', {sql}))
         sql = sql % tuple(map(lambda v: str(v), tuple_args))
         _sql_ = sql.strip()
-        logging("DEBUG",FormatMsg('SQL',{_sql_}))
+        logging("DEBUG", FormatMsg('SQL', {_sql_}))
         return _sql_
 
     def StrParseEngine(self, sql, tuple_args, logging):
@@ -279,22 +279,22 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG",FormatMsg('SQL',{sql}))
+        logging("DEBUG", FormatMsg('SQL', {sql}))
         sql = sql.format(*tuple(map(lambda v: str(v), tuple_args)))
         _sql_ = sql.strip()
-        logging("DEBUG",FormatMsg('SQL',{_sql_}))
+        logging("DEBUG", FormatMsg('SQL', {_sql_}))
         return _sql_
 
     def DictParseEngine(self, sql, dict_args, logging):
         sql = self.formatSql(sql)
-        logging("DEBUG",FormatMsg('SQL',{sql}))
+        logging("DEBUG", FormatMsg('SQL', {sql}))
         sqlFragments = self.sqlChipMaker(sql)
         for key in dict_args:
             sqlFragments = self.listReplace(
                 sqlFragments, f':{key}', str(dict_args[key]))
         sql = self.formatSql(' '.join(sqlFragments))
         _sql_ = sql.strip()
-        logging("DEBUG",FormatMsg('SQL',{_sql_}))
+        logging("DEBUG", FormatMsg('SQL', {_sql_}))
         return _sql_
 
     def TempParseEngineT(self, sql, tuple_args, logging):
@@ -305,10 +305,11 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG",FormatMsg('SQL',{sql}))
-        sql = sql % tuple(map(lambda v: str(v) if type(v)==int or type(v)==float else f'\'{str(v)}\'', tuple_args))
+        logging("DEBUG", FormatMsg('SQL', {sql}))
+        sql = sql % tuple(map(lambda v: str(v) if type(v) == int or type(
+            v) == float else f'\'{str(v)}\'', tuple_args))
         _sql_ = sql.strip()
-        logging("DEBUG",FormatMsg('SQL',{_sql_}))
+        logging("DEBUG", FormatMsg('SQL', {_sql_}))
         return _sql_
 
     def StrParseEngineT(self, sql, tuple_args, logging):
@@ -319,20 +320,21 @@ class SqlParser():
                 sqlSegments[segIdx] = sqlSegments[segIdx].replace(
                     sqlSegments[segIdx][commentIdx:], "")
         sql = ' '.join(sqlSegments)
-        logging("DEBUG",FormatMsg('SQL',{sql}))
-        sql = sql.format(*tuple(map(lambda v: str(v) if type(v)==int or type(v)==float else f'\'{str(v)}\'', tuple_args)))
+        logging("DEBUG", FormatMsg('SQL', {sql}))
+        sql = sql.format(*tuple(map(lambda v: str(v) if type(v) ==
+                                    int or type(v) == float else f'\'{str(v)}\'', tuple_args)))
         _sql_ = sql.strip()
-        logging("DEBUG",FormatMsg('SQL',{_sql_}))
+        logging("DEBUG", FormatMsg('SQL', {_sql_}))
         return _sql_
 
     def DictParseEngineT(self, sql, dict_args, logging):
         sql = self.formatSql(sql)
-        logging("DEBUG",FormatMsg('SQL',{sql}))
+        logging("DEBUG", FormatMsg('SQL', {sql}))
         sqlFragments = self.sqlChipMaker(sql)
         for key in dict_args:
             sqlFragments = self.listReplace(
-                sqlFragments, f':{key}', str(dict_args[key]) if type(dict_args[key])==int or type(dict_args[key])==float else f'\'{str(dict_args[key])}\'')
+                sqlFragments, f':{key}', str(dict_args[key]) if type(dict_args[key]) == int or type(dict_args[key]) == float else f'\'{str(dict_args[key])}\'')
         sql = self.formatSql(' '.join(sqlFragments))
         _sql_ = sql.strip()
-        logging("DEBUG",FormatMsg('SQL',{_sql_}))
+        logging("DEBUG", FormatMsg('SQL', {_sql_}))
         return _sql_

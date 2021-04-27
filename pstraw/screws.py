@@ -18,6 +18,8 @@ from dataclasses import dataclass
 # ConfStore.b = {'xxx': {'yyy': 123}}
 
 # 配置对象，控制对象只读
+
+
 class ConfStore():
     def __init__(self, **kwargs):
         self.__ConfStore__ = Store(kwargs)
@@ -87,8 +89,9 @@ class PathPlant():
         tempath = os.path.split(path)
         if tempath[1] == '':
             path = tempath[0]
-        #
+        # modelStr前的路径
         head = path
+        # modelStr后的路径
         tail = ""
         #
         skip = False
@@ -108,7 +111,7 @@ class PathPlant():
                     # 每次循环都合并一下路径
                     tail = os.path.join(sp[1], tail)
             head = sp[0]
-        return [head, tail]
+        return (head, tail)
 
     @classmethod
     def initFolder(cls, path):
