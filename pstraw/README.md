@@ -114,7 +114,8 @@ pip install twine
 python setup.py sdist build
 # 上传
 # python setup.py sdist upload
-twine upload dist/*
+twine upload dist/pstraw-0.9.7.tar.gz
+# twine upload dist/*
 ```
 
  - pip查看版本
