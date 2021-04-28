@@ -768,8 +768,12 @@ class InitGuide(GuideArgs, PathPlant):
 
     # 初始化logging
     def initLogging(self):
+        logPath = None
+        if self.LOG_PATH:
+            logPath = os.path.join(self.LOG_PATH, self.module_name + ".log")
+        #
         self.__logger = LoggerFactory(
-            path=os.path.join(self.LOG_PATH, self.module_name + ".log"),
+            path=logPath,
             console=False,
             debug=self.DEBUG,
             maxMb=self.LOG_MAX_SIZE,

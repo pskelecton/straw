@@ -25,6 +25,14 @@
             "program": "${workspaceFolder}/test.py",
             "console": "integratedTerminal",
             "args": ["test_db_create"]
+        },
+        {
+            "name": "quick_to_use",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test.py",
+            "console": "integratedTerminal",
+            "args": ["quick_to_use"]
         }
     ]
 }

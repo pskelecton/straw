@@ -119,6 +119,8 @@ def Insert2Mysql():
             "PHONE":f'+86-{str(1300000001+id)}'
         })
         InsertUser(store)
-        InsertClient(store)
+        if id < 10:
+            # 只插入前十条，后十条用于测试
+            InsertClient(store)
 
 Insert2Mysql()

@@ -27,6 +27,12 @@ def printHelp():
  +-----------------------------------
 ''')
 
+def nameResolve(name):
+    if name[0:5] == 'test_':
+        return name
+    else:
+        return f'test_{name}'
+
 if __name__ == '__main__':
 
     if len(sys.argv) > 1:
@@ -47,23 +53,26 @@ if __name__ == '__main__':
                         exec(job)
             elif sys.argv[1] == '--help' or sys.argv[1] == '-h' or sys.argv[1] == '-?':
                 printHelp()
+            elif sys.argv[1] == '--clear' or sys.argv[1] == '-c':
+                # 还原数据库
+                from ptest.test_db_create.main import *
             else:
                 # 运行脚本
-                job = f'from ptest.{sys.argv[1]}.main import *'
+                job = f'from ptest.{nameResolve(sys.argv[1])}.main import *'
                 print('Job-->',job)
                 exec(job)
         elif len(sys.argv) == 3 and (sys.argv[1] == '--clear' or sys.argv[1] == '-c'):
             # 还原数据库
             from ptest.test_db_create.main import *
             # 运行脚本
-            job = f'from ptest.{sys.argv[2]}.main import *'
+            job = f'from ptest.{nameResolve(sys.argv[2])}.main import *'
             print('Job-->',job)
             exec(job)
         elif len(sys.argv) == 3 and (sys.argv[2] == '--clear' or sys.argv[2] == '-c'):
             # 还原数据库
             from ptest.test_db_create.main import *
             # 运行脚本
-            job = f'from ptest.{sys.argv[1]}.main import *'
+            job = f'from ptest.{nameResolve(sys.argv[1])}.main import *'
             print('Job-->',job)
             exec(job)
         else:
