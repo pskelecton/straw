@@ -21,6 +21,9 @@ pip install pstraw
 ```
 
 - 快速使用
+
+[![源文件](https://img.shields.io/badge/Link-%E6%BA%90%E7%A0%81-orange)](https://github.com/pskelecton/straw/blob/master/ptest/test_quick_to_use/main.py)
+
 ```python
 from pstraw import Straw
 from dataclasses import dataclass
@@ -63,6 +66,8 @@ ExecSQL()
 ## 基本调用
 
 ### 通过SQL的方式调用
+
+[![源文件](https://img.shields.io/badge/Link-%E6%BA%90%E7%A0%81-orange)](https://github.com/pskelecton/straw/blob/master/ptest/test_exec_by_sql/main.py)
 
 ```python
 from pstraw import Straw
@@ -156,6 +161,8 @@ ExecSQL()
 ```
 
 ### 通过SQL_NAME指定一个sql文件
+
+[![源文件](https://img.shields.io/badge/Link-%E6%BA%90%E7%A0%81-orange)](https://github.com/pskelecton/straw/blob/master/ptest/test_exec_by_sql_file/main.py)
 
 #### 目录结构如下
 ```
