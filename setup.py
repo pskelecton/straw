@@ -51,7 +51,7 @@ SOFTWARE.*
 
 setup(
     name='pstraw',
-    version='0.9.7',
+    version='0.9.8',
     description=('简单的函数调用来处理数据库'),
     long_description=long_description,
     author='Chalk Yu',
