@@ -114,7 +114,7 @@ pip install twine
 python setup.py sdist build
 # 上传
 # python setup.py sdist upload
-twine upload dist/pstraw-0.9.7.tar.gz
+twine upload dist/pstraw-0.9.8.tar.gz
 # twine upload dist/*
 ```
 
@@ -130,8 +130,8 @@ pip install pstraw
 
  - git打标签
 ```
-git tag v0.9.5
-git push origin v0.9.5
+git tag v0.9.8
+git push origin v0.9.8
 ```
 
 ### 工作日程

@@ -56,7 +56,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/test.py",
             "console": "integratedTerminal",
-            "args": ["sql_section_by_sql_file",]
+            "args": ["sql_section_by_sql_file"]
         },
         {
             "name": "sql_section_by_sql",
@@ -64,7 +64,15 @@
             "request": "launch",
             "program": "${workspaceFolder}/test.py",
             "console": "integratedTerminal",
-            "args": ["sql_section_by_sql",]
+            "args": ["sql_section_by_sql"]
+        },
+        {
+            "name": "template_type",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test.py",
+            "console": "integratedTerminal",
+            "args": ["template_type"]
         },
     ]
 }

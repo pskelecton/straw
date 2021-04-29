@@ -66,6 +66,16 @@ class TemplateFactory():
             arg = strExp.replace(f'@{directName}', '').strip()
             return arg[1:-1]
 
+    # 分割参数
+    def splitArg(self, argStr):
+        resArgs = []
+        args = argStr.split(",")
+        for arg in args:
+            _arg = arg.strip()
+            if _arg != "":
+                resArgs.append(_arg)
+        return resArgs
+
     # 判断是否是某个指令
     def checkIsDirective(self, strExp, directName):
         if f'@{directName}' in strExp and strExp.strip().index(f'@{directName}') == 0:
@@ -90,7 +100,7 @@ class TemplateFactory():
 
     def Model(self, fullSql):
         sqlChips = Store()
-        sectionName = None
+        sectionNames = []
         sqlLines = fullSql.split('\n')
         for sqlLine in sqlLines:
             # 数据如： ['   ', '@model`user`', '   ']
@@ -100,13 +110,16 @@ class TemplateFactory():
             fraArr, splitStr = self.composition(sqlLine, 0)
             if len(splitStr) > 0 and ''.join(splitStr).strip() == "":
                 directive = fraArr[0]
-                sectionName = self.getArg(directive, 'model').strip()
-                sqlChips[sectionName] = ""
+                modelArg = self.getArg(directive, 'model').strip()
+                # 绑定多个sectionName , 逗号分割
+                sectionNames = self.splitArg(modelArg)
+                for sectionName in sectionNames:
+                    sqlChips[sectionName] = ""
             else:
-                if sectionName != None:
-                    sqlChips[sectionName] = sqlChips[sectionName] + \
-                        '\n' + sqlLine
+                for sectionName in sectionNames:
+                    sqlChips[sectionName] = sqlChips[sectionName] + '\n' + sqlLine
                     sqlChips[sectionName] = sqlChips[sectionName].strip()
+
         return sqlChips
 
 
