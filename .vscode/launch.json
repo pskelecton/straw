@@ -33,6 +33,38 @@
             "program": "${workspaceFolder}/test.py",
             "console": "integratedTerminal",
             "args": ["quick_to_use"]
-        }
+        },
+        {
+            "name": "exec_by_sql",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test.py",
+            "console": "integratedTerminal",
+            "args": ["exec_by_sql"]
+        },
+        {
+            "name": "exec_by_sql_file",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test.py",
+            "console": "integratedTerminal",
+            "args": ["exec_by_sql_file"]
+        },
+        {
+            "name": "sql_section_by_sql_file",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test.py",
+            "console": "integratedTerminal",
+            "args": ["sql_section_by_sql_file",]
+        },
+        {
+            "name": "sql_section_by_sql",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test.py",
+            "console": "integratedTerminal",
+            "args": ["sql_section_by_sql",]
+        },
     ]
 }

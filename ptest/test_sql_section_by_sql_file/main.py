@@ -36,10 +36,9 @@ class CLIENT():
 
 '''
   @db.sql注解：绑定一个sql方法
-  SQL_NAME为要读入sql的文件名
-  这里相当于读取./SelectUser.sql文件
+  读取./dml.sql文件，并绑定@model`SearchUser`注解的sql语句
 '''
-@db.sql(USER,SQL_NAME='SelectUser')
+@db.sql(USER,SQL_NAME='dml')
 def SearchUser(name:str,minId:int):
     '''
       函数返回的参数是个字典，其中字典的key：'USER'对应SQL语句中的:USER
@@ -50,9 +49,9 @@ def SearchUser(name:str,minId:int):
 
 '''
     @db.sql注解：绑定一个sql方法
-    插入数据
+    读取./dml.sql文件，并绑定@model`AddClient`注解的sql语句
 '''
-@db.sql(SQL_NAME='InsertClient')
+@db.sql(SQL_NAME='dml')
 def AddClient(userId:str,phone:str):
   return {
         "USERID": userId,
@@ -64,9 +63,9 @@ def AddClient(userId:str,phone:str):
     }
 '''
     @db.sql注解：绑定一个sql方法
-    验证插入成功
+    读取./dml.sql文件，并绑定@model`SearchClient`注解的sql语句
 '''
-@db.sql(CLIENT,SQL_NAME='SelectClient')
+@db.sql(CLIENT,SQL_NAME='dml')
 def SearchClient(minId:int):
   return {'MINID':minId}
 '''
