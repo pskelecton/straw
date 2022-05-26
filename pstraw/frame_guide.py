@@ -130,6 +130,9 @@ class GuideArgs(ConfArgs):
         # 是否输出日志文件
         self.__Args__['LOG_ON'] = VarGet(kwargs.get(
             'LOG_ON'), self.getArg('LOG_ON'), __cache__.log_on)
+        # 是否开启控制台
+        self.__Args__['CONSOLE_ON'] = VarGet(kwargs.get(
+            'CONSOLE_ON'), self.getArg('CONSOLE_ON'), __cache__.console_on)
         # 是否是debug模式
         self.__Args__['DEBUG'] = VarGet(kwargs.get(
             'DEBUG'), self.getArg('DEBUG'), __cache__.debug)
@@ -270,6 +273,16 @@ class GuideArgs(ConfArgs):
     @LOG_ON.setter
     def LOG_ON(self, value):
         self.__Args__['LOG_ON'] = value
+        # pass  # 可读写属性
+
+    # 是否开启控制台
+    @property
+    def CONSOLE_ON(self):
+        return self.__Args__['CONSOLE_ON']
+
+    @CONSOLE_ON.setter
+    def CONSOLE_ON(self, value):
+        self.__Args__['CONSOLE_ON'] = value
         # pass  # 可读写属性
 
     # 是否是debug模式
@@ -762,7 +775,8 @@ class InitGuide(GuideArgs, PathPlant):
 
     # 打印输出函数
     def logging(self, level, message, *msgs):
-        self.__print(level, message, *msgs)
+        if self.CONSOLE_ON:
+            self.__print(level, message, *msgs)
         if self.LOG_ON:
             self.__logging(level, message, *msgs)
 

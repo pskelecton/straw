@@ -17,6 +17,8 @@ __cache__ = ConfStore(
     log_dir='log',  # log文件目录
     # 是否输出日志文件
     log_on=False,
+    # 是否开启控制台
+    console_on=True,
     # 是否使用多环境切换
     env_on=False,
     # 是否是debug模式
